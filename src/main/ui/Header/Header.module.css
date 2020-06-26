@@ -1,0 +1,19 @@
+.header {
+     background-color: #3685ff;
+     height: 70px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+ }
+
+.header .active {
+    color: hotpink;
+    border-bottom: 1px solid hotpink;
+}
+
+.header a {
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    color: white;
+    margin: 50% 10px;
+}
