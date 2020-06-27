@@ -6,14 +6,21 @@
      align-items: center;
  }
 
-.header .active {
+.header .navMenu {
+    width: 60%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+.header .navMenu .active {
     color: hotpink;
     border-bottom: 1px solid hotpink;
 }
 
-.header a {
+.header .navMenu a {
     text-decoration: none;
     border-bottom: 1px solid transparent;
     color: white;
-    margin: 50% 10px;
-}
+ }
