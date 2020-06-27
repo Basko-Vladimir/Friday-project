@@ -12,3 +12,11 @@ export const SingUpReducer = (state: StateType = initialState, action: any): Sta
             return state;
     }
 };
+
+
+// Action Creators
+
+
+
+// Thunks
+
