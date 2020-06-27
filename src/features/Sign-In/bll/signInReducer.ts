@@ -7,7 +7,7 @@ const initialState = {
 
 type StateType = typeof initialState;
 
-export const authReducer = (state: StateType = initialState, action: any): StateType => {
+export const signInReducer = (state: StateType = initialState, action: any): StateType => {
     switch (action.type) {
         default:
             return state;

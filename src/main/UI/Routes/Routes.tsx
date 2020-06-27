@@ -1,6 +1,6 @@
 import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
-import {SignIn} from '../../../features/Sign-In/SignIn';
+import {SignIn} from '../../../features/Sign-In/ui/SignIn';
 import {SignUpContainer} from '../../../features/Sign-Up/UI/SignUp';
 import {Forgot} from '../../../features/Forgot/Forgot';
 import {SetNewPass} from '../../../features/Set-New-Pass/SetNewPass';
