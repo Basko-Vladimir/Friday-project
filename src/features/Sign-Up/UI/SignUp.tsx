@@ -2,6 +2,10 @@ import React, {ChangeEvent, useState} from 'react';
 import {Input} from '../../../main/UI/common/Input/Input';
 import {Button} from '../../../main/UI/common/Button/Button';
 import s from './SignUp.module.scss';
+import {AppStateType} from "../../../main/BLL/store";
+import {useSelector} from "react-redux";
+import {isLoading} from "../BLL/SignUpReducer";
+import Loading from "../../../main/UI/common/LoadingToggle/Loading";
 
 type SignUpPropsType = {
     setLogin: (value: string) => void,
@@ -23,6 +27,7 @@ export const SignUp: React.FC<SignUpPropsType> = ({setLogin}) => {
             </div>
 
             <Button title={'Sign Up'}/>
+            {isLoading && <Loading/>}
         </div>
     )
 };
@@ -30,7 +35,7 @@ export const SignUpContainer = () => {
 
     const [login, setLogin] = useState<string>('');
 
-    return <SignUp setLogin={setLogin}/>
+    return <SignUp setLogin={setLogin} />
 };
 
 

@@ -1,7 +1,6 @@
 
 
 const initialState = {
-    isLoading: false,
     a: 'bla-bla'
 };
 
