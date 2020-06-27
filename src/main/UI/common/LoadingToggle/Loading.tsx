@@ -6,7 +6,7 @@ import {AppStateType} from "../../../BLL/store";
 
 const Loading = () => {
     let [points, setPoints] = useState<string>('.');
-    let isLoading = useSelector((state: AppStateType) => state.auth.isLoading);
+    let isLoading = useSelector((state: AppStateType) => state.signUp.isLoading);
     const loadingProgress = () => {
         setTimeout(() => {
             points.length < 5
