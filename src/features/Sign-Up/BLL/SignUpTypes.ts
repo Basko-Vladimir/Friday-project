@@ -9,6 +9,22 @@ export const SIGN_UP_SUCCESS = 'SignUpReducer/SIGN_UP_SUCCESS';
 export const SIGN_UP_ERROR = 'SignUpReducer/SIGN_UP_ERROR';
 export const IS_LOADING = 'SignUpReducer/IS_LOADING';
 
+// Типизация SignUp.tsx
+export type SignUpPropsType = {
+    login: string
+    setLogin: (value: string) => void
+    firstPass: string
+    setFirstPass: (value: string) => void
+    secondPass: string
+    setSecondPass: (value: string) => void
+    similar: boolean
+    registerMe: (value: string) => void
+    responseMessage: string
+    wrongPassword: (value: string) => void
+    isLoading: (value: boolean) => IsLoadingACType
+}
+
+
 
 export type SignUpSuccessType = {
     type: typeof SIGN_UP_SUCCESS

@@ -1,21 +1,32 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {Input} from '../../../main/UI/common/Input/Input';
 import {Button} from '../../../main/UI/common/Button/Button';
 import s from './SignUp.module.scss';
 import {AppStateType} from "../../../main/BLL/store";
-import {useSelector} from "react-redux";
-import {isLoading} from "../BLL/SignUpReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {isLoading, SignUpError, signUpTC} from "../BLL/SignUpReducer";
 import Loading from "../../../main/UI/common/LoadingToggle/Loading";
+import {SignUpPropsType} from "../BLL/SignUpTypes";
+import {Redirect} from 'react-router-dom';
+import {SIGN_IN_PATH} from "../../../main/UI/Routes/Routes";
 
-type SignUpPropsType = {
-    setLogin: (value: string) => void,
-}
 
 
-export const SignUp: React.FC<SignUpPropsType> = ({setLogin}) => {
-    const setEmailCallback = (e:ChangeEvent<HTMLInputElement>) => { setLogin(e.currentTarget.value) };
-    const setPassCallback = (e:ChangeEvent<HTMLInputElement>) => { setLogin(e.currentTarget.value) };
-    const setConfirmPassCallback = (e:ChangeEvent<HTMLInputElement>) => { setLogin(e.currentTarget.value) };
+
+export const SignUp: React.FC<SignUpPropsType> = ({login, firstPass,
+                                                      secondPass,
+                                                      setFirstPass, setLogin, setSecondPass,
+                                                      registerMe, similar,
+                                                      wrongPassword, responseMessage, isLoading}) => {
+    const setEmailCallback = (e: ChangeEvent<HTMLInputElement>) => {
+        setLogin(e.currentTarget.value)
+    };
+    const setPassCallback = (e: ChangeEvent<HTMLInputElement>) => {
+        setLogin(e.currentTarget.value)
+    };
+    const setConfirmPassCallback = (e: ChangeEvent<HTMLInputElement>) => {
+        setLogin(e.currentTarget.value)
+    };
     return (
         <div className={s.container}>
             <h1>Sign Up</h1>
@@ -32,10 +43,37 @@ export const SignUp: React.FC<SignUpPropsType> = ({setLogin}) => {
     )
 };
 export const SignUpContainer = () => {
+    const dispatch = useDispatch();
+    const {signUpSuccess, message} = useSelector((state: AppStateType) => state.signUp);
+    const [login, setLogin] = useState('');
+    const [similar, setSimilar] = useState<boolean>(false);
+    const [firstPass, setFirstPass] = useState<string>('');
+    const [secondPass, setSecondPass] = useState<string>('');
+    useEffect(() => {
+        if (secondPass === firstPass && secondPass) setSimilar(true);
+        else setSimilar(false)
+    }, [secondPass, firstPass]);
+    const registerMe = () => {
+        dispatch(signUpTC(login, firstPass))
+    };
+    const wrongPassword = () => {
+        dispatch(SignUpError('wrong credentials'))
+    };
 
-    const [login, setLogin] = useState<string>('');
-
-    return <SignUp setLogin={setLogin} />
+    return(
+        <>
+            { !signUpSuccess ?
+                <SignUp login={login} setLogin={setLogin}
+                    firstPass={firstPass} setFirstPass={setFirstPass}
+                    secondPass={secondPass} setSecondPass={setSecondPass}
+                    similar={similar} registerMe={registerMe}
+                    responseMessage={message} wrongPassword={wrongPassword}
+                    isLoading={isLoading}
+            />
+            : <Redirect to={SIGN_IN_PATH}/>
+            }
+        </>
+    )
 };
 
 
