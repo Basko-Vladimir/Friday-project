@@ -1,8 +1,8 @@
-import React, {InputHTMLAttributes, DetailedHTMLProps} from 'react';
+import React, {InputHTMLAttributes, DetailedHTMLProps, ChangeEvent} from 'react';
 import styles from './Input.module.css';
 
 export type InputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement> & { error?: string, value?: string, changeInput?: () => void }
+    HTMLInputElement> & { error?: string, value?: string, changeInput?: (e:ChangeEvent<HTMLInputElement>) => void }
 
 export const Input: React.FC<InputPropsType> = ({error, value, changeInput, ...props}) => {
     return (
