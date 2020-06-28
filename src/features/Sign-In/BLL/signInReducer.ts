@@ -9,7 +9,7 @@ const SET_ERROR = 'cards/signInReducer/SET_ERROR';
 const initialState = {
     isAuth: false,
     userData: {} as UserDataType,
-    errorMessage: 'rtjr'
+    errorMessage: ''
 };
 
 export type StateType = typeof initialState;
