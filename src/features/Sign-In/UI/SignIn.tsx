@@ -4,11 +4,13 @@ import {NewInput} from './NewInput/NewInput';
 import {NavLink} from 'react-router-dom';
 import {FORGOT_PATH, SIGN_UP_PATH} from '../../../main/UI/Routes/Routes';
 import {Button} from '../../../main/UI/common/Button/Button';
+import { ErrorMessage } from '../../../main/UI/common/ErrorMessage/ErrorMessage';
 
 type SignInPropsType = {
     email: string
     password: string
     isRemember: boolean
+    errorText: string
     changeEmail: (e: ChangeEvent<HTMLInputElement>) => void
     changePass: (e: ChangeEvent<HTMLInputElement>) => void
     changeIsRemember: (e: ChangeEvent<HTMLInputElement>) => void
@@ -16,7 +18,7 @@ type SignInPropsType = {
 }
 
 export const SignIn: React.FC<SignInPropsType> = (props) => {
-    const {email, password, isRemember, changePass, changeEmail, changeIsRemember, sendFormData} = props;
+    const {email, password, isRemember, errorText,  changePass, changeEmail, changeIsRemember, sendFormData} = props;
     return (
         <div>
             <h1>Sign In</h1>
@@ -32,6 +34,9 @@ export const SignIn: React.FC<SignInPropsType> = (props) => {
                 </label>
                 <Button title={'Sign in'}/>
                 <NavLink to={SIGN_UP_PATH}>Registration</NavLink>
+                {errorText && <div className={styles.errorBlock}>
+                                    <ErrorMessage errorText={errorText}/>
+                              </div>}
             </form>
         </div>
     )
