@@ -22,10 +22,10 @@ export const SignUp: React.FC<SignUpPropsType> = ({login, firstPass,
         setLogin(e.currentTarget.value)
     };
     const setPassCallback = (e: ChangeEvent<HTMLInputElement>) => {
-        setLogin(e.currentTarget.value)
+        setFirstPass(e.currentTarget.value)
     };
     const setConfirmPassCallback = (e: ChangeEvent<HTMLInputElement>) => {
-        setLogin(e.currentTarget.value)
+        setSecondPass(e.currentTarget.value)
     };
     return (
         <div className={s.container}>
@@ -43,10 +43,9 @@ export const SignUp: React.FC<SignUpPropsType> = ({login, firstPass,
                 /> {!similar && <span>password does not match!</span>}
             </div>
 
-            <Button title={'Sign Up'} onClick={similar? registerMe : wrongPassword}
-
-            />
+            <Button title={'Sign Up'} onClick={similar? registerMe : wrongPassword} />
             {isLoading && <Loading/>}
+            {<span>{responseMessage}</span>}
         </div>
     )
 };
