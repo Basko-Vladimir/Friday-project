@@ -1,11 +1,10 @@
 import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
-import {SignIn} from '../../../features/Sign-In/ui/SignIn';
+import {SignInContainer} from '../../../features/Sign-In/UI/SignInContainer';
 import {SignUpContainer} from '../../../features/Sign-Up/UI/SignUp';
 import {Forgot} from '../../../features/Forgot/Forgot';
 import {SetNewPass} from '../../../features/Set-New-Pass/SetNewPass';
 import {Profile} from '../../../features/Profile/Profile';
-
 
 export const SIGN_IN_PATH = '/sign-in';
 export const SIGN_UP_PATH = '/sign-up';
@@ -16,7 +15,7 @@ export const PROFILE_PATH = '/profile';
 export const Routes = () => {
     return (
         <Switch>
-            <Route path={SIGN_IN_PATH} render={() => <SignIn/>}/>
+            <Route path={SIGN_IN_PATH} render={() => <SignInContainer/>}/>
             <Route path={SIGN_UP_PATH} render={() => <SignUpContainer/>}/>
             <Route path={FORGOT_PATH} render={() => <Forgot/>}/>
             <Route path={SET_NEW_PASS_PATH} render={() => <SetNewPass/>}/>
