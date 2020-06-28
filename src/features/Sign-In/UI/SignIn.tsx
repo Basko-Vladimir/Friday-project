@@ -20,7 +20,7 @@ type SignInPropsType = {
 export const SignIn: React.FC<SignInPropsType> = (props) => {
     const {email, password, isRemember, errorText,  changePass, changeEmail, changeIsRemember, sendFormData} = props;
     return (
-        <div>
+        <div className={styles.signInPage}>
             <h1>Sign In</h1>
             <form onSubmit={sendFormData} className={styles.form}>
                 <NewInput type={'text'} placeholder={'Enter your e-mail'}
@@ -35,6 +35,7 @@ export const SignIn: React.FC<SignInPropsType> = (props) => {
                 <Button title={'Sign in'}/>
                 <NavLink to={SIGN_UP_PATH}>Registration</NavLink>
                 {errorText && <div className={styles.errorBlock}>
+                                    <div className={styles.background}> </div>
                                     <ErrorMessage errorText={errorText}/>
                               </div>}
             </form>

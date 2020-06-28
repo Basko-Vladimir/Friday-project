@@ -9,7 +9,7 @@ const SET_ERROR = 'cards/signInReducer/SET_ERROR';
 const initialState = {
     isAuth: false,
     userData: {} as UserDataType,
-    errorMessage: 'ERROR'
+    errorMessage: 'rtjr'
 };
 
 export type StateType = typeof initialState;
@@ -17,6 +17,7 @@ export type StateType = typeof initialState;
 export const signInReducer = (state: StateType = initialState, action: SignInActionsTypes): StateType => {
     switch (action.type) {
         case SET_USER_DATA:
+            debugger
             return {
                 ...state,
                 userData: action.userData
@@ -49,19 +50,25 @@ export const setErrorText = (errorMessage: string) => ({type: SET_ERROR, errorMe
 
 
 export const login = (email: string, password: string, isRemember: boolean ) => {
-    return async (dispatch: Dispatch) => {
-        const result = await authAPI.login(email, password, isRemember);
-        if (result.status >= 200 && result.status < 300) {
-            debugger
-            setAuthUser(result.data.token)
+    return async (dispatch: any) => {
+        const response = await authAPI.login(email, password, isRemember);
+        if (response.status >= 200 && response.status < 300) {
+            dispatch(setAuthMe(response.data.token))     // адо сделать другую типизацию dispatcha
         } else {
-            dispatch(setErrorText(result.data.error))
+            dispatch(setErrorText(response.data.error))
         }
     };
 };
 
-export const setAuthUser = (token: string) => async (dispatch: Dispatch) => {
-    const userData = await authAPI.authMe(token);
-    debugger;
+export const setAuthMe = (token: string) => async (dispatch: Dispatch) => {
+    const response = await authAPI.authMe(token);
+    if (response.status >= 200 && response.status < 300) {
+        dispatch(setUserData({...response.data}));
+        dispatch(loginSuccess(true));
+    } else {
+        dispatch(setErrorText(response.data.error))
+    }
 };
+
+
 

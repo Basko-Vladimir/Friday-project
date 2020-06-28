@@ -1,22 +1,17 @@
 
 
 export type UserDataType = {
+    created: string
     email: string
-    name: string
     isAdmin: boolean
+    name: string
+    publicCardPacksCount: number
     rememberMe: boolean
+    success: boolean
     token: string
     tokenDeathTime: number
+    updated: string
+    verified: boolean
     __v: number
     _id: string
-    success: boolean
 };
-
-export type ErrorType = {
-    email: boolean
-    emailRegExp: string
-    error: string
-    in: string
-    password: boolean
-    passwordRegExp: string
-}
