@@ -20,6 +20,14 @@ type StateType = typeof initialState;
 
 export const SingUpReducer = (state: StateType = initialState, action: any): StateType => {
     switch (action.type) {
+        case SIGN_UP_SUCCESS:
+            return {...state, message: 'done!', signUpSuccess: action.signUpSuccess};
+        case SIGN_UP_ERROR:
+            return {...state, message: action.errorMessage};
+        case IS_LOADING:
+            return {
+                ...state, isLoading: action.value
+            };
         default:
             return state;
     }
@@ -38,6 +46,7 @@ export const SignUpError = (errorMessage: string)
 
 export const signUpTC = (email:string, password:string) =>
     async(dispatch: Dispatch<ChatActionTypes>)  => {
+    debugger
         try {
             dispatch(isLoading(true));
             const data = await SignUpAPI.SignUpAPI(email, password);
