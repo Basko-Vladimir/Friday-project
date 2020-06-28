@@ -32,12 +32,20 @@ export const SignUp: React.FC<SignUpPropsType> = ({login, firstPass,
             <h1>Sign Up</h1>
 
             <div className={s.inputs}>
-                <Input placeholder={'Enter Your email'} changeInput={setEmailCallback}/>
-                <Input placeholder={'Enter Your Password'} changeInput={setPassCallback}/>
-                <Input placeholder={'Confirm Your password'} changeInput={setConfirmPassCallback}/>
+                <Input placeholder={'Enter Your email'} changeInput={setEmailCallback}
+                        type='text' value={login}
+                />
+                <Input placeholder={'Enter Your Password'} changeInput={setPassCallback}
+                        type='password' value={firstPass}
+                />
+                <Input placeholder={'Confirm Your password'} changeInput={setConfirmPassCallback}
+                        type='password' value={secondPass}
+                /> {!similar && <span>password does not match!</span>}
             </div>
 
-            <Button title={'Sign Up'}/>
+            <Button title={'Sign Up'} onClick={similar? registerMe : wrongPassword}
+
+            />
             {isLoading && <Loading/>}
         </div>
     )

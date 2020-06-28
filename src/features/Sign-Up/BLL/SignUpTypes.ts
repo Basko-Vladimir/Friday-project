@@ -1,8 +1,4 @@
-
-
-
-
-
+import React from "react";
 
 
 export const SIGN_UP_SUCCESS = 'SignUpReducer/SIGN_UP_SUCCESS';
@@ -18,9 +14,9 @@ export type SignUpPropsType = {
     secondPass: string
     setSecondPass: (value: string) => void
     similar: boolean
-    registerMe: (value: string) => void
+    registerMe: (e: React.MouseEvent) => void
     responseMessage: string
-    wrongPassword: (value: string) => void
+    wrongPassword: (e: React.MouseEvent) => void
     isLoading: (value: boolean) => IsLoadingACType
 }
 
