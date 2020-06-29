@@ -1,0 +1,23 @@
+
+
+.body {
+    position: absolute;
+    box-shadow: 0 1px 15px 0 rgba(51, 51, 51, 0.5);
+    width: 200px;
+    height: 70px;
+    bottom: 60%;
+    left: 43.5%;
+    background-color: silver;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .loadingProgress{
+        position: fixed;
+        width: 100px;
+        display: flex;
+        left: 47.5%;
+    }
+}
+.hide {
+
+}

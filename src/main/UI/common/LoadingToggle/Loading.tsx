@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import s from './Loading.module.css'
+import s from './Loading.module.scss'
 import {useSelector} from "react-redux";
 import {AppStateType} from "../../../BLL/store";
 
@@ -16,9 +16,9 @@ const Loading = () => {
         return points
     };
     return (
-        <div>
+        <div className={isLoading ? s.body : s.hide}>
             <span className={s.loadingProgress}>
-                {isLoading && 'LOADING' + loadingProgress()}
+                {isLoading && 'Loading' + loadingProgress()}
             </span>
         </div>
     );
