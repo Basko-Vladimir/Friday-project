@@ -4,10 +4,10 @@ import styles from './Button.module.css';
 export type ButtonPropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement> & { title: string };
 
-export const Button: React.FC<ButtonPropsType> = ({title, ...props}) => {
+export const Button: React.FC<ButtonPropsType> = React.memo(({title, ...props}) => {
     return (
         <div>
             <button className={styles.button} {...props}>{title}</button>
         </div>
     )
-};
+});

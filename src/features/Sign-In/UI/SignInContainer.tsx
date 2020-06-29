@@ -1,35 +1,42 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useCallback, useEffect, useState} from 'react';
 import {PROFILE_PATH} from '../../../main/UI/Routes/Routes';
 import {Redirect} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {login} from '../BLL/signInReducer';
+import {login, setAuthMe} from '../BLL/signInReducer';
 import {AppStateType} from '../../../main/BLL/store';
 import {SignIn} from './SignIn';
 
 export const SignInContainer = () => {
-    const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const errorText = useSelector<AppStateType, string>(state => state.signIn.errorMessage);
+    const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const dispatch = useDispatch();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isRemember, setSetIsRemember] = useState(false);
 
-    const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [isRemember, setIsRemember] = useState<boolean>(false);
+
+
+    useEffect( () => {
+        const token = localStorage.getItem('token');
+        token && dispatch(setAuthMe(token));
+    },[ dispatch]);
+
+    const changeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value)
-    };
+    }, [setEmail]);
 
-    const changePass = (e: ChangeEvent<HTMLInputElement>) => {
+    const changePass = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.currentTarget.value)
-    };
+    }, [setPassword]);
 
-    const changeIsRemember = (e: ChangeEvent<HTMLInputElement>) => {
-        setSetIsRemember(e.currentTarget.checked)
-    };
+    const changeIsRemember = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setIsRemember(e.currentTarget.checked)
+    }, [setIsRemember]);
 
-    const sendFormData = (e: FormEvent<HTMLFormElement>) => {
+    const sendFormData = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(login(email, password, isRemember));
-    };
+    }, [dispatch, email, password, isRemember]);
 
     return (
         <>
