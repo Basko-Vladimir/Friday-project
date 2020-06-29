@@ -1,12 +1,25 @@
 import axios from 'axios';
+import {UserDataType} from '../types/types';
 
-const instanse = axios.create({
+const instance = axios.create({
     baseURL: 'https://cards-nya-back.herokuapp.com/1.0'
 });
 
 export const authAPI = {
-    signIn(email: string, password: string, isRemember: boolean = false ) {
-        return instanse.post('/auth/login', {email, password, isRemember})
+    login: async (email: string, password: string, rememberMe: boolean = false ) => {
+        try {
+            return await instance.post<UserDataType>('/auth/login', {email, password, rememberMe})
+        } catch (err) {
+            return err.response;
+        }
+    },
+
+    authMe: async (token: string) => {
+        try {
+            return await instance.post<UserDataType>('/auth/me', {token})
+        } catch (err) {
+            return err.response;
+        }
     }
 };
 

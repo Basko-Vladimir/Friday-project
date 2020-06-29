@@ -1,0 +1,17 @@
+.errorBlock {
+    width: 300px;
+    height: 150px;
+    box-shadow: 0 0 10px black ;
+    border: 6px double dodgerblue;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 3;
+
+    h3 {
+        color:red;
+    }
+}
