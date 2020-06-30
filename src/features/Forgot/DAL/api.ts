@@ -14,7 +14,7 @@ export const forgotAPI = {
             })
                 .then(res => res.data)
         } catch (err) {
-            return err.response
+            return err.response.data
         }
     }
 };

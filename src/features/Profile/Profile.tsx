@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../main/BLL/store';
-import {UserDataType} from '../Sign-In/types/types';
+import {UserDataType} from '../Sign-In/types/ResponseSuccessTypes';
 import {loginSuccess, setAuthMe, setUserData} from '../Sign-In/BLL/signInReducer';
 import {Button} from '../../main/UI/common/Button/Button';
 import { Redirect } from 'react-router-dom';
 import {SIGN_IN_PATH} from '../../main/UI/Routes/Routes';
+import {getItemFromLS, setItemToLS} from '../Sign-In/LS-service/localStorage';
 
 export const Profile = () => {
     const userData = useSelector<AppStateType, UserDataType | null>(state => state.signIn.userData);
@@ -13,12 +14,12 @@ export const Profile = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = getItemFromLS('token');
         if (!isAuth && token)  dispatch(setAuthMe(token));
     }, [isAuth, dispatch]);
 
     const signOut = () => {
-        localStorage.setItem('token', '');
+        setItemToLS('token', '');
         dispatch(setUserData(null));
         dispatch(loginSuccess(false));
     };

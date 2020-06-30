@@ -1,8 +1,9 @@
 import {Dispatch} from 'redux';
 import {authAPI} from '../DAL/api';
-import {UserDataType} from '../types/types';
+import {UserDataType} from '../types/ResponseSuccessTypes';
 import { ThunkAction } from 'redux-thunk';
 import {AppStateType} from '../../../main/BLL/store';
+import {setItemToLS} from '../LS-service/localStorage';
 const SET_USER_DATA = 'cards/signInReducer/SET_USER_DATA';
 const LOGIN_SUCCESS = 'cards/signInReducer/LOGIN_SUCCESS';
 const SET_ERROR = 'cards/signInReducer/SET_ERROR';
@@ -49,26 +50,27 @@ export type SetErrorType = ReturnType<typeof setErrorText>;
 export const setErrorText = (errorMessage: string) => ({type: SET_ERROR, errorMessage} as const);
 
 
-
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 export const login = (email: string, password: string, isRemember: boolean ):ThunkType => {
     return async (dispatch) => {
-        const response = await authAPI.login(email, password, isRemember);
-        if (response.status >= 200 && response.status < 300) {
-            await dispatch(setAuthMe(response.data.token))          // зачем просит await ??
+        const data = await authAPI.login(email, password, isRemember);
+        if (data.success) {
+            await dispatch(setAuthMe(data.token))          // зачем просит await ??
         } else {
-            dispatch(setErrorText(response.data.error))
+            dispatch(setErrorText(data.error))
         }
     };
 };
 
 export const setAuthMe = (token: string) => async (dispatch: Dispatch<ActionsTypes>) => {
-    const response = await authAPI.authMe(token);
-    if (response.status >= 200 && response.status < 300) {
-        localStorage.setItem('token', response.data.token);
-        dispatch(setUserData({...response.data}));
+    const data = await authAPI.authMe(token);
+    if (data.success) {
+        setItemToLS('token', data.token);
+        dispatch(setUserData({...data}));
         dispatch(loginSuccess(true));
+    } else {
+        dispatch(setErrorText(data.error))
     }
 };
 

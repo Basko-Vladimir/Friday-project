@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {login, setAuthMe} from '../BLL/signInReducer';
 import {AppStateType} from '../../../main/BLL/store';
 import {SignIn} from './SignIn';
+import {getItemFromLS} from '../LS-service/localStorage';
 
 export const SignInContainer = () => {
     const errorText = useSelector<AppStateType, string>(state => state.signIn.errorMessage);
@@ -17,7 +18,7 @@ export const SignInContainer = () => {
 
 
     useEffect( () => {
-        const token = localStorage.getItem('token');
+        const token = getItemFromLS('token');
         token && dispatch(setAuthMe(token));
     },[ dispatch]);
 
@@ -36,6 +37,9 @@ export const SignInContainer = () => {
     const sendFormData = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(login(email, password, isRemember));
+        setEmail('');
+        setPassword('');
+        setIsRemember(false);
     }, [dispatch, email, password, isRemember]);
 
     return (

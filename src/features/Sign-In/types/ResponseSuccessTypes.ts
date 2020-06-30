@@ -15,3 +15,5 @@ export type UserDataType = {
     __v: number
     _id: string
 };
+
+

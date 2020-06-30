@@ -28,10 +28,10 @@ type SetForgotSuccess = ReturnType<typeof setForgotSuccess>
 const setForgotSuccess = (success: boolean) => ({type:SET_FORGOT_SUCCESS, success} as const);
 
 export const sendEmail = (email: string) => async (dispatch: Dispatch<ActionsType>) => {
-    const response = await forgotAPI.sendEmail(email);
-    if (response.success) {
-        dispatch(setForgotSuccess(response.success))
+    const data = await forgotAPI.sendEmail(email);
+    if (data.success) {
+        dispatch(setForgotSuccess(data.success))
     } else {
-        dispatch(setErrorText(response.data.error))
+        dispatch(setErrorText(data.error))
     }
 };
