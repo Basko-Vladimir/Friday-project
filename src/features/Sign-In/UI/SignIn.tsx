@@ -17,7 +17,7 @@ type SignInPropsType = {
     sendFormData: (e: FormEvent<HTMLFormElement>) => void
 }
 
-export const SignIn: React.FC<SignInPropsType> = (props) => {
+export const SignIn: React.FC<SignInPropsType> = React.memo((props) => {
     const {email, password, isRemember, errorText,  changePass, changeEmail, changeIsRemember, sendFormData} = props;
     return (
         <div className={styles.signInPage}>
@@ -41,4 +41,4 @@ export const SignIn: React.FC<SignInPropsType> = (props) => {
             </form>
         </div>
     )
-};
+});

@@ -8,7 +8,7 @@ const SET_ERROR = 'cards/signInReducer/SET_ERROR';
 
 const initialState = {
     isAuth: false,
-    userData: {} as UserDataType,
+    userData: null as UserDataType | null,
     errorMessage: ''
 };
 
@@ -17,7 +17,6 @@ export type StateType = typeof initialState;
 export const signInReducer = (state: StateType = initialState, action: SignInActionsTypes): StateType => {
     switch (action.type) {
         case SET_USER_DATA:
-            debugger
             return {
                 ...state,
                 userData: action.userData
@@ -40,20 +39,20 @@ export const signInReducer = (state: StateType = initialState, action: SignInAct
 type SignInActionsTypes = SetUserDataType | LoginSuccessType | SetErrorType;
 
 type SetUserDataType = ReturnType<typeof setUserData>
-const setUserData = (userData: UserDataType) => ({type: SET_USER_DATA, userData} as const);
+export const setUserData = (userData: UserDataType | null) => ({type: SET_USER_DATA, userData} as const);
 
 type LoginSuccessType = ReturnType<typeof loginSuccess>;
-const loginSuccess = (isAuth: boolean) => ({type: LOGIN_SUCCESS, isAuth} as const);
+export const loginSuccess = (isAuth: boolean) => ({type: LOGIN_SUCCESS, isAuth} as const);
 
 type SetErrorType = ReturnType<typeof setErrorText>;
 export const setErrorText = (errorMessage: string) => ({type: SET_ERROR, errorMessage} as const);
 
 
 export const login = (email: string, password: string, isRemember: boolean ) => {
-    return async (dispatch: any) => {
+    return async (dispatch: any) => {                                 // <--- надо сделать другую типизацию dispatcha
         const response = await authAPI.login(email, password, isRemember);
         if (response.status >= 200 && response.status < 300) {
-            dispatch(setAuthMe(response.data.token))     // адо сделать другую типизацию dispatcha
+            dispatch(setAuthMe(response.data.token))
         } else {
             dispatch(setErrorText(response.data.error))
         }
@@ -63,10 +62,9 @@ export const login = (email: string, password: string, isRemember: boolean ) => 
 export const setAuthMe = (token: string) => async (dispatch: Dispatch) => {
     const response = await authAPI.authMe(token);
     if (response.status >= 200 && response.status < 300) {
+        localStorage.setItem('token', response.data.token);
         dispatch(setUserData({...response.data}));
         dispatch(loginSuccess(true));
-    } else {
-        dispatch(setErrorText(response.data.error))
     }
 };
 
