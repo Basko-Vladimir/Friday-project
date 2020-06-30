@@ -37,8 +37,8 @@ export const SingUpReducer = (state: StateType = initialState, action: any): Sta
 // Action Creators
 export const isLoading = (value: boolean):IsLoadingACType => ({type: IS_LOADING, value});
 
-const SignUpSuccess = (registeredSuccess: boolean)
-    : SignUpSuccessType => ({type: SIGN_UP_SUCCESS, registeredSuccess});
+const SignUpSuccess = (signUpSuccess: boolean)
+    : SignUpSuccessType => ({type: SIGN_UP_SUCCESS, signUpSuccess});
 export const SignUpError = (errorMessage: string)
     : SignUpErrorType => ({type: SIGN_UP_ERROR, errorMessage});
 

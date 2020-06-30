@@ -24,7 +24,7 @@ export type SignUpPropsType = {
 
 export type SignUpSuccessType = {
     type: typeof SIGN_UP_SUCCESS
-    registeredSuccess: boolean
+    signUpSuccess: boolean
 }
 export type SignUpErrorType = {
     type: typeof SIGN_UP_ERROR
