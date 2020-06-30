@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FormEvent} from 'react';
 import styles from './SignIn.module.scss';
-import {NewInput} from './NewInput/NewInput';
+import {NewInput} from '../../../main/UI/common/NewInput/NewInput';
 import {NavLink} from 'react-router-dom';
 import {FORGOT_PATH, SIGN_UP_PATH} from '../../../main/UI/Routes/Routes';
 import {Button} from '../../../main/UI/common/Button/Button';
@@ -18,9 +18,10 @@ type SignInPropsType = {
 }
 
 export const SignIn: React.FC<SignInPropsType> = React.memo((props) => {
-    const {email, password, isRemember, errorText,  changePass, changeEmail, changeIsRemember, sendFormData} = props;
+    const {email, password, isRemember, errorText,  changePass,
+            changeEmail, changeIsRemember, sendFormData} = props;
     return (
-        <div className={styles.signInPage}>
+        <div>
             <h1>Sign In</h1>
             <form onSubmit={sendFormData} className={styles.form}>
                 <NewInput type={'text'} placeholder={'Enter your e-mail'}

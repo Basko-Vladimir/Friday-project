@@ -1,7 +1,8 @@
 import {Dispatch} from 'redux';
 import {authAPI} from '../DAL/api';
 import {UserDataType} from '../types/types';
-
+import { ThunkAction } from 'redux-thunk';
+import {AppStateType} from '../../../main/BLL/store';
 const SET_USER_DATA = 'cards/signInReducer/SET_USER_DATA';
 const LOGIN_SUCCESS = 'cards/signInReducer/LOGIN_SUCCESS';
 const SET_ERROR = 'cards/signInReducer/SET_ERROR';
@@ -14,7 +15,7 @@ const initialState = {
 
 export type StateType = typeof initialState;
 
-export const signInReducer = (state: StateType = initialState, action: SignInActionsTypes): StateType => {
+export const signInReducer = (state: StateType = initialState, action: ActionsTypes): StateType => {
     switch (action.type) {
         case SET_USER_DATA:
             return {
@@ -36,7 +37,7 @@ export const signInReducer = (state: StateType = initialState, action: SignInAct
     }
 };
 
-type SignInActionsTypes = SetUserDataType | LoginSuccessType | SetErrorType;
+type ActionsTypes = SetUserDataType | LoginSuccessType | SetErrorType;
 
 type SetUserDataType = ReturnType<typeof setUserData>
 export const setUserData = (userData: UserDataType | null) => ({type: SET_USER_DATA, userData} as const);
@@ -44,22 +45,25 @@ export const setUserData = (userData: UserDataType | null) => ({type: SET_USER_D
 type LoginSuccessType = ReturnType<typeof loginSuccess>;
 export const loginSuccess = (isAuth: boolean) => ({type: LOGIN_SUCCESS, isAuth} as const);
 
-type SetErrorType = ReturnType<typeof setErrorText>;
+export type SetErrorType = ReturnType<typeof setErrorText>;
 export const setErrorText = (errorMessage: string) => ({type: SET_ERROR, errorMessage} as const);
 
 
-export const login = (email: string, password: string, isRemember: boolean ) => {
-    return async (dispatch: any) => {                                 // <--- надо сделать другую типизацию dispatcha
+
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+
+export const login = (email: string, password: string, isRemember: boolean ):ThunkType => {
+    return async (dispatch) => {
         const response = await authAPI.login(email, password, isRemember);
         if (response.status >= 200 && response.status < 300) {
-            dispatch(setAuthMe(response.data.token))
+            await dispatch(setAuthMe(response.data.token))          // зачем просит await ??
         } else {
             dispatch(setErrorText(response.data.error))
         }
     };
 };
 
-export const setAuthMe = (token: string) => async (dispatch: Dispatch) => {
+export const setAuthMe = (token: string) => async (dispatch: Dispatch<ActionsTypes>) => {
     const response = await authAPI.authMe(token);
     if (response.status >= 200 && response.status < 300) {
         localStorage.setItem('token', response.data.token);
