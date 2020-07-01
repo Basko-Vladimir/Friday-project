@@ -8,7 +8,7 @@ import {SignIn} from './SignIn';
 import {getItemFromLS} from '../LS-service/localStorage';
 
 export const SignInContainer = () => {
-    const errorText = useSelector<AppStateType, string>(state => state.signIn.errorMessage);
+    const messageText = useSelector<AppStateType, string>(state => state.signIn.message);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const dispatch = useDispatch();
 
@@ -20,7 +20,7 @@ export const SignInContainer = () => {
     useEffect( () => {
         const token = getItemFromLS('token');
         token && dispatch(setAuthMe(token));
-    },[ dispatch]);
+    },[dispatch]);
 
     const changeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value)
@@ -42,16 +42,10 @@ export const SignInContainer = () => {
         setIsRemember(false);
     }, [dispatch, email, password, isRemember]);
 
-    return (
-        <>
-            {
-                !isAuth
-                    ? <SignIn email={email} password={password} isRemember={isRemember}
-                              changeEmail={changeEmail} changePass={changePass} errorText={errorText}
-                              changeIsRemember={changeIsRemember} sendFormData={sendFormData}/>
-                    : <Redirect to={PROFILE_PATH}/>
-            }
-        </>
-    )
+    if (isAuth) return <Redirect to={PROFILE_PATH}/>;
+
+    return <SignIn email={email} password={password} isRemember={isRemember}
+                   changeEmail={changeEmail} changePass={changePass} messageText={messageText}
+                   changeIsRemember={changeIsRemember} sendFormData={sendFormData}/>
 };
 

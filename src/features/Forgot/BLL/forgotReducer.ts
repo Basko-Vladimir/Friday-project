@@ -1,6 +1,6 @@
 import {Dispatch} from 'redux';
 import {forgotAPI} from '../DAL/api';
-import {setErrorText, SetErrorType} from '../../Sign-In/BLL/signInReducer';
+import {SetMessageTextType, setMessageText} from '../../Sign-In/BLL/signInReducer';
 
 const SET_FORGOT_SUCCESS = 'cards/forgotReducer/SET_FORGOT_SUCCESS';
 
@@ -22,16 +22,18 @@ export const forgotReducer = (state: StateType = initialState, action: SetForgot
     }
 };
 
-type ActionsType = SetForgotSuccess | SetErrorType;
+type ActionsType = SetForgotSuccess | SetMessageTextType;
 
 type SetForgotSuccess = ReturnType<typeof setForgotSuccess>
-const setForgotSuccess = (success: boolean) => ({type:SET_FORGOT_SUCCESS, success} as const);
+export const setForgotSuccess = (success: boolean) => ({type:SET_FORGOT_SUCCESS, success} as const);
 
 export const sendEmail = (email: string) => async (dispatch: Dispatch<ActionsType>) => {
-    const data = await forgotAPI.sendEmail(email);
-    if (data.success) {
-        dispatch(setForgotSuccess(data.success))
-    } else {
-        dispatch(setErrorText(data.error))
+    try {
+        await forgotAPI.sendEmail(email);
+        dispatch(setForgotSuccess(true));
+        dispatch(setMessageText('Success! Check your email'))
+    } catch (err) {
+        dispatch(setForgotSuccess(false));
+        dispatch(setMessageText(err.response.data.error))
     }
 };

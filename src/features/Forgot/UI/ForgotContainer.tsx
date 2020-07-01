@@ -3,12 +3,12 @@ import {Forgot} from './Forgot';
 import {useDispatch, useSelector} from 'react-redux';
 import {sendEmail} from '../BLL/forgotReducer';
 import {AppStateType} from '../../../main/BLL/store';
-import {SET_NEW_PASS_PATH} from '../../../main/UI/Routes/Routes';
 import { Redirect } from 'react-router-dom';
+import { SIGN_IN_PATH } from '../../../main/UI/Routes/Routes';
 
 export const ForgotContainer = () => {
-    const [email, setEmail] = useState('');
-    const errorText = useSelector<AppStateType, string>(state => state.signIn.errorMessage);
+    const [email, setEmail] = useState<string>('');
+    const messageText = useSelector<AppStateType, string>(state => state.signIn.message);
     const forgotSuccess = useSelector<AppStateType, boolean>(state => state.forgot.forgotSuccess);
     const dispatch = useDispatch();
 
@@ -19,16 +19,11 @@ export const ForgotContainer = () => {
     const onSendEmail = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(sendEmail(email));
+        setEmail('');
     }, [dispatch, email]);
 
-    return (
-        <>
-            {
-                forgotSuccess
-                ? <Redirect to={SET_NEW_PASS_PATH}/>
-                : <Forgot email={email} changeEmail={changeEmail}
-                        errorText={errorText} sendEmail={onSendEmail}/>
-            }
-        </>
-    )
+    // if (forgotSuccess) return <Redirect to={SIGN_IN_PATH}/>;
+
+    return <Forgot email={email} changeEmail={changeEmail} isResponseError={!forgotSuccess}
+                                 messageText={messageText} sendEmail={onSendEmail}/>
 };

@@ -4,18 +4,19 @@ import {Button} from '../../../main/UI/common/Button/Button';
 import {NewInput} from '../../../main/UI/common/NewInput/NewInput';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import { NavLink } from 'react-router-dom';
-import {ErrorMessage} from '../../../main/UI/common/ErrorMessage/ErrorMessage';
+import {Message} from '../../../main/UI/common/Message/Message';
+import {setMessageText} from '../../Sign-In/BLL/signInReducer';
 
 type ForgotPropsType = {
     email: string
-    errorText: string
+    messageText: string
+    isResponseError: boolean
     changeEmail: (e: ChangeEvent<HTMLInputElement>) => void
     sendEmail: (e: FormEvent<HTMLFormElement>) => void
 }
 
 export const Forgot:React.FC<ForgotPropsType> = React.memo((props) => {
-    const {email, changeEmail, errorText, sendEmail} = props;
-
+    const {email, messageText, isResponseError, changeEmail, sendEmail} = props;
     return (
         <div>
             <h1>Forgot</h1>
@@ -25,11 +26,13 @@ export const Forgot:React.FC<ForgotPropsType> = React.memo((props) => {
                 <Button title={'Send email'}/>
             </form>
             <NavLink to={SIGN_IN_PATH}>Sign In</NavLink>
-            {errorText && <div className={styles.errorBlock}>
-                <div className={styles.background}> </div>
-                <ErrorMessage errorText={errorText}/>
-            </div>}
+            {
+                messageText && <div className={styles.errorBlock}>
+                    <div className={styles.background}> </div>
+                    <Message messageText={messageText} isResponseError={isResponseError}
+                             actionCreator={setMessageText('')}/>
+                </div>
+            }
         </div>
-
     )
 });
