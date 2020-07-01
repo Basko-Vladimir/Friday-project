@@ -16,7 +16,7 @@ export const Profile = () => {
     useEffect(() => {
         const token = getItemFromLS('token');
         token && dispatch(setAuthMe(token));
-    }, [isAuth, dispatch]);
+    }, [dispatch]);
 
     const signOut = () => {
         setItemToLS('token', '');

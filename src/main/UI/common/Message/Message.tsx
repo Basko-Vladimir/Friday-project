@@ -12,17 +12,18 @@ type MessagePropsType = {
 
 export const Message: React.FC<MessagePropsType> = React.memo((props) => {
     const {messageText, isResponseError, actionCreator} = props;
-    const messageClass = isResponseError ? `${styles.messageBlock} ${styles.error} ` : styles.messageBlock;
+    const messageClass = isResponseError ? `${styles.message} ${styles.error} ` : styles.message;
     const dispatch = useDispatch();
 
     const closeMessage = () => {
         dispatch(actionCreator)
     };
 
-    return (
+    return <>
+        <div className={styles.background}> </div>
         <div className={messageClass}>
             <h3>{messageText}</h3>
             <Button title={'Close'} onClick={closeMessage}/>
         </div>
-    )
+    </>
 });

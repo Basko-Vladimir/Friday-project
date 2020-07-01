@@ -39,11 +39,8 @@ export const SignIn: React.FC<SignInPropsType> = React.memo((props) => {
                 <Button title={'Sign in'}/>
                 <NavLink to={SIGN_UP_PATH}>Registration</NavLink>
                 {
-                    messageText && <div className={styles.errorBlock}>
-                                       <div className={styles.background}> </div>
-                                       <Message messageText={messageText} isResponseError={true}
-                                                actionCreator={setMessageText('')}/>
-                                   </div>
+                    messageText && <Message messageText={messageText} isResponseError={true}
+                                            actionCreator={setMessageText('')}/>
                 }
             </form>
         </div>

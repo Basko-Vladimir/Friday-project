@@ -27,11 +27,8 @@ export const Forgot:React.FC<ForgotPropsType> = React.memo((props) => {
             </form>
             <NavLink to={SIGN_IN_PATH}>Sign In</NavLink>
             {
-                messageText && <div className={styles.errorBlock}>
-                    <div className={styles.background}> </div>
-                    <Message messageText={messageText} isResponseError={isResponseError}
-                             actionCreator={setMessageText('')}/>
-                </div>
+                messageText && <Message messageText={messageText} isResponseError={isResponseError}
+                                        actionCreator={setMessageText('')}/>
             }
         </div>
     )
