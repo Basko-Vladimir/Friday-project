@@ -9,7 +9,7 @@ export const forgotAPI = {
     sendEmail(email: string) {
         return instance.post<ForgotSuccessType>('auth/forgot', {
             email: email,
-            html1: "<a href='http://localhost:3000/#/reset-password/",
+            html1: "<a href='http://localhost:3000/#/set-new-password/",
             html2: "'>reset-password-link</a>"
         })
             .then(res => res.data)

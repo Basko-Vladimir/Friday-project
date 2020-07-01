@@ -9,7 +9,7 @@ import {ForgotContainer} from '../../../features/Forgot/UI/ForgotContainer';
 export const SIGN_IN_PATH = '/sign-in';
 export const SIGN_UP_PATH = '/sign-up';
 export const FORGOT_PATH = '/forgot';
-export const SET_NEW_PASS_PATH = '/reset-password';
+export const SET_NEW_PASS_PATH = '/set-new-password';
 export const PROFILE_PATH = '/profile';
 
 export const Routes = () => {
