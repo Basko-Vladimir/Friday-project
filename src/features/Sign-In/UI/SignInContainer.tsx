@@ -8,7 +8,7 @@ import {SignIn} from './SignIn';
 import {getItemFromLS} from '../LS-service/localStorage';
 
 export const SignInContainer = () => {
-    const messageText = useSelector<AppStateType, string>(state => state.signIn.message);
+    const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const dispatch = useDispatch();
 

@@ -5,7 +5,7 @@ import {NavLink} from 'react-router-dom';
 import {FORGOT_PATH, SIGN_UP_PATH} from '../../../main/UI/Routes/Routes';
 import {Button} from '../../../main/UI/common/Button/Button';
 import {Message} from '../../../main/UI/common/Message/Message';
-import {setMessageText} from '../BLL/signInReducer';
+import {setMessageText} from '../../../main/BLL/appReducer';
 
 type SignInPropsType = {
     email: string

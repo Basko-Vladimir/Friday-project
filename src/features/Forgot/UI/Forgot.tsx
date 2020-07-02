@@ -5,7 +5,7 @@ import {NewInput} from '../../../main/UI/common/NewInput/NewInput';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import { NavLink } from 'react-router-dom';
 import {Message} from '../../../main/UI/common/Message/Message';
-import {setMessageText} from '../../Sign-In/BLL/signInReducer';
+import { setMessageText } from '../../../main/BLL/appReducer';
 
 type ForgotPropsType = {
     email: string
@@ -23,9 +23,9 @@ export const Forgot:React.FC<ForgotPropsType> = React.memo((props) => {
             <form className={styles.form} onSubmit={sendEmail}>
                 <NewInput type={'text'} placeholder={'Enter your e-mail'}
                           value={email} onChange={changeEmail}/>
+                <NavLink to={SIGN_IN_PATH}>Sign In</NavLink>
                 <Button title={'Send email'}/>
             </form>
-            <NavLink to={SIGN_IN_PATH}>Sign In</NavLink>
             {
                 messageText && <Message messageText={messageText} isResponseError={isResponseError}
                                         actionCreator={setMessageText('')}/>

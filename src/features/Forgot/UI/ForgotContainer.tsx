@@ -8,7 +8,7 @@ import { SIGN_IN_PATH } from '../../../main/UI/Routes/Routes';
 
 export const ForgotContainer = () => {
     const [email, setEmail] = useState<string>('');
-    const messageText = useSelector<AppStateType, string>(state => state.signIn.message);
+    const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const forgotSuccess = useSelector<AppStateType, boolean>(state => state.forgot.forgotSuccess);
     const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ export const ForgotContainer = () => {
         setEmail('');
     }, [dispatch, email]);
 
-    // if (forgotSuccess) return <Redirect to={SIGN_IN_PATH}/>;
+    if (forgotSuccess) return <Redirect to={SIGN_IN_PATH}/>;
 
     return <Forgot email={email} changeEmail={changeEmail} isResponseError={!forgotSuccess}
                                  messageText={messageText} sendEmail={onSendEmail}/>

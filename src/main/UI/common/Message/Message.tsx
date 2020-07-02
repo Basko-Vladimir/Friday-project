@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Message.module.scss';
 import {Button} from '../Button/Button';
 import {useDispatch} from 'react-redux';
-import {SetMessageTextType} from '../../../../features/Sign-In/BLL/signInReducer';
+import {SetMessageTextType} from '../../../BLL/appReducer';
 
 type MessagePropsType = {
     messageText: string
