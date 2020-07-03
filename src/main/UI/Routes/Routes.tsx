@@ -2,9 +2,9 @@ import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {SignInContainer} from '../../../features/Sign-In/UI/SignInContainer';
 import {SignUpContainer} from '../../../features/Sign-Up/UI/SignUp';
-import {Forgot} from '../../../features/Forgot/Forgot';
-import {SetNewPass} from '../../../features/Set-New-Pass/SetNewPass';
+import {SetNewPassContainer} from '../../../features/Set-New-Pass/UI/SetNewPassContainer';
 import {Profile} from '../../../features/Profile/Profile';
+import {ForgotContainer} from '../../../features/Forgot/UI/ForgotContainer';
 
 export const SIGN_IN_PATH = '/sign-in';
 export const SIGN_UP_PATH = '/sign-up';
@@ -17,8 +17,8 @@ export const Routes = () => {
         <Switch>
             <Route path={SIGN_IN_PATH} render={() => <SignInContainer/>}/>
             <Route path={SIGN_UP_PATH} render={() => <SignUpContainer/>}/>
-            <Route path={FORGOT_PATH} render={() => <Forgot/>}/>
-            <Route path={SET_NEW_PASS_PATH} render={() => <SetNewPass/>}/>
+            <Route path={FORGOT_PATH} render={() => <ForgotContainer/>}/>
+            <Route path={`${SET_NEW_PASS_PATH}/:resetToken?`} render={() => <SetNewPassContainer/>}/>
             <Route path={PROFILE_PATH} render={() => <Profile/>}/>
             <Redirect exact path={'/'} to={SIGN_IN_PATH}/>
             <Route path={'*'} render={() => <h2> 404 ERROR PAGE NOT FOUND</h2>}/>

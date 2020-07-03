@@ -1,23 +1,24 @@
 import {Dispatch} from 'redux';
-import {authAPI} from '../DAL/api';
-import {UserDataType} from '../types/types';
+import {authAPI} from '../DAL/signInAPI';
+import {UserDataType} from '../types/ResponseSuccessTypes';
+import {ThunkAction} from 'redux-thunk';
+import {AppStateType} from '../../../main/BLL/store';
+import {setItemToLS} from '../LS-service/localStorage';
+import {SetMessageTextType, setMessageText} from '../../../main/BLL/appReducer';
 
 const SET_USER_DATA = 'cards/signInReducer/SET_USER_DATA';
 const LOGIN_SUCCESS = 'cards/signInReducer/LOGIN_SUCCESS';
-const SET_ERROR = 'cards/signInReducer/SET_ERROR';
 
 const initialState = {
     isAuth: false,
-    userData: {} as UserDataType,
-    errorMessage: ''
+    userData: null as UserDataType | null,
 };
 
 export type StateType = typeof initialState;
 
-export const signInReducer = (state: StateType = initialState, action: SignInActionsTypes): StateType => {
+export const signInReducer = (state: StateType = initialState, action: ActionsTypes): StateType => {
     switch (action.type) {
         case SET_USER_DATA:
-            debugger
             return {
                 ...state,
                 userData: action.userData
@@ -27,46 +28,42 @@ export const signInReducer = (state: StateType = initialState, action: SignInAct
                 ...state,
                 isAuth: action.isAuth
             };
-        case SET_ERROR:
-            return {
-                ...state,
-                errorMessage: action.errorMessage
-            };
         default:
             return state;
     }
 };
 
-type SignInActionsTypes = SetUserDataType | LoginSuccessType | SetErrorType;
+type ActionsTypes = SetUserDataType | LoginSuccessType | SetMessageTextType;
 
 type SetUserDataType = ReturnType<typeof setUserData>
-const setUserData = (userData: UserDataType) => ({type: SET_USER_DATA, userData} as const);
+export const setUserData = (userData: UserDataType | null) => ({type: SET_USER_DATA, userData} as const);
 
 type LoginSuccessType = ReturnType<typeof loginSuccess>;
-const loginSuccess = (isAuth: boolean) => ({type: LOGIN_SUCCESS, isAuth} as const);
+export const loginSuccess = (isAuth: boolean) => ({type: LOGIN_SUCCESS, isAuth} as const);
 
-type SetErrorType = ReturnType<typeof setErrorText>;
-export const setErrorText = (errorMessage: string) => ({type: SET_ERROR, errorMessage} as const);
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
-
-export const login = (email: string, password: string, isRemember: boolean ) => {
-    return async (dispatch: any) => {
-        const response = await authAPI.login(email, password, isRemember);
-        if (response.status >= 200 && response.status < 300) {
-            dispatch(setAuthMe(response.data.token))     // адо сделать другую типизацию dispatcha
-        } else {
-            dispatch(setErrorText(response.data.error))
+export const login = (email: string, password: string, isRemember: boolean): ThunkType => {
+    return async (dispatch) => {
+        try {
+            const data = await authAPI.login(email, password, isRemember);
+            setItemToLS('token', data.token);
+            dispatch(setUserData({...data}));
+            dispatch(loginSuccess(true));
+        } catch (err) {
+            dispatch(setMessageText(err.response.data.error))
         }
     };
 };
 
-export const setAuthMe = (token: string) => async (dispatch: Dispatch) => {
-    const response = await authAPI.authMe(token);
-    if (response.status >= 200 && response.status < 300) {
-        dispatch(setUserData({...response.data}));
+export const setAuthMe = (token: string) => async (dispatch: Dispatch<ActionsTypes>) => {
+    try {
+        const data = await authAPI.authMe(token);
+        setItemToLS('token', data.token);
+        dispatch(setUserData({...data}));
         dispatch(loginSuccess(true));
-    } else {
-        dispatch(setErrorText(response.data.error))
+    } catch (err) {
+        console.log(err.response.data.error);
     }
 };
 
