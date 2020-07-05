@@ -1,6 +1,7 @@
 import {Dispatch} from 'redux';
 import {forgotAPI} from '../DAL/forgotAPI';
 import {setMessageText, SetMessageTextType} from '../../../main/BLL/appReducer';
+import {ForgotResponseErrorType} from '../types/ResponseErrorTypes';
 
 const SET_FORGOT_SUCCESS = 'cards/forgotReducer/SET_FORGOT_SUCCESS';
 
@@ -29,10 +30,11 @@ export const setForgotSuccess = (success: boolean) => ({type:SET_FORGOT_SUCCESS,
 
 export const sendEmail = (email: string) => async (dispatch: Dispatch<ActionsType>) => {
     try {
-        await forgotAPI.sendEmail(email);
+        const data = await forgotAPI.sendEmail(email);
         dispatch(setForgotSuccess(true));
         dispatch(setMessageText('Success! Check your email'))
     } catch (err) {
         dispatch(setMessageText(err.response.data.error))
+        // const a = err.response.data as ForgotResponseErrorType
     }
 };

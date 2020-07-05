@@ -12,7 +12,7 @@ type SetNewPassPropsType = {
     passwordRepeat: string
     sendNewPassword: (e: FormEvent<HTMLFormElement>) => void
     changePassword: (e: ChangeEvent<HTMLInputElement>) => void
-    changePasswordRepeat: (e: ChangeEvent<HTMLInputElement>) => void
+    changePasswordRepeat: (value: string) => void
     messageText: string
     isResponseError: boolean
 }
@@ -28,7 +28,7 @@ export const SetNewPass: React.FC<SetNewPassPropsType> = React.memo( (props) => 
                 <NewInput value={password} placeholder={'Enter new password'}
                           onChange={changePassword} type={'password'}/>
                 <NewInput value={passwordRepeat} placeholder={'Repeat password'}
-                          onChange={changePasswordRepeat} type={'password'}/>
+                          onChangeHandler={changePasswordRepeat} type={'password'}/>
                 <NavLink to={SIGN_IN_PATH}>Sign In</NavLink>
                 <Button title={'Set password'}/>
             </form>

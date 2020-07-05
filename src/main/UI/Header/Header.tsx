@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './Header.module.css';
-
 import {NavLink} from 'react-router-dom';
-import {SIGN_IN_PATH, SIGN_UP_PATH, FORGOT_PATH, SET_NEW_PASS_PATH, PROFILE_PATH} from '../Routes/Routes';
+import {SIGN_IN_PATH, SIGN_UP_PATH, FORGOT_PATH,
+        SET_NEW_PASS_PATH, PROFILE_PATH, PACKS_PATH} from '../Routes/Routes';
 
 export const Header = () => {
     return (
@@ -13,6 +13,7 @@ export const Header = () => {
                 <NavLink to={FORGOT_PATH} activeClassName={styles.active}>Forgot</NavLink>
                 <NavLink to={SET_NEW_PASS_PATH} activeClassName={styles.active}>Set New Password</NavLink>
                 <NavLink to={PROFILE_PATH} activeClassName={styles.active}>Profile</NavLink>
+                <NavLink to={PACKS_PATH} activeClassName={styles.active}>Packs</NavLink>
             </nav>
         </header>
     )

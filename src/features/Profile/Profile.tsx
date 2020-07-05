@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../main/BLL/store';
 import {UserDataType} from '../Sign-In/types/ResponseSuccessTypes';
@@ -13,19 +13,24 @@ export const Profile = () => {
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const dispatch = useDispatch();
 
+    const [firstRendering, setFirstRendering] = useState<boolean>(true);
+
     useEffect(() => {
+        if (firstRendering) {
+            setFirstRendering(false);
+        }
         const token = getItemFromLS('token');
         token && dispatch(setAuthMe(token));
-    }, [dispatch]);
+    }, [dispatch, setFirstRendering]);
 
     const signOut = () => {
         setItemToLS('token', '');
         dispatch(setUserData(null));
         dispatch(loginSuccess(false));
     };
-
+     // if (!firstRendering && !fetching )
     if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
-
+    //if (fetching) return <Preloader/>
     return (
         <div>
             <h1>Profile </h1>
