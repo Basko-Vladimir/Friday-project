@@ -21,8 +21,8 @@ export const SetNewPassContainer = () => {
         setPassword(e.currentTarget.value)
     }, [setPassword]);
 
-    const changePasswordRepeat = useCallback( (e: ChangeEvent<HTMLInputElement>) => {
-        setPasswordRepeat(e.currentTarget.value)
+    const changePasswordRepeat = useCallback( (value: string) => {
+        setPasswordRepeat(value)
     }, [setPasswordRepeat]);
 
     const sendNewPassword = useCallback( (e: FormEvent<HTMLFormElement>) => {
@@ -36,7 +36,9 @@ export const SetNewPassContainer = () => {
         setPasswordRepeat('');
     }, [dispatch, password, passwordRepeat, resetToken]);
 
-    if (newPassSuccess) return <Redirect to={SIGN_IN_PATH}/>;
+    if (newPassSuccess) setTimeout( () => {}, 500);
+
+    // if (redirect) return <Redirect to={SIGN_IN_PATH}/>;
 
     return <SetNewPass password={password} passwordRepeat={passwordRepeat}
                                 sendNewPassword={sendNewPassword} changePassword={changePassword}
