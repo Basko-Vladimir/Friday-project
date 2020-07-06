@@ -3,7 +3,7 @@ import styles from './Table.module.scss';
 import {Button} from '../Button/Button';
 import {PackItemType} from '../../../../features/Packs/types';
 import {useDispatch} from 'react-redux';
-import {updatePack} from '../../../../features/Packs/BLL/packsReducer';
+import {addPack, changePack, deletePack} from '../../../../features/Packs/BLL/packsReducer';
 import {getItemFromLS} from '../../../../features/Sign-In/LS-service/localStorage';
 
 type TablePropsType = {
@@ -18,15 +18,24 @@ export const Table = React.memo(function (props:TablePropsType) {
     const token = getItemFromLS('token');
 
     const onUpdatePack = (idPack: string) => {
-        dispatch(updatePack(idPack, token));
+        dispatch(changePack(idPack, token));
     };
+
+    const onAddPack = () => {
+        dispatch(addPack(token))
+    };
+
+    const onDeletePack = (idPack: string) => {
+        dispatch(deletePack(idPack, token))
+    };
+
 
     return (
             <div className={styles.table}>
                 <div className={styles.headers}>
                     {columnsHeaders.map((header, i) =>  {
                         return i === columnsHeaders.length - 1
-                                ? <Button key={header} title={header} />
+                                ? <Button key={header} title={header} onClick={onAddPack} />
                                 : <span key={header}>{header}</span>
                         }
                     )}
@@ -39,7 +48,7 @@ export const Table = React.memo(function (props:TablePropsType) {
                                        <span>{row.grade ? row.grade : '---'}</span>
                                        <span className={styles.buttonColumn}>
                                            <Button title={'Update'} onClick={() => onUpdatePack(row._id)}/>
-                                           <Button title={'Delete'}/>
+                                           <Button title={'Delete'} onClick={() => onDeletePack(row._id)}/>
                                        </span>
                                    </div>
                         })

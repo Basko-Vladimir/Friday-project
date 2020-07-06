@@ -11,8 +11,30 @@ export const packsAPI = {
             .then(res => res.data)
     },
 
+    addPack (token: string | undefined) {
+        return instance.post('/cards/pack', {
+            cardsPack: {
+                name: 'BaskoPack',
+                grade: 0
+            },
+            token
+        })
+            .then(res => res.data)
+    },
+
     updatePack (idPack: string, token: string | undefined) {
-        return instance.put('/cards/pack', { cardsPack: {_id: idPack}, token})
+        return instance.put('/cards/pack', {
+            cardsPack: {
+                _id: idPack,
+                name: 'changedBaskoPack'
+            },
+            token
+        })
+            .then(res => res.data)
+    },
+
+    deletePack (idPack: string, token: string | undefined) {
+        return instance.delete(`/cards/pack?token=${token}&id=${idPack}`)
             .then(res => res.data)
     }
 };

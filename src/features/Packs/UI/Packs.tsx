@@ -16,15 +16,14 @@ export const Packs = function () {
     const token = getItemFromLS('token');
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
 
-
     useEffect( () => {
         if (firstRendering && token) {
-             dispatch(getPacks(token));
             setFirstRendering(false);
+            dispatch(getPacks(token));
         }
     }, [dispatch, token, setFirstRendering, firstRendering]);
 
-    console.log(token, isAuth);
+
     if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
     return <Table columnsHeaders={headers} rows={packs}/>
