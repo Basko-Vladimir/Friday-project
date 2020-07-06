@@ -1,21 +1,25 @@
-import React, {InputHTMLAttributes, DetailedHTMLProps, ChangeEvent} from 'react';
+import React, {InputHTMLAttributes, DetailedHTMLProps, ChangeEvent, useState} from 'react';
 import {Button} from "../Button/Button";
 import s from './Search.module.scss'
+import {Input} from "../Input/Input";
+import {useDispatch, useSelector} from "react-redux";
+import {AppStateType} from "../../../BLL/store";
+import {PackItemType} from "../../../../features/Packs/types";
+
 
 export type InputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement> & { error?: string, onChangeHandler?: (value: string) => void }
+    HTMLInputElement> & { searchQuery?: string, setQuery?: (e: React.ChangeEvent<HTMLInputElement>) => void }
 
-export const Search: React.FC<InputPropsType> = React.memo(({error, onChangeHandler, onChange, ...props}) => {
+export const Search: React.FC<InputPropsType> =
+    React.memo(({ onChange, setQuery, searchQuery, ...props}) => {
 
-    const onChangeCallback = (e: ChangeEvent<HTMLInputElement>) => {
-        onChangeHandler && onChangeHandler(e.currentTarget.value);
-        onChange && onChange(e)
-    };
+
     return <div className={s.container}>
         <div className={s.searchArea}>
-            <input onChange={() => {
-            }} {...props} type='text' placeholder='Card name'/>
-            {error && <span>{error}</span>}
+            <Input onChange={setQuery} {...props} type='text'
+                   placeholder='Card name' value={searchQuery}
+
+            />
         </div>
         <Button title='Search'/>
     </div>
@@ -23,6 +27,15 @@ export const Search: React.FC<InputPropsType> = React.memo(({error, onChangeHand
 
 export const SearchContainer = () => {
 
-
-    return <Search/>
+    const dispatch = useDispatch();
+    const cardsPack = useSelector<AppStateType, Array<PackItemType>>(state => state.packs.packs);
+    const toSearch = (cardsPack:any) => {
+        return cardsPack.find.match(searchQuery); // Поиск совпадений запроса в массиве колод
+    };
+    const newPacksRange = dispatch(<></>); // Вызвать санку, и засунуть туда новый Pack
+    const [searchQuery, setSearchQuery] = useState('');
+    const setQuery = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.currentTarget.value)
+    };
+    return <Search setQuery={setQuery} searchQuery={searchQuery}/>
 };
