@@ -7,6 +7,7 @@ import {getPacks} from '../BLL/packsReducer';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import { Redirect } from 'react-router-dom';
 import {PackItemType} from '../types';
+import {SearchContainer} from "../../../main/UI/common/Search/Search";
 
 export const Packs = function () {
     const headers = ['Title', 'Crade', 'Add Pack' ];
@@ -26,5 +27,9 @@ export const Packs = function () {
 
     if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
-    return <Table columnsHeaders={headers} rows={packs}/>
+    return <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <SearchContainer/>
+            <Table columnsHeaders={headers} rows={packs}/>
+        </div>
+
 };

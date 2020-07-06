@@ -1,0 +1,13 @@
+
+
+.container {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    .searchArea {
+        position: relative;
+        top: 21px;
+        padding-right: 50px;
+    }
+}
