@@ -1,4 +1,4 @@
-import React, {InputHTMLAttributes, DetailedHTMLProps, ChangeEvent, useState, ClassAttributes, useEffect} from 'react';
+import React, {InputHTMLAttributes, DetailedHTMLProps, ChangeEvent, useState} from 'react';
 import {Button} from "../Button/Button";
 import s from './Search.module.scss'
 import {Input} from "../Input/Input";
@@ -25,7 +25,7 @@ export const Search: React.FC<InputPropsType> =
 
             />
         </div>
-        <Button title='Search' onClick={toSearch}/>
+        <Button title='Search' onClick={toSearch} style={{marginRight: '20px'}}/>
         <Button title='Reset' onClick={toReset}/>
     </div>
 });
@@ -53,6 +53,6 @@ export const SearchContainer = () => {
     const setQuery = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.currentTarget.value)
     };
-    debugger
+
     return <Search setQuery={setQuery} searchQuery={searchQuery} toSearch={toSearch} toReset={toReset}/>
 };
