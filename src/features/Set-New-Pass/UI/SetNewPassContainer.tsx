@@ -2,8 +2,7 @@ import React, {ChangeEvent, FormEvent, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../../main/BLL/store';
 import {SetNewPass} from './SetNewPass';
-import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
-import { Redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { setNewPassword } from '../BLL/setNewPassReducer';
 import {setMessageText} from '../../../main/BLL/appReducer';
 
@@ -15,7 +14,6 @@ export const SetNewPassContainer = () => {
     const dispatch = useDispatch();
     const {resetToken} = useParams();
 
-    console.log(resetToken);
 
     const changePassword = useCallback( (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.currentTarget.value)

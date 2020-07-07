@@ -1,10 +1,19 @@
 
+
 .headers {
     height: 60px;
-    display: grid;
-    grid-template-columns: 2fr 2fr 3fr;
-    border: 2px solid green;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 6px double #ff4776;
     align-items: center;
     font-weight: bolder;
+
+    span {
+        width: 200px;
+    }
+
+    button {
+        margin: 0 90px;
+    }
 }
 

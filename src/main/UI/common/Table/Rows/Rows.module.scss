@@ -1,14 +1,29 @@
 
 .rows {
     .row, & .buttonColumn {
-        display: grid;
-        grid-template-columns: 2fr 2fr 3fr;
-        justify-content: center;
+        display: flex;
+        justify-content: space-around;
         align-items: center;
+    }
 
-        .buttonColumn {
-            grid-template-columns: 1fr 1fr;
+    span {
+        width: 200px;
+        text-align: center;
+
+        a {
+            text-decoration: none;
+            color: #3685FF;
+            font-weight: 500;
+
+            &:hover {
+                color: hotpink;
+            }
         }
+    }
+
+    .buttonColumn {
+        grid-template-columns: 1fr 1fr;
+        width: 300px;
     }
 }
 

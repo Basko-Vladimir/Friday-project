@@ -1,8 +1,10 @@
 import React from 'react';
 import styles from './Header.module.css';
 import {NavLink} from 'react-router-dom';
-import {SIGN_IN_PATH, SIGN_UP_PATH, FORGOT_PATH,
-        SET_NEW_PASS_PATH, PROFILE_PATH, PACKS_PATH} from '../Routes/Routes';
+import {
+    SIGN_IN_PATH, SIGN_UP_PATH, FORGOT_PATH,
+    SET_NEW_PASS_PATH, PROFILE_PATH, PACKS_PATH
+} from '../Routes/Routes';
 
 export const Header = () => {
     return (

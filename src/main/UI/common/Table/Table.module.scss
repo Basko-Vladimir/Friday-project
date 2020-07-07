@@ -1,7 +1,52 @@
 .table {
-    border: 2px solid red;
-    width: 70%;
+    border: 6px double #ff4776;
+    width: 1000px;
     margin: 50px auto 0;
+
+    .headers {
+        height: 60px;
+        display: flex;
+        justify-content: space-around;
+        border-bottom: 6px double #ff4776;
+        align-items: center;
+        font-weight: bolder;
+
+        span {
+            width: 200px;
+        }
+
+        button {
+            margin: 0 90px;
+        }
+    }
+
+    .rows {
+        .row, & .buttonColumn {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        span {
+            width: 200px;
+            text-align: center;
+
+            a {
+                text-decoration: none;
+                color: #3685FF;
+                font-weight: 500;
+
+                &:hover {
+                    color: hotpink;
+                }
+            }
+        }
+
+        .buttonColumn {
+            grid-template-columns: 1fr 1fr;
+            width: 300px;
+        }
+    }
 
     button {
         margin: 10px auto;

@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './Rows.module.scss';
 import {Button} from '../../Button/Button';
-import {PackItemType} from '../../../../../features/Packs/types';
+import {NavLink} from 'react-router-dom';
+import {CARDS_PATH} from '../../../Routes/Routes';
 
 type RowsPropsType = {
-    rows: Array<PackItemType>
+    rows: Array<any> //Array<PackItemType> | Array<CardItemType> не работает такая типизация !
     deleteItem: (id: string) => void
     updateItem: (id: string) => void
 }
@@ -15,7 +16,9 @@ export const Rows: React.FC<RowsPropsType> = React.memo(({rows, deleteItem, upda
             {
                 rows.map( row => {
                     return <div key={row._id} className={styles.row}>
-                        <span>{row.name}</span>
+                        <span>
+                            <NavLink to={`${CARDS_PATH}/${row._id}`}>{row.name}</NavLink>
+                        </span>
                         <span>{row.grade}</span>
                         <span className={styles.buttonColumn}>
                                            <Button title={'Update'} onClick={() => updateItem(row._id)}/>

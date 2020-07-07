@@ -6,6 +6,7 @@ import {forgotReducer} from '../../features/Forgot/BLL/forgotReducer';
 import {setNewPassReducer} from '../../features/Set-New-Pass/BLL/setNewPassReducer';
 import { appReducer } from './appReducer';
 import {packsReducer} from '../../features/Packs/BLL/packsReducer';
+import {cardsReducer} from '../../features/Cards/BLL/cardsReducer';
 
 const rootReducer = combineReducers({
     app: appReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     signIn: signInReducer,
     forgot: forgotReducer,
     setNewPass: setNewPassReducer,
-    packs: packsReducer
+    packs: packsReducer,
+    cards: cardsReducer
 });
 
 export type AppStateType = ReturnType<typeof rootReducer>;
