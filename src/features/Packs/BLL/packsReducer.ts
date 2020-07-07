@@ -36,7 +36,7 @@ export const packsReducer = (state: StateType = initialState, action: ActionsTyp
 };
 
 type SetPacksType = ReturnType<typeof setPacks>
-const setPacks = (packs: Array<PackItemType>) => ({type:SET_PACKS, packs} as const);
+export const setPacks = (packs: Array<PackItemType>) => ({type:SET_PACKS, packs} as const);
 
 type UpdatePackType = ReturnType<typeof updatePackAC>;
 const updatePackAC = (idPack: string, newPack: PackItemType) => ({type: UPDATE_PACK, idPack, newPack} as const);

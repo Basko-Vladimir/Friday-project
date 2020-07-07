@@ -7,6 +7,7 @@ import {addPack, changePack, deletePack, getPacks} from '../BLL/packsReducer';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import {Redirect} from 'react-router-dom';
 import {PackItemType} from '../types';
+import {SearchContainer} from "../../../main/UI/common/Search/Search";
 import {Message} from '../../../main/UI/common/Message/Message';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
@@ -44,7 +45,9 @@ export const Packs = function () {
 
     if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
 
-    return <>
+
+    return <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <SearchContainer/>
         <Table columnsHeaders={headers} rows={packs}
                deleteItem={onDeletePack} addItem={onAddPack}
                updateItem={onUpdatePack} tableModel={'packs'}/>
@@ -53,5 +56,6 @@ export const Packs = function () {
             messageText && <Message messageText={messageText} isResponseError={true}
                                     actionCreator={setMessageText('')}/>
         }
-    </>
+        </div>
+
 };
