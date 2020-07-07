@@ -1,0 +1,14 @@
+
+.rows {
+    .row, & .buttonColumn {
+        display: grid;
+        grid-template-columns: 2fr 2fr 3fr;
+        justify-content: center;
+        align-items: center;
+
+        .buttonColumn {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+}
+

@@ -12,19 +12,18 @@ export const Profile = () => {
     const userData = useSelector<AppStateType, UserDataType | null>(state => state.signIn.userData);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const dispatch = useDispatch();
-
+    const token = getItemFromLS('token');
     const [firstRendering, setFirstRendering] = useState<boolean>(true);
 
     useEffect(() => {
-        if (firstRendering) {
+        if (token && firstRendering && !isAuth ) {
+            dispatch(setAuthMe(token));
             setFirstRendering(false);
         }
-        const token = getItemFromLS('token');
-        token && dispatch(setAuthMe(token));
-    }, [dispatch, setFirstRendering]);
+    }, [dispatch, setFirstRendering, firstRendering, token, isAuth]);
 
     const signOut = () => {
-        setItemToLS('token', '');
+        setItemToLS('token', null);
         dispatch(setUserData(null));
         dispatch(loginSuccess(false));
     };

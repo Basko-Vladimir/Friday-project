@@ -1,0 +1,10 @@
+
+.headers {
+    height: 60px;
+    display: grid;
+    grid-template-columns: 2fr 2fr 3fr;
+    border: 2px solid green;
+    align-items: center;
+    font-weight: bolder;
+}
+

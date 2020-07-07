@@ -6,21 +6,27 @@ import {login, setAuthMe} from '../BLL/signInReducer';
 import {AppStateType} from '../../../main/BLL/store';
 import {SignIn} from './SignIn';
 import {getItemFromLS} from '../LS-service/localStorage';
+import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 
 export const SignInContainer = () => {
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
-    const dispatch = useDispatch();
+    const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
+    const token = getItemFromLS('token');
 
+    const [firstRendering, setFirstRendering] = useState<boolean>(true);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isRemember, setIsRemember] = useState<boolean>(false);
 
+    const dispatch = useDispatch();
 
-    useEffect( () => {
-        const token = getItemFromLS('token');
-        token && dispatch(setAuthMe(token));
-    },[dispatch]);
+    useEffect(() => {
+        if (token && firstRendering && !isAuth) {
+            dispatch(setAuthMe(token));
+            setFirstRendering(false)
+        }
+    }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
 
     const changeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value)
@@ -44,8 +50,11 @@ export const SignInContainer = () => {
 
     if (isAuth) return <Redirect to={PROFILE_PATH}/>;
 
-    return <SignIn email={email} password={password} isRemember={isRemember}
-                   changeEmail={changeEmail} changePass={changePass} messageText={messageText}
-                   changeIsRemember={changeIsRemember} sendFormData={sendFormData}/>
+    return <>
+        <SignIn email={email} password={password} isRemember={isRemember}
+                changeEmail={changeEmail} changePass={changePass} messageText={messageText}
+                changeIsRemember={changeIsRemember} sendFormData={sendFormData}/>
+        {isLoading && <Loading/>}
+    </>
 };
 
