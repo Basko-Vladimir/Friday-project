@@ -5,16 +5,17 @@ import {Input} from "../Input/Input";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../BLL/store";
 import {PackItemType} from "../../../../features/Packs/types";
-import {setPacks} from "../../../../features/Packs/BLL/packsReducer";
+import {getPacks, setPacks} from "../../../../features/Packs/BLL/packsReducer";
+import {getItemFromLS} from "../../../../features/Sign-In/LS-service/localStorage";
 
 
 export type InputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement> &
     { searchQuery?: string, setQuery?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-        toSearch?: () => void }
+        toSearch?: () => void, toReset?: () => void}
 
 export const Search: React.FC<InputPropsType> =
-    React.memo(({ onChange, setQuery, searchQuery, toSearch, ...props}) => {
+    React.memo(({ onChange, setQuery, searchQuery, toSearch, toReset, ...props}) => {
 
 
     return <div className={s.container}>
@@ -25,6 +26,7 @@ export const Search: React.FC<InputPropsType> =
             />
         </div>
         <Button title='Search' onClick={toSearch}/>
+        <Button title='Reset' onClick={toReset}/>
     </div>
 });
 
@@ -34,7 +36,11 @@ export const SearchContainer = () => {
     const dispatch = useDispatch();
     const cardsPack = useSelector<AppStateType, Array<PackItemType>>(state => state.packs.packs);
 
-
+    // Сброс результатов поиска
+    const toReset = () => {
+        const token = getItemFromLS('token') as string; // Достаём токен, т.к. его надо передать в getPacks
+        dispatch(getPacks(token))
+    };
 
     const toSearch = () => {
         let result = cardsPack.filter((i: PackItemType) => {
@@ -48,5 +54,5 @@ export const SearchContainer = () => {
         setSearchQuery(e.currentTarget.value)
     };
     debugger
-    return <Search setQuery={setQuery} searchQuery={searchQuery} toSearch={toSearch}/>
+    return <Search setQuery={setQuery} searchQuery={searchQuery} toSearch={toSearch} toReset={toReset}/>
 };

@@ -59,6 +59,7 @@ const deletePackAC = (idPack: string) => ({type: DELETE_PACK, idPack} as const);
 
 
 export const getPacks = (token: string) =>  async (dispatch: Dispatch) => {
+
     const data = await packsAPI.getPacks(token);
     setItemToLS('token', data.token);
     dispatch(setPacks(data.cardPacks));
