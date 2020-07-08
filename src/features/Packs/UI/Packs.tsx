@@ -11,6 +11,7 @@ import {SearchContainer} from "../../../main/UI/common/Search/Search";
 import {Message} from '../../../main/UI/common/Message/Message';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
+import {PaginatorContainer} from "../../../main/UI/common/Paginator/Paginator";
 
 export const Packs = function () {
     const headers = ['Title', 'Crade', 'Add Pack'];
@@ -56,6 +57,7 @@ export const Packs = function () {
             messageText && <Message messageText={messageText} isResponseError={true}
                                     actionCreator={setMessageText('')}/>
         }
+        <PaginatorContainer />
         </div>
 
 };
