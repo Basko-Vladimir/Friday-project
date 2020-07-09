@@ -73,7 +73,7 @@ export const getPacksNew = (token: string, page: number) =>  async (dispatch: Di
     debugger
     try {
         dispatch(isLoading(true));
-        const data = await packsAPI.getPacks(token, page);
+        const data = await packsAPI.getPacks(token, '', 4, page);
         setItemToLS('token', data.token);
         dispatch(setPacks(data.cardPacks));
     } catch (e) {
