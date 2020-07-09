@@ -12,7 +12,7 @@ import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 
 export const Packs = function () {
-    const headers = ['Title', 'Crade', 'Add Pack'];
+    const headers = ['Name', 'Grade', 'Add Pack'];
     const [firstRendering, setFirstRendering] = useState<boolean>(true);
     const token = getItemFromLS('token');
 
@@ -30,6 +30,11 @@ export const Packs = function () {
         }
     }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
 
+
+    const onGetPacks = useCallback( (sortParams: string) => {
+        token && dispatch(getPacks(token, `sortPacks=${sortParams}`))
+    }, [dispatch, token]);
+
     const onUpdatePack = useCallback((idPack: string) => {
         dispatch(changePack(idPack, token));
     }, [dispatch, token]);
@@ -45,7 +50,7 @@ export const Packs = function () {
     if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
 
     return <>
-        <Table columnsHeaders={headers} rows={packs}
+        <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
                deleteItem={onDeletePack} addItem={onAddPack}
                updateItem={onUpdatePack} tableModel={'packs'}/>
         {isLoading && <Loading/>}

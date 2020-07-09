@@ -1,35 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
 import {AppStateType} from '../../main/BLL/store';
 import {UserDataType} from '../Sign-In/types/ResponseSuccessTypes';
-import {loginSuccess, setAuthMe, setUserData} from '../Sign-In/BLL/signInReducer';
-import {Button} from '../../main/UI/common/Button/Button';
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import {SIGN_IN_PATH} from '../../main/UI/Routes/Routes';
-import {getItemFromLS, setItemToLS} from '../Sign-In/LS-service/localStorage';
 
 export const Profile = () => {
     const userData = useSelector<AppStateType, UserDataType | null>(state => state.signIn.userData);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
-    const dispatch = useDispatch();
-    const token = getItemFromLS('token');
-    const [firstRendering, setFirstRendering] = useState<boolean>(true);
 
-    useEffect(() => {
-        if (token && firstRendering && !isAuth ) {
-            dispatch(setAuthMe(token));
-            setFirstRendering(false);
-        }
-    }, [dispatch, setFirstRendering, firstRendering, token, isAuth]);
-
-    const signOut = () => {
-        setItemToLS('token', null);
-        dispatch(setUserData(null));
-        dispatch(loginSuccess(false));
-    };
-     // if (!firstRendering && !fetching )
     if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
-    //if (fetching) return <Preloader/>
+
     return (
         <div>
             <h1>Profile </h1>
@@ -46,11 +27,6 @@ export const Profile = () => {
             <div><b>verified:</b> {String(userData?.verified)}</div>
             <div><b>__v:</b> {userData?.__v}</div>
             <div><b>_id:</b> {userData?._id}</div>
-            <div>
-                <Button title={'Sign Out'} onClick={signOut}/>
-            </div>
         </div>
-
-
     )
 };

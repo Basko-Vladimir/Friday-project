@@ -6,7 +6,7 @@ import {AppStateType} from '../../../main/BLL/store';
 import {setItemToLS} from '../LS-service/localStorage';
 import {SetMessageTextType, setMessageText} from '../../../main/BLL/appReducer';
 import {isLoading} from '../../Sign-Up/BLL/SignUpReducer';
-import { IsLoadingACType } from '../../Sign-Up/BLL/SignUpTypes';
+import {IsLoadingACType} from '../../Sign-Up/BLL/SignUpTypes';
 
 const SET_USER_DATA = 'cards/signInReducer/SET_USER_DATA';
 const LOGIN_SUCCESS = 'cards/signInReducer/LOGIN_SUCCESS';
@@ -63,13 +63,12 @@ export const login = (email: string, password: string, isRemember: boolean): Thu
 
 export const setAuthMe = (token: string) => async (dispatch: Dispatch<ActionsTypes>) => {
     try {
+        dispatch(loginSuccess(true));
         const data = await authAPI.authMe(token);
         setItemToLS('token', data.token);
         dispatch(setUserData({...data}));
-        dispatch(loginSuccess(true));
     } catch (err) {
         dispatch(loginSuccess(false));
-        console.log(err.response.data.error);
     }
 };
 

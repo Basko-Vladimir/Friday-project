@@ -8,7 +8,7 @@ import {SignIn} from './SignIn';
 import {getItemFromLS} from '../LS-service/localStorage';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 
-export const SignInContainer = () => {
+export const SignInContainer = React.memo(() => {
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
@@ -56,5 +56,5 @@ export const SignInContainer = () => {
                 changeIsRemember={changeIsRemember} sendFormData={sendFormData}/>
         {isLoading && <Loading/>}
     </>
-};
+});
 
