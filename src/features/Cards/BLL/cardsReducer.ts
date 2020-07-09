@@ -43,10 +43,10 @@ const updateCardAC = (cardId: string, newCard: CardItemType) => ({type: UPDATE_C
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getCards = (token: string, packId: string) =>  async (dispatch: Dispatch<ActionsType>) => {
+export const getCards = (token: string, packId: string, sortParams?: string) =>  async (dispatch: Dispatch<ActionsType>) => {
     try {
         dispatch(isLoading(true));
-        const data = await cardsAPI.getCards(token, packId);
+        const data = await cardsAPI.getCards(token, packId, sortParams);
         setItemToLS('token', data.token);
         dispatch(setCards(data.cards));
     } catch (e) {
@@ -62,6 +62,7 @@ export const addCard  = (token: string, packId: string): ThunkType => async (dis
         const data = await cardsAPI.addCard(token, packId);
         await dispatch(getCards(data.token, data.newCard.cardsPack_id));
     } catch (e) {
+        setItemToLS('token', e.response.data.token);
         dispatch(setMessageText(e.response.data.error))
     } finally {
         dispatch(isLoading(false));

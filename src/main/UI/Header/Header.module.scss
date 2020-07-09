@@ -1,0 +1,38 @@
+.header {
+     background-color: #3685ff;
+     height: 70px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+
+    .navMenu {
+        width: 60%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        .active {
+            color: hotpink;
+            border-bottom: 1px solid hotpink;
+        }
+
+        a {
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            color: white;
+        }
+    }
+
+    .signOut {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+
+        button {
+            width: 80px;
+            background-color: red;
+            margin: 0;
+
+        }
+    }
+ }

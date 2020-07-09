@@ -12,15 +12,16 @@ type TablePropsType = {
     deleteItem: (id: string) => void
     updateItem: (id: string) => void
     addItem: () => void
+    getItems: (sortParams: string) => void
     tableModel: string
 }
 
 export const Table = React.memo(function (props:TablePropsType) {
-    const {columnsHeaders, rows, deleteItem, addItem, updateItem, tableModel} = props;
+    const {columnsHeaders, rows, deleteItem, addItem, updateItem, tableModel, getItems} = props;
 
     return (
             <div className={styles.table}>
-                <ColumnsHeaders columnsHeaders={columnsHeaders} addItem={addItem}/>
+                <ColumnsHeaders columnsHeaders={columnsHeaders} addItem={addItem} getItems={getItems}/>
                 {
                     tableModel === 'packs'
                         ? <div className={styles.rows}>

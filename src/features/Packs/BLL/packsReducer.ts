@@ -44,10 +44,10 @@ const updatePackAC = (idPack: string, newPack: PackItemType) => ({type: UPDATE_P
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getPacks = (token: string) =>  async (dispatch: Dispatch<ActionsType>) => {
+export const getPacks = (token: string, sortParams?: string) =>  async (dispatch: Dispatch<ActionsType>) => {
     try {
         dispatch(isLoading(true));
-        const data = await packsAPI.getPacks(token);
+        const data = await packsAPI.getPacks(token, sortParams);
         setItemToLS('token', data.token);
         dispatch(setPacks(data.cardPacks));
     } catch (e) {

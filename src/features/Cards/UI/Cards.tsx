@@ -30,6 +30,10 @@ export const Cards = function () {
         }
     }, [dispatch, token, setFirstRendering, firstRendering, isAuth, packId]);
 
+    const onGetCards = useCallback( (sortParams: string) => {
+        token && dispatch(getCards(token, packId, `sortCards=${sortParams}`))
+    }, [dispatch, token, packId]);
+
     const onUpdatePack = useCallback((cardId: string) => {
         token && dispatch(changeCard(cardId, token));
     }, [dispatch, token]);
@@ -45,7 +49,7 @@ export const Cards = function () {
     if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
 
     return <>
-        <Table columnsHeaders={headers} rows={cards}
+        <Table columnsHeaders={headers} rows={cards} getItems={onGetCards}
                deleteItem={onDeletePack} addItem={onAddPack}
                updateItem={onUpdatePack} tableModel={'cards'}/>
         {isLoading && <Loading/>}
