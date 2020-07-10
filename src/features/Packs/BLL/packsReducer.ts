@@ -14,7 +14,7 @@ const SET_NEW_PAGE = 'cards/packsReducer/SET_NEW_PAGE';
 
 const initialState = {
     packs: [] as Array<PackItemType>,
-    pageCount: 100 as number,
+    pageCount: 1000 as number,
     page: 1 as number
 };
 

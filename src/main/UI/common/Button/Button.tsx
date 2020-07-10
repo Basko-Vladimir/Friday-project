@@ -2,7 +2,7 @@ import React, {ButtonHTMLAttributes, DetailedHTMLProps} from 'react';
 import styles from './Button.module.scss';
 
 export type ButtonPropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement> & { title: string };
+    HTMLButtonElement> & { title: string | number };
 
 export const Button: React.FC<ButtonPropsType> = React.memo(({title, ...props}) => {
     return (
