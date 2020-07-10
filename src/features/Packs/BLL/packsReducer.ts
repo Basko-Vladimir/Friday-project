@@ -70,7 +70,7 @@ export const getPacks = (token: string, sortParams?: string) =>  async (dispatch
 
 
 export const getPacksNew = (token: string, page: number) =>  async (dispatch: Dispatch<ActionsType>) => {
-    debugger
+
     try {
         dispatch(isLoading(true));
         const data = await packsAPI.getPacks(token, '', 4, page);

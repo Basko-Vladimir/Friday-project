@@ -11,23 +11,29 @@ export type ButtonPropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonE
     {
         title: string, pageNumber: number, setPage: any,
         disableLeftBtn: boolean, disableRightBtn: boolean, lastPage: any,
-        b4Call: () => void, b1Call: () => void, b1: string | number, b2:  string | number,
-        b3:  string | number, b4:  string | number,
+        b4Call: () => void, b1Call: () => void, b1: string | number, b2: string | number,
+        b3: string | number, b4: string | number,
         // middleBtnCall: () => void
     };
 
-const Paginator: React.FC<ButtonPropsType> = React.memo(({title, pageNumber, setPage,
+const Paginator: React.FC<ButtonPropsType> = React.memo(({
+                                                             title, pageNumber, setPage,
                                                              disableLeftBtn, disableRightBtn, lastPage,
                                                              b4Call, b1Call, b1, b2, b3, b4,
                                                              // middleBtnCall,
-                                                             ...props}) => {
+                                                             ...props
+                                                         }) => {
     return (
         <div className={s.container}>
             <h3>Pages</h3>
             <Button title={'<'} className={s.arrow} disabled={disableLeftBtn}/>
             <Button title={b1.toString()} className={s.button} onClick={b1Call}/>
-            <Button title={b2.toString()} className={s.button} onClick={() => {setPage(0)}}/>
-            <Button title={b3.toString()} className={s.button} onClick={() => {setPage(1)}}/>
+            <Button title={b2.toString()} className={s.button} onClick={() => {
+                setPage(0)
+            }}/>
+            <Button title={b3.toString()} className={s.button} onClick={() => {
+                setPage(1)
+            }}/>
             <Button title={b4.toString()} className={s.button} onClick={b4Call}/>
             <span>...</span>
             <Button title={lastPage || '...'} className={s.button}/>
@@ -36,11 +42,16 @@ const Paginator: React.FC<ButtonPropsType> = React.memo(({title, pageNumber, set
     )
 });
 export const PaginatorContainer = () => {
+
+    // Нужно починить:
+    // 1. Дизейблы.
+    // 2. Последнюю кнопку.
+    // 3. После починки п.2, реализовать логику убирания-появления спана '...'
+
     // Значения кнопок
-    const [bnts, setBtns] = useState([1,4]);
-    const [bnts2, setBtns2] = useState([bnts[0] + 1, bnts[0] + 2]);
-    // let [b1, b4] = [1, 4];
-    // let [b2, b3,] = [b1 + 1, b1 + 2];
+    const [btns, setBtns] = useState([1, 4]);
+    const [btns2, setBtns2] = useState([btns[0] + 1, btns[0] + 2]);
+
 
     // Данные
     const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
@@ -66,42 +77,41 @@ export const PaginatorContainer = () => {
     // Callbacks
     const dispatch = useDispatch();
     const b4Call = () => {
-            setBtns([pageNumber, pageNumber + 3]);
-            pageNumber = bnts[1];
-            // b1 = pageNumber;
-            // b4 = pageNumber + 3;
-            setIsB4(false);
-            setIsB1(true);
+
+        pageNumber = btns[1];
+        setBtns([pageNumber, pageNumber + 3]);
+        setIsB4(false);
+        setIsB1(true);
         setPage(null);
     };
     const b1Call = () => {
+
         setIsB1(true);
-        if (bnts[0] > 1) {
+        if (btns[0] > 1) {
+            pageNumber = btns[0];
             setBtns([pageNumber - 3, pageNumber]);
-            pageNumber = bnts[0];
-            // b4 = pageNumber;
-            // b1 = pageNumber - 3;
             setIsB4(false)
         }
         setPage(null);
     };
+    // Изменение состояния кнопок 2, 3
+    useEffect(() => {
+        btns2[0] !== btns[0] + 1 && setBtns2([btns[0] + 1, btns[0] + 2]);
+    }, [btns2]);
 
-    // const middleBtnCall = (btn: number) => {
-    //     btn === 0 ? pageNumber = bnts2[0] : pageNumber = bnts2[1];
-    //     dispatch(SetNewPageAC(pageNumber));
-    // };
+    // Вызов санки, экшена
     const setPage = (btn: number | null) => {
+
         if (btn === 0) {
-            pageNumber = bnts2[0];
+            pageNumber = btns2[0];
         } else if (btn === 1) {
-            pageNumber = bnts2[1];
+            pageNumber = btns2[1];
         }
-        // btn === 0 ? pageNumber = bnts2[0] : pageNumber = bnts2[1];
+        setBtns2([btns[0] + 1, btns[0] + 2]);
         dispatch(SetNewPageAC(pageNumber));
         const token = getItemFromLS('token') as string;
         dispatch(getPacksNew(token, pageNumber))
     };
-
 
 
     return <Paginator title={''}
@@ -112,8 +122,7 @@ export const PaginatorContainer = () => {
                       lastPage={lastPage}
                       b4Call={b4Call}
                       b1Call={b1Call}
-                      b1={bnts[0]} b2={bnts2[0]} b3={bnts2[1]} b4={bnts[1]}
-                      // middleBtnCall={middleBtnCall}
+                      b1={btns[0]} b2={btns2[0]} b3={btns2[1]} b4={btns[1]}
     />
 };
 
