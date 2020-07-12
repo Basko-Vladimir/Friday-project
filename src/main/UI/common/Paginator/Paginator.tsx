@@ -1,4 +1,4 @@
-import React, {ButtonHTMLAttributes, DetailedHTMLProps, useCallback, useEffect, useState} from 'react';
+import React, {ButtonHTMLAttributes, DetailedHTMLProps, useEffect, useState} from 'react';
 import s from './Paginator.module.scss';
 import {Button} from "../Button/Button";
 import {useDispatch, useSelector} from "react-redux";
@@ -17,7 +17,7 @@ export type ButtonPropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonE
 
 const Paginator: React.FC<ButtonPropsType> =
     React.memo(({ title, currentPage, setPage, disableLeftBtn, disableRightBtn, lastPage,
-                    b4Call, b1Call, b1, b2, b3, b4, showSpan, arrowsCall, 
+                    b4Call, b1Call, b1, b2, b3, b4, showSpan, arrowsCall,
                                                              ...props
                                                          }) => {
     return (
