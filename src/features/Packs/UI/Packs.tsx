@@ -26,10 +26,19 @@ export const Packs = function () {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (firstRendering && token && isAuth) {
-            setFirstRendering(false);
-            dispatch(getPacks(token));
+
+        if (firstRendering && token) {
+                dispatch(getPacks(token));
+                setFirstRendering(false);
         }
+        // if (firstRendering && token && isAuth) {
+        //     debugger
+        //     dispatch(getPacks(token));
+        //     setFirstRendering(false);
+        // } else if (token && !isAuth){
+        //     debugger
+        //     dispatch(setAuthMe(token));
+        // }
     }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
 
 
@@ -49,20 +58,22 @@ export const Packs = function () {
         dispatch(deletePack(idPack, token))
     }, [dispatch, token]);
 
-    if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
+    if (!isAuth && !firstRendering) return <Redirect to={SIGN_IN_PATH}/>;
+    // if (isLoading) return <Loading/>;
 
-
-    return <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        <SearchContainer/>
-        <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
-               deleteItem={onDeletePack} addItem={onAddPack}
-               updateItem={onUpdatePack} tableModel={'packs'}/>
-        {isLoading && <Loading/>}
-        {
-            messageText && <Message messageText={messageText} isResponseError={true}
-                                    actionCreator={setMessageText('')}/>
-        }
-        <PaginatorContainer/>
-    </div>
+    return (
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <SearchContainer/>
+            <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
+                   deleteItem={onDeletePack} addItem={onAddPack}
+                   updateItem={onUpdatePack} tableModel={'packs'}/>
+            {
+                messageText && <Message messageText={messageText} isResponseError={true}
+                                        actionCreator={setMessageText('')}/>
+            }
+            <PaginatorContainer/>
+            {isLoading && <Loading/>}
+        </div>
+    )
 
 };

@@ -1,15 +1,33 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../main/BLL/store';
 import {UserDataType} from '../Sign-In/types/ResponseSuccessTypes';
 import {Redirect} from 'react-router-dom';
 import {SIGN_IN_PATH} from '../../main/UI/Routes/Routes';
+import {getItemFromLS} from '../Sign-In/LS-service/localStorage';
+import {setAuthMe} from '../Sign-In/BLL/signInReducer';
+import Loading from '../../main/UI/common/LoadingToggle/Loading';
 
 export const Profile = () => {
     const userData = useSelector<AppStateType, UserDataType | null>(state => state.signIn.userData);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
+    const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
 
-    if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
+    const token = getItemFromLS('token');
+    const [firstRendering, setFirstRendering] = useState<boolean>(true);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (firstRendering && token && !isAuth) {
+            dispatch(setAuthMe(token));
+            setFirstRendering(false);
+        }
+    }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
+
+    if (!isAuth) {
+        return <Redirect to={SIGN_IN_PATH}/>;
+    }
+    if (isLoading) return <Loading/>;
 
     return (
         <div>
