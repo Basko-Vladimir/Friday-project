@@ -17,14 +17,14 @@ export type ButtonPropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonE
 
 const Paginator: React.FC<ButtonPropsType> =
     React.memo(({ title, currentPage, setPage, disableLeftBtn, disableRightBtn, lastPage,
-                    b4Call, b1Call, b1, b2, b3, b4, showSpan, arrowsCall,
+                    b4Call, b1Call, b1, b2, b3, b4, showSpan, arrowsCall, 
                                                              ...props
                                                          }) => {
     return (
         <div className={s.container}>
             <h3>Pages</h3>
-            <Button title={'<'} className={s.arrow} disabled={disableLeftBtn} onClick={() => {arrowsCall('left')}}/>
-            <Button title={b1.toString()} className={s.button} onClick={b1Call}/>
+            <Button title={'<'} className={s.arrow} disabled={disableLeftBtn} onClick={() => {arrowsCall('left')}} />
+            <Button title={b1.toString()} className={s.button} onClick={b1Call} />
             <Button title={b2.toString()} className={s.button} onClick={() => {
                 setPage(0)
             }}/>
@@ -48,7 +48,6 @@ export const PaginatorContainer = () => {
     const [btns, setBtns] = useState([1, 4]);
     const [btns2, setBtns2] = useState([btns[0] + 1, btns[0] + 2]);
 
-debugger
     // Данные
     // const itemsCount = useSelector<any, number>(s => s.packs.packs.length);  //Кол-во колод
     // const pagesCount = Math.ceil(itemsCount / pageSize); // Кол-во страниц
@@ -140,7 +139,6 @@ debugger
         const token = getItemFromLS('token') as string;
         dispatch(getPacksNew(token, currentPage))
     };
-
 
     return <Paginator title={''}
                       currentPage={currentPage}
