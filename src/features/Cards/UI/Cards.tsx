@@ -49,9 +49,9 @@ export const Cards = function () {
     if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
 
     return <>
-        <Table columnsHeaders={headers} rows={cards} getItems={onGetCards}
-               deleteItem={onDeletePack} addItem={onAddPack}
-               updateItem={onUpdatePack} tableModel={'cards'}/>
+        {/*<Table columnsHeaders={headers} rows={cards} getItems={onGetCards}*/}
+        {/*       deleteItem={onDeletePack} addItem={onAddPack}*/}
+        {/*       updateItem={onUpdatePack} tableModel={'cards'} showModal={() => {} }/>*/}
         {isLoading && <Loading/>}
         {
             messageText && <MessageModal messageText={messageText} isResponseError={true}

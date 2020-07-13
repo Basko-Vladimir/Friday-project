@@ -12,10 +12,17 @@ import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 import {PaginatorContainer} from "../../../main/UI/common/Paginator/Paginator";
+import {AddPackModal} from './AddPackModal/AddPackModal';
+import {ChangePackModal} from './ChangePackModal/ChangePackModal';
+import {DeletePackModal} from './DeletePackModal/DeletePackModal';
 
 export const Packs = function () {
     const headers = ['Name', 'Grade', 'Add Pack'];
+
     const [firstRendering, setFirstRendering] = useState<boolean>(true);
+    const [currentPackId, setCurrentPackId] = useState<string>('');
+    const [currentPackName, setCurrentPackName] = useState<string>('');
+    const [modalType, setModalType] = useState<string>('');
     const token = getItemFromLS('token');
 
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
@@ -26,10 +33,9 @@ export const Packs = function () {
     const dispatch = useDispatch();
 
     useEffect(() => {
-
         if (firstRendering && token) {
-                dispatch(getPacks(token));
-                setFirstRendering(false);
+            dispatch(getPacks(token));
+            setFirstRendering(false);
         }
         // if (firstRendering && token && isAuth) {
         //     debugger
@@ -39,24 +45,34 @@ export const Packs = function () {
         //     debugger
         //     dispatch(setAuthMe(token));
         // }
-    }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
+    }, [dispatch, token, setFirstRendering, firstRendering]);
 
+    const showModal = useCallback((modalType: string, packId?: string, packName?: string) => {
+        packId && setCurrentPackId(packId);
+        packName && setCurrentPackName(packName);
+        setModalType(modalType);
+    }, [setCurrentPackId, setCurrentPackName, setModalType]);
+
+    const hideModal = useCallback(() => {
+        setModalType('');
+    }, [setModalType]);
 
     const onGetPacks = useCallback((sortParams: string) => {
-        token && dispatch(getPacks(token, `sortPacks=${sortParams}`))
+        token && dispatch(getPacks(token, `sortPacks=${sortParams}`));
     }, [dispatch, token]);
 
-    const onUpdatePack = useCallback((idPack: string) => {
-        dispatch(changePack(idPack, token));
+    const onChangePack = useCallback((newName: string) => {
+        token && dispatch(changePack(currentPackId, token, newName));
+    }, [dispatch, token, currentPackId]);
+
+    const onAddPack = useCallback((title: string) => {
+        token && dispatch(addPack(token, title));
     }, [dispatch, token]);
 
-    const onAddPack = useCallback(() => {
-        dispatch(addPack(token))
-    }, [dispatch, token]);
+    const onDeletePack = useCallback(() => {
+        token && dispatch(deletePack(currentPackId, token));
+    }, [dispatch, token, currentPackId]);
 
-    const onDeletePack = useCallback((idPack: string) => {
-        dispatch(deletePack(idPack, token))
-    }, [dispatch, token]);
 
     if (!isAuth && !firstRendering) return <Redirect to={SIGN_IN_PATH}/>;
     // if (isLoading) return <Loading/>;
@@ -65,15 +81,16 @@ export const Packs = function () {
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <SearchContainer/>
             <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
-                   deleteItem={onDeletePack} addItem={onAddPack}
-                   updateItem={onUpdatePack} tableModel={'packs'}/>
-            {
-                messageText && <MessageModal messageText={messageText} isResponseError={true}
-                                        actionCreator={setMessageText('')}/>
-            }
+                   tableModel={'packs'} showModal={showModal}/>
+            <MessageModal messageText={messageText} isResponseError={true}
+                                             actionCreator={setMessageText('')}/>
             <PaginatorContainer/>
+            <AddPackModal modalType={modalType} addPack={onAddPack}
+                          hideModal={hideModal}/>
+            <ChangePackModal modalType={modalType} onChangePack={onChangePack}
+                             hideModal={hideModal} currentPackName={currentPackName}/>
+            <DeletePackModal modalType={modalType} deletePack={onDeletePack} hideModal={hideModal}/>
             {isLoading && <Loading/>}
         </div>
     )
-
 };

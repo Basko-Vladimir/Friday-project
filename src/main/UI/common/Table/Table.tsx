@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Table.module.scss';
-
 import {Button} from '../Button/Button';
 import {NavLink} from 'react-router-dom';
 import {CARDS_PATH} from '../../Routes/Routes';
@@ -11,19 +10,17 @@ import {PackItemType} from '../../../../features/Packs/types';
 type TablePropsType = {
     columnsHeaders: Array<string>
     rows: any
-    deleteItem: (id: string) => void
-    updateItem: (id: string) => void
-    addItem: () => void
     getItems: (sortParams: string) => void
     tableModel: string
+    showModal: (modalType: string, id?: string, name?: string) => void
 }
 
 export const Table = React.memo(function (props: TablePropsType) {
-    const {columnsHeaders, rows, deleteItem, addItem, updateItem, tableModel, getItems} = props;
+    const {columnsHeaders, rows, tableModel, getItems, showModal} = props;
 
     return (
         <div className={styles.table}>
-            <ColumnsHeaders columnsHeaders={columnsHeaders} addItem={addItem} getItems={getItems}/>
+            <ColumnsHeaders columnsHeaders={columnsHeaders} getItems={getItems} showModal={showModal}/>
             {
                 tableModel === 'packs'
                     ? <div className={styles.rows}>
@@ -36,8 +33,8 @@ export const Table = React.memo(function (props: TablePropsType) {
                                         </span>
                                     <span>{row.grade}</span>
                                     <span className={styles.buttonColumn}>
-                                           <Button title={'Update'} onClick={() => updateItem(row._id)}/>
-                                           <Button title={'Delete'} onClick={() => deleteItem(row._id)}/>
+                                           <Button title={'Change'} name={'change'} onClick={(e) => showModal(e.currentTarget.name, row._id, row.name)}/>
+                                           <Button title={'Delete'} name={'delete'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
                                        </span>
                                 </div>
                             })
@@ -53,8 +50,8 @@ export const Table = React.memo(function (props: TablePropsType) {
                                         <span>{row.answer}</span>
                                         <span>{row.grade}</span>
                                         <span className={styles.buttonColumn}>
-                                           <Button title={'Update'} onClick={() => updateItem(row._id)}/>
-                                           <Button title={'Delete'} onClick={() => deleteItem(row._id)}/>
+                                           <Button title={'Change'} name={'change'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
+                                           <Button title={'Delete'} name={'delete'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
                                        </span>
                                     </div>
                                 })

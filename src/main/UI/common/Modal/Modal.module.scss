@@ -19,10 +19,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: absolute;
+    top: 30%;
+    left: calc(50% - 150px);
     z-index: 3;
     margin: 0 auto;
-    color: #289c42;
 }
 
 .error h3{
