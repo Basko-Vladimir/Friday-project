@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 import {setNewPassAPI} from '../DAL/setNewPassAPI';
 import { setMessageText } from "../../../main/BLL/appReducer";
+import {isLoading} from '../../Sign-Up/BLL/SignUpReducer';
 
 const SET_NEW_PASS_SUCCESS = 'cards/setNewPassReducer/setNewPassReducer';
 
@@ -27,11 +28,13 @@ const setNewPassSuccess = (isSuccess: boolean) => ({type: SET_NEW_PASS_SUCCESS, 
 
 export const setNewPassword = (password: string, token: string) => async (dispatch: Dispatch) => {
     try {
+        dispatch(isLoading(true));
         await setNewPassAPI.setNewPass(password, token);
         dispatch(setNewPassSuccess(true));
         dispatch(setMessageText('Success! Password changed'));
     } catch (err) {
         dispatch(setMessageText(err.response.data.error));
+    } finally {
+        dispatch(isLoading(false));
     }
-
 };

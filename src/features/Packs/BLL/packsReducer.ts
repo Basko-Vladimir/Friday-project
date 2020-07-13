@@ -14,7 +14,7 @@ const SET_NEW_PAGE = 'cards/packsReducer/SET_NEW_PAGE';
 
 const initialState = {
     packs: [] as Array<PackItemType>,
-    pageCount: 1000 as number,
+    pageCount: 4 as number,
     page: 1 as number
 };
 
@@ -83,10 +83,10 @@ export const getPacksNew = (token: string, page: number) =>  async (dispatch: Di
     }
 };
 
-export const addPack = (token: string | undefined): ThunkType => async (dispatch) => {
+export const addPack = (token: string, packName: string): ThunkType => async (dispatch) => {
     try {
         dispatch(isLoading(true));
-        const data = await packsAPI.addPack(token);
+        const data = await packsAPI.addPack(token, packName);
         await dispatch(getPacks(data.token));
     } catch (e) {
 
@@ -97,12 +97,12 @@ export const addPack = (token: string | undefined): ThunkType => async (dispatch
 
 };
 
-export const changePack = (idPack: string, token: string | undefined) => async (dispatch: Dispatch) => {
+export const changePack = (packId: string, token: string, newName: string ) => async (dispatch: Dispatch) => {
     try {
         dispatch(isLoading(true));
-        const data = await packsAPI.updatePack(idPack, token);
+        const data = await packsAPI.updatePack(packId, token, newName);
         setItemToLS('token', data.token);
-        dispatch(updatePackAC(idPack, data.updatedCardsPack));
+        dispatch(updatePackAC(packId, data.updatedCardsPack));
     } catch(e){
         setItemToLS('token', e.response.data.token);
         dispatch(setMessageText(e.response.data.error))
@@ -111,10 +111,10 @@ export const changePack = (idPack: string, token: string | undefined) => async (
     }
 };
 
-export const deletePack = (idPack: string, token: string | undefined): ThunkType => async (dispatch) => {
+export const deletePack = (packId: string, token: string ): ThunkType => async (dispatch) => {
     try {
         dispatch(isLoading(true));
-        const data = await packsAPI.deletePack(idPack, token);
+        const data = await packsAPI.deletePack(packId, token);
         setItemToLS('token', data.token);
         await dispatch(getPacks(data.token))
     } catch (e) {
