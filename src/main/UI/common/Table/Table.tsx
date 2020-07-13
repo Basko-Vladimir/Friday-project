@@ -12,7 +12,7 @@ type TablePropsType = {
     rows: any
     getItems: (sortParams: string) => void
     tableModel: string
-    showModal: (modalType: string, id?: string, name?: string) => void
+    showModal: (modalType: string, id?: string, name?: string, question?: string, answer?: string) => void
 }
 
 export const Table = React.memo(function (props: TablePropsType) {
@@ -50,8 +50,10 @@ export const Table = React.memo(function (props: TablePropsType) {
                                         <span>{row.answer}</span>
                                         <span>{row.grade}</span>
                                         <span className={styles.buttonColumn}>
-                                           <Button title={'Change'} name={'change'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
-                                           <Button title={'Delete'} name={'delete'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
+                                           <Button title={'Change'} name={'change'}
+                                                   onClick={(e) => showModal(e.currentTarget.name, row._id, row.question, row.answer)}/>
+                                           <Button title={'Delete'} name={'delete'}
+                                                   onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
                                        </span>
                                     </div>
                                 })

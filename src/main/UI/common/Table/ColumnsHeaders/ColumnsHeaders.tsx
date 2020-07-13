@@ -5,7 +5,7 @@ import {Button} from '../../Button/Button';
 type HeadersPropsType = {
     columnsHeaders: Array<string>
     getItems: (sortParams: string) => void
-    showModal: (name: string) => void
+    showModal: (modalType: string) => void
 };
 
 

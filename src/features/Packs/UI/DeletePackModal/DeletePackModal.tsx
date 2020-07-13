@@ -3,13 +3,13 @@ import styles from './DeletePackModal.module.scss';
 import {Modal} from '../../../../main/UI/common/Modal/Modal';
 import {Button} from '../../../../main/UI/common/Button/Button';
 
-type DeletePackModal = {
+type DeletePackModalPropsType = {
     modalType: string
     deletePack: () => void
     hideModal: () => void
 }
 
-export const DeletePackModal = React.memo((props: DeletePackModal) => {
+export const DeletePackModal = React.memo((props: DeletePackModalPropsType) => {
     const {modalType, deletePack, hideModal} = props;
 
     const onDeletePack = () => {

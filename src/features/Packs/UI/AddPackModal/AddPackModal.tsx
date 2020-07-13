@@ -3,13 +3,13 @@ import {Modal} from '../../../../main/UI/common/Modal/Modal';
 import {Button} from '../../../../main/UI/common/Button/Button';
 import {NewInput} from '../../../../main/UI/common/NewInput/NewInput';
 
-type AddPackModal = {
+type AddPackModalPropsType = {
     modalType: string
     hideModal: () => void
     addPack: (value: string) => void
 }
 
-export const AddPackModal = React.memo((props: AddPackModal) => {
+export const AddPackModal = React.memo((props: AddPackModalPropsType) => {
     const {modalType, hideModal, addPack} = props;
     const [name, setName] = useState<string>('');
 

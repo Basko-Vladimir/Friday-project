@@ -56,10 +56,10 @@ export const getCards = (token: string, packId: string, sortParams?: string) => 
     }
 };
 
-export const addCard  = (token: string, packId: string): ThunkType => async (dispatch) => {
+export const addCard  = (token: string, packId: string, question: string, answer: string): ThunkType => async (dispatch) => {
     try {
         dispatch(isLoading(true));
-        const data = await cardsAPI.addCard(token, packId);
+        const data = await cardsAPI.addCard(token, packId, question, answer);
         await dispatch(getCards(data.token, data.newCard.cardsPack_id));
     } catch (e) {
         setItemToLS('token', e.response.data.token);
@@ -70,10 +70,10 @@ export const addCard  = (token: string, packId: string): ThunkType => async (dis
 
 };
 
-export const changeCard = (cardId: string, token: string) => async (dispatch: Dispatch) => {
+export const changeCard = (cardId: string, token: string, question: string, answer: string) => async (dispatch: Dispatch) => {
     try {
         dispatch(isLoading(true));
-        const data = await cardsAPI.updateCard(cardId, token);
+        const data = await cardsAPI.updateCard(cardId, token, question, answer);
         setItemToLS('token', data.token);
         dispatch(updateCardAC(data.updatedCard._id, data.updatedCard));
     } catch(e){

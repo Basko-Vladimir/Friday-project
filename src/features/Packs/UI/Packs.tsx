@@ -82,9 +82,9 @@ export const Packs = function () {
             <SearchContainer/>
             <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
                    tableModel={'packs'} showModal={showModal}/>
-            <MessageModal messageText={messageText} isResponseError={true}
-                                             actionCreator={setMessageText('')}/>
             <PaginatorContainer/>
+            <MessageModal messageText={messageText} isResponseError={true}
+                          actionCreator={setMessageText('')}/>
             <AddPackModal modalType={modalType} addPack={onAddPack}
                           hideModal={hideModal}/>
             <ChangePackModal modalType={modalType} onChangePack={onChangePack}
