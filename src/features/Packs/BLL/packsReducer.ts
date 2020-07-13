@@ -14,7 +14,7 @@ const SET_NEW_PAGE = 'cards/packsReducer/SET_NEW_PAGE';
 
 const initialState = {
     packs: [] as Array<PackItemType>,
-    pageCount: 4 as number,
+    pageCount: 1000 as number,
     page: 1 as number
 };
 
@@ -70,7 +70,7 @@ export const getPacks = (token: string, sortParams?: string) =>  async (dispatch
 
 
 export const getPacksNew = (token: string, page: number) =>  async (dispatch: Dispatch<ActionsType>) => {
-    debugger
+
     try {
         dispatch(isLoading(true));
         const data = await packsAPI.getPacks(token, '', 4, page);
