@@ -10,7 +10,7 @@ import {PackItemType} from '../../../../features/Packs/types';
 
 type TablePropsType = {
     columnsHeaders: Array<string>
-    rows: any  //не работает такая типизация !
+    rows: any
     deleteItem: (id: string) => void
     updateItem: (id: string) => void
     addItem: () => void

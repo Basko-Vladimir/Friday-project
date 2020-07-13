@@ -8,7 +8,7 @@ import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import {Redirect} from 'react-router-dom';
 import {PackItemType} from '../types';
 import {SearchContainer} from "../../../main/UI/common/Search/Search";
-import {Message} from '../../../main/UI/common/Message/Message';
+import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 import {PaginatorContainer} from "../../../main/UI/common/Paginator/Paginator";
@@ -68,7 +68,7 @@ export const Packs = function () {
                    deleteItem={onDeletePack} addItem={onAddPack}
                    updateItem={onUpdatePack} tableModel={'packs'}/>
             {
-                messageText && <Message messageText={messageText} isResponseError={true}
+                messageText && <MessageModal messageText={messageText} isResponseError={true}
                                         actionCreator={setMessageText('')}/>
             }
             <PaginatorContainer/>

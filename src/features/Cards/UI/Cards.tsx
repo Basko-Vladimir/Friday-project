@@ -4,7 +4,7 @@ import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../../main/BLL/store';
 import {getItemFromLS} from '../../Sign-In/LS-service/localStorage';
-import {Message} from '../../../main/UI/common/Message/Message';
+import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import {Redirect, useParams} from 'react-router-dom';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
@@ -54,7 +54,7 @@ export const Cards = function () {
                updateItem={onUpdatePack} tableModel={'cards'}/>
         {isLoading && <Loading/>}
         {
-            messageText && <Message messageText={messageText} isResponseError={true}
+            messageText && <MessageModal messageText={messageText} isResponseError={true}
                                     actionCreator={setMessageText('')}/>
         }
     </>
