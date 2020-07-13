@@ -7,6 +7,7 @@ import {Profile} from '../../../features/Profile/Profile';
 import {ForgotContainer} from '../../../features/Forgot/UI/ForgotContainer';
 import {Packs} from '../../../features/Packs/UI/Packs';
 import {Cards} from '../../../features/Cards/UI/Cards';
+import {LearnContainer} from "../../../features/Learn/Learn";
 
 export const SIGN_IN_PATH = '/sign-in';
 export const SIGN_UP_PATH = '/sign-up';
@@ -15,6 +16,7 @@ export const SET_NEW_PASS_PATH = '/set-new-password';
 export const PROFILE_PATH = '/profile';
 export const PACKS_PATH = '/packs';
 export const CARDS_PATH = '/cards';
+export const LEARN = '/learn';
 
 export const Routes = () => {
     return (
@@ -25,8 +27,9 @@ export const Routes = () => {
             <Route path={`${SET_NEW_PASS_PATH}/:resetToken?`} render={() => <SetNewPassContainer/>}/>
             <Route path={PROFILE_PATH} render={() => <Profile/>}/>
             <Route path={PACKS_PATH} render={() => <Packs/>}/>
+            <Route path={LEARN} render={() => <LearnContainer/>}/>
             <Route path={`${CARDS_PATH}/:packId?`} render={() => <Cards/>}/>
-            <Redirect exact path={'/'} to={SIGN_IN_PATH}/>
+            {/*<Redirect exact path={'/'} to={SIGN_IN_PATH}/>*/}
             <Route path={'*'} render={() => <h2> 404 ERROR PAGE NOT FOUND</h2>}/>
         </Switch>
     )

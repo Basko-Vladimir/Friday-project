@@ -1,0 +1,42 @@
+
+.container {
+  .visible {
+
+  }
+
+  .hidden {
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    .body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 20vh;
+      margin-top: 30px;
+      .answers {
+        display: flex;
+        justify-content: center;
+        margin: 30px 0;
+        span {
+          padding: 5px;
+          margin-right: 20px;
+          background-color: darkgrey;
+          border-radius: 4px;
+          color: white;
+          cursor: pointer;
+          &:hover {
+            background-color: darksalmon;
+            transition: 0.4s ease-in-out;
+          }
+        }
+      }
+
+
+    }
+
+    .nextBtnContainer {
+
+    }
+  }
+}
