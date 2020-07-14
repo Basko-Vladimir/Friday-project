@@ -14,7 +14,7 @@ type TablePropsType = {
     tableModel: string
     showModal: (modalType: string, id?: string, name?: string, question?: string, answer?: string) => void
 }
-
+const btnStyle = {width: '80px'};
 export const Table = React.memo(function (props: TablePropsType) {
     const {columnsHeaders, rows, tableModel, getItems, showModal} = props;
 
@@ -33,8 +33,9 @@ export const Table = React.memo(function (props: TablePropsType) {
                                         </span>
                                     <span>{row.grade}</span>
                                     <span className={styles.buttonColumn}>
-                                           <Button title={'Change'} name={'change'} onClick={(e) => showModal(e.currentTarget.name, row._id, row.name)}/>
-                                           <Button title={'Delete'} name={'delete'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
+                                           <Button style={btnStyle} title={'Change'} name={'change'} onClick={(e) => showModal(e.currentTarget.name, row._id, row.name)}/>
+                                           <Button style={btnStyle} title={'Delete'} name={'delete'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
+                                           <Button style={btnStyle} title={'Learn'} name={'learn'} onClick={(e) => {}}/>
                                        </span>
                                 </div>
                             })
