@@ -32,6 +32,8 @@ export const Search: React.FC<InputPropsType> =
 
 export const SearchContainer = () => {
 
+    //Всё что надо, передаём через пропсы и компонента становится универсальной!
+
     // Достаём массив колод из state
     const dispatch = useDispatch();
     const cardsPack = useSelector<AppStateType, Array<PackItemType>>(state => state.packs.packs);

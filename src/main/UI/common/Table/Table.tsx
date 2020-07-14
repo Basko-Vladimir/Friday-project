@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Table.module.scss';
 import {Button} from '../Button/Button';
 import {NavLink} from 'react-router-dom';
-import {CARDS_PATH} from '../../Routes/Routes';
+import {CARDS_PATH, LEARN} from '../../Routes/Routes';
 import {ColumnsHeaders} from './ColumnsHeaders/ColumnsHeaders';
 import {CardItemType} from '../../../../features/Cards/types';
 import {PackItemType} from '../../../../features/Packs/types';
@@ -14,7 +14,7 @@ type TablePropsType = {
     tableModel: string
     showModal: (modalType: string, id?: string, creatorId?: string, name?: string, question?: string, answer?: string) => void
 }
-
+const btnStyle = {width: '80px'};
 export const Table = React.memo(function (props: TablePropsType) {
     const {columnsHeaders, rows, tableModel, getItems, showModal} = props;
 
@@ -36,10 +36,11 @@ export const Table = React.memo(function (props: TablePropsType) {
                                         </span>
                                     <span>{row.grade}</span>
                                     <span className={styles.buttonColumn}>
-                                           <Button title={'Change'} name={'change'}
+                                           <Button style={btnStyle} title={'Change'} name={'change'}
                                                    onClick={(e) => showModal(e.currentTarget.name, row._id, row.user_id, row.name)}/>
-                                           <Button title={'Delete'} name={'delete'}
+                                           <Button style={btnStyle} title={'Delete'} name={'delete'}
                                                    onClick={(e) => showModal(e.currentTarget.name, row._id, row.user_id)}/>
+                                           <NavLink to={`${LEARN}/${row._id}`}><Button style={btnStyle} title={'Learn'} name={'learn'} /></NavLink>
                                        </span>
                                 </div>
                             })
