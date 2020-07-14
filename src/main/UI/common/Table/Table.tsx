@@ -37,8 +37,7 @@ export const Table = React.memo(function (props: TablePropsType) {
                                                    onClick={(e) => showModal(e.currentTarget.name, row._id, row.name)}/>
                                            <Button style={btnStyle} title={'Delete'} name={'delete'}
                                                    onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
-                                            <Button style={btnStyle} title={'Learn'} name={'learn'} onClick={(e) => {
-                                            }}><NavLink to={`${LEARN}`}/></Button>
+                                            <NavLink to={`${LEARN}/${row._id}`}><Button style={btnStyle} title={'Learn'} name={'learn'} /></NavLink>
                                        </span>
                                 </div>
                             })
