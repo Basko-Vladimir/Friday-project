@@ -3,7 +3,7 @@ import styles from './Header.module.scss';
 import {NavLink} from 'react-router-dom';
 import {
     SIGN_IN_PATH, SIGN_UP_PATH, FORGOT_PATH,
-    SET_NEW_PASS_PATH, PROFILE_PATH, PACKS_PATH
+    SET_NEW_PASS_PATH, PROFILE_PATH, PACKS_PATH, LEARN
 } from '../Routes/Routes';
 import {Button} from '../common/Button/Button';
 import {setItemToLS} from '../../../features/Sign-In/LS-service/localStorage';
@@ -31,6 +31,7 @@ export const Header = () => {
                 <NavLink to={SET_NEW_PASS_PATH} activeClassName={styles.active}>Set New Password</NavLink>
                 <NavLink to={PROFILE_PATH} activeClassName={styles.active}>Profile</NavLink>
                 <NavLink to={PACKS_PATH} activeClassName={styles.active}>Packs</NavLink>
+                <NavLink to={LEARN} activeClassName={styles.active}>Learn</NavLink>
             </nav>
             {
                 isAuth && <div className={styles.signOut}>
