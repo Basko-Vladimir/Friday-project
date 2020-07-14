@@ -14,20 +14,25 @@ import {AddCardModal} from './AddCardModal/AddCardModal';
 import {ChangeCardModal} from './ChangeCardModal/ChangeCardModal';
 import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
 
+type CardsPropsType = {
+    state: any // как здесь типизировать???
+}
 
-export const Cards = function () {
-    const headers = ['Question', 'Answer', 'Grade', 'Add Pack'];
+export const Cards = function (props: CardsPropsType) {
+    const headers = ['Question', 'Answer', 'Grade', 'Add Card'];
     const [firstRendering, setFirstRendering] = useState<boolean>(true);
     const [modalType, setModalType] = useState<string>('');
     const [currentCardId, setCurrentCardId] = useState<string>('');
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [currentAnswer, setCurrentAnswer] = useState<string>('');
     const token = getItemFromLS('token');
+    const packCreatorId = props.state.data;
 
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
     const cards = useSelector<AppStateType, Array<CardItemType>>(state => state.cards.cards);
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
+    const ownerId = useSelector<AppStateType, string | undefined>(state => state.signIn.userData?._id);
 
     const {packId} = useParams();
     const dispatch = useDispatch();
@@ -39,12 +44,16 @@ export const Cards = function () {
         }
     }, [dispatch, token, setFirstRendering, firstRendering, isAuth, packId]);
 
-    const showModal = useCallback((modalType: string, cardId?: string, question?: string, answer?: string) => {
-        setModalType(modalType);
-        cardId && setCurrentCardId(cardId);
-        question && setCurrentQuestion(question);
-        answer && setCurrentAnswer(answer);
-    }, [setModalType, setCurrentCardId, setCurrentAnswer, setCurrentQuestion]);
+    const showModal = useCallback((modalType: string, cardId?: string, creatorId?: string, question?: string, answer?: string) => {
+        if (packCreatorId !== ownerId) {
+            dispatch(setMessageText('This not your Card'))
+        } else {
+            setModalType(modalType);
+            cardId && setCurrentCardId(cardId);
+            question && setCurrentQuestion(question);
+            answer && setCurrentAnswer(answer);
+        }
+    }, [setModalType, setCurrentCardId, setCurrentAnswer, setCurrentQuestion, ownerId, dispatch, packCreatorId]);
 
     const onGetCards = useCallback((sortParams: string) => {
         token && dispatch(getCards(token, packId, `sortCards=${sortParams}`))

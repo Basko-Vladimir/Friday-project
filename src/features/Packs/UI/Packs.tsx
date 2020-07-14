@@ -29,6 +29,7 @@ export const Packs = function () {
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
     const packs = useSelector<AppStateType, Array<PackItemType>>(state => state.packs.packs);
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
+    const ownerId = useSelector<AppStateType, string | undefined>(state => state.signIn.userData?._id);
 
     const dispatch = useDispatch();
 
@@ -47,11 +48,15 @@ export const Packs = function () {
         // }
     }, [dispatch, token, setFirstRendering, firstRendering]);
 
-    const showModal = useCallback((modalType: string, packId?: string, packName?: string) => {
-        packId && setCurrentPackId(packId);
-        packName && setCurrentPackName(packName);
-        setModalType(modalType);
-    }, [setCurrentPackId, setCurrentPackName, setModalType]);
+    const showModal = useCallback((modalType: string, packId?: string, creatorId?: string, packName?: string) => {
+        if ((modalType === 'delete' || modalType === 'change') && creatorId !== ownerId) {
+            dispatch(setMessageText('This not your Pack'))
+        } else {
+            packId && setCurrentPackId(packId);
+            packName && setCurrentPackName(packName);
+            setModalType(modalType);
+        }
+    }, [setCurrentPackId, setCurrentPackName, setModalType, ownerId, dispatch]);
 
     const hideModal = useCallback(() => {
         setModalType('');

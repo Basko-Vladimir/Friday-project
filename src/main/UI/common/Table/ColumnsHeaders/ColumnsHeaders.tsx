@@ -31,7 +31,8 @@ export const ColumnsHeaders: React.FC<HeadersPropsType> = React.memo((props) => 
         <div className={styles.headers}>
             {columnsHeaders.map((header, i) => {
                     return i === columnsHeaders.length - 1
-                        ? <Button key={header} title={header} name={'add'} onClick={(e) => showModal(e.currentTarget.name)}/>
+                        ? <Button key={header} title={header} name={'add'}
+                                  onClick={(e) => showModal(e.currentTarget.name)}/>
                         : <span key={header}>
                             <b onClick={onSetSort}>{header}</b>
                     </span>

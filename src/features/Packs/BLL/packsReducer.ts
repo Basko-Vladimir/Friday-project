@@ -31,7 +31,7 @@ export const packsReducer = (state: StateType = initialState, action: ActionsTyp
         case UPDATE_PACK:
             return {
                 ...state,
-              packs: state.packs.map( p => p._id === action.idPack ? {...p, ...action.newPack } : p)
+                packs: state.packs.map(p => p._id === action.idPack ? {...p, ...action.newPack} : p)
             };
         case SET_NEW_PAGE:
             return {
@@ -44,7 +44,7 @@ export const packsReducer = (state: StateType = initialState, action: ActionsTyp
 };
 
 type SetPacksType = ReturnType<typeof setPacks>
-export const setPacks = (packs: Array<PackItemType>) => ({type:SET_PACKS, packs} as const);
+export const setPacks = (packs: Array<PackItemType>) => ({type: SET_PACKS, packs} as const);
 
 type UpdatePackType = ReturnType<typeof updatePackAC>;
 const updatePackAC = (idPack: string, newPack: PackItemType) => ({type: UPDATE_PACK, idPack, newPack} as const);
@@ -55,7 +55,7 @@ export const SetNewPageAC = (newPage: number) => ({type: SET_NEW_PAGE, newPage} 
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getPacks = (token: string, sortParams?: string) =>  async (dispatch: Dispatch<ActionsType>) => {
+export const getPacks = (token: string, sortParams?: string) => async (dispatch: Dispatch<ActionsType>) => {
     try {
         dispatch(isLoading(true));
         const data = await packsAPI.getPacks(token, sortParams);
@@ -68,8 +68,7 @@ export const getPacks = (token: string, sortParams?: string) =>  async (dispatch
     }
 };
 
-
-export const getPacksNew = (token: string, page: number) =>  async (dispatch: Dispatch<ActionsType>) => {
+export const getPacksNew = (token: string, page: number) => async (dispatch: Dispatch<ActionsType>) => {
 
     try {
         dispatch(isLoading(true));
@@ -97,21 +96,22 @@ export const addPack = (token: string, packName: string): ThunkType => async (di
 
 };
 
-export const changePack = (packId: string, token: string, newName: string ) => async (dispatch: Dispatch) => {
-    try {
-        dispatch(isLoading(true));
-        const data = await packsAPI.updatePack(packId, token, newName);
-        setItemToLS('token', data.token);
-        dispatch(updatePackAC(packId, data.updatedCardsPack));
-    } catch(e){
-        setItemToLS('token', e.response.data.token);
-        dispatch(setMessageText(e.response.data.error))
-    } finally {
-        dispatch(isLoading(false));
-    }
-};
+export const changePack = (packId: string, token: string, newName: string) =>
+    async (dispatch: Dispatch) => {
+        try {
+            dispatch(isLoading(true));
+            const data = await packsAPI.updatePack(packId, token, newName);
+            setItemToLS('token', data.token);
+            dispatch(updatePackAC(packId, data.updatedCardsPack));
+        } catch (e) {
+            setItemToLS('token', e.response.data.token);
+            dispatch(setMessageText(e.response.data.error))
+        } finally {
+            dispatch(isLoading(false));
+        }
+    };
 
-export const deletePack = (packId: string, token: string ): ThunkType => async (dispatch) => {
+export const deletePack = (packId: string, token: string): ThunkType => async (dispatch) => {
     try {
         dispatch(isLoading(true));
         const data = await packsAPI.deletePack(packId, token);

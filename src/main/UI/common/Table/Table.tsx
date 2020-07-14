@@ -12,7 +12,7 @@ type TablePropsType = {
     rows: any
     getItems: (sortParams: string) => void
     tableModel: string
-    showModal: (modalType: string, id?: string, name?: string, question?: string, answer?: string) => void
+    showModal: (modalType: string, id?: string, creatorId?: string, name?: string, question?: string, answer?: string) => void
 }
 
 export const Table = React.memo(function (props: TablePropsType) {
@@ -29,12 +29,17 @@ export const Table = React.memo(function (props: TablePropsType) {
                             rows.map((row: PackItemType) => {
                                 return <div key={row._id} className={styles.row}>
                                         <span>
-                                            <NavLink to={`${CARDS_PATH}/${row._id}`}>{row.name}</NavLink>
+                                            <NavLink to={{
+                                                pathname: `${CARDS_PATH}/${row._id}`,
+                                                state: {data: row.user_id}
+                                            }}>{row.name}</NavLink>
                                         </span>
                                     <span>{row.grade}</span>
                                     <span className={styles.buttonColumn}>
-                                           <Button title={'Change'} name={'change'} onClick={(e) => showModal(e.currentTarget.name, row._id, row.name)}/>
-                                           <Button title={'Delete'} name={'delete'} onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
+                                           <Button title={'Change'} name={'change'}
+                                                   onClick={(e) => showModal(e.currentTarget.name, row._id, row.user_id, row.name)}/>
+                                           <Button title={'Delete'} name={'delete'}
+                                                   onClick={(e) => showModal(e.currentTarget.name, row._id, row.user_id)}/>
                                        </span>
                                 </div>
                             })
@@ -51,9 +56,9 @@ export const Table = React.memo(function (props: TablePropsType) {
                                         <span>{row.grade}</span>
                                         <span className={styles.buttonColumn}>
                                            <Button title={'Change'} name={'change'}
-                                                   onClick={(e) => showModal(e.currentTarget.name, row._id, row.question, row.answer)}/>
+                                                   onClick={(e) => showModal(e.currentTarget.name, row._id, row.user_id, row.question, row.answer)}/>
                                            <Button title={'Delete'} name={'delete'}
-                                                   onClick={(e) => showModal(e.currentTarget.name, row._id)}/>
+                                                   onClick={(e) => showModal(e.currentTarget.name, row._id, row.user_id)}/>
                                        </span>
                                     </div>
                                 })

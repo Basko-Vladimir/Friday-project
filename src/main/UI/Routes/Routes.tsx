@@ -25,7 +25,7 @@ export const Routes = () => {
             <Route path={`${SET_NEW_PASS_PATH}/:resetToken?`} render={() => <SetNewPassContainer/>}/>
             <Route path={PROFILE_PATH} render={() => <Profile/>}/>
             <Route path={PACKS_PATH} render={() => <Packs/>}/>
-            <Route path={`${CARDS_PATH}/:packId?`} render={() => <Cards/>}/>
+            <Route path={`${CARDS_PATH}/:packId?`} render={(props) => <Cards state={props.location.state}/>}/>
             <Redirect exact path={'/'} to={SIGN_IN_PATH}/>
             <Route path={'*'} render={() => <h2> 404 ERROR PAGE NOT FOUND</h2>}/>
         </Switch>
