@@ -1,17 +1,22 @@
-import React from 'react';
+import React, {DetailedHTMLProps, InputHTMLAttributes, useState} from 'react';
 import s from './Learn.module.scss'
 import {Button} from "../../main/UI/common/Button/Button";
 
-const Learn = function () {
+type LearnType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
+        HTMLInputElement> &
+    { show: boolean, setShow: (show: boolean) => void }
+
+const Learn: React.FC<LearnType> =  ({show, setShow}) => {
 
 
     return <div className={s.container}>
         <div className={s.visible}>
             <h2>Learning Page</h2>
             <p>Question</p>
-            <Button title='check'/>
+            <Button title='check' onClick={() => {setShow(!show)}}/>
         </div>
-        <div className={s.hidden}>
+        {   show &&
+            <div className={s.hidden}>
             <p>Answer</p>
             <div className={s.body}>
                 <div className={s.answers}>
@@ -27,10 +32,13 @@ const Learn = function () {
 
             </div>
         </div>
+        }
     </div>
 };
 
 export const LearnContainer = () => {
 
-    return <Learn />
+    const [show, setShow] = useState<boolean>(false);
+
+    return <Learn show={show} setShow={setShow}/>
 };
