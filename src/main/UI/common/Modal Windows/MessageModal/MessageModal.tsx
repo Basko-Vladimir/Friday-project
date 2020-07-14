@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
-import {Button} from '../Button/Button';
+import {Button} from '../../Button/Button';
 import {useDispatch} from 'react-redux';
-import {SetMessageTextType} from '../../../BLL/appReducer';
+import {SetMessageTextType} from '../../../../BLL/appReducer';
 import {Modal} from '../Modal/Modal';
 
 type MessageModalPropsType = {

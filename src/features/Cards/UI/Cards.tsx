@@ -4,14 +4,16 @@ import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../../main/BLL/store';
 import {getItemFromLS} from '../../Sign-In/LS-service/localStorage';
-import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
+import {MessageModal} from '../../../main/UI/common/Modal Windows/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import {Redirect, useParams} from 'react-router-dom';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import {addCard, getCards, changeCard, deleteCard} from '../BLL/cardsReducer';
 import {CardItemType} from '../types';
-import { AddCardModal } from './AddCardModal/AddCardModal';
+import {AddCardModal} from './AddCardModal/AddCardModal';
 import {ChangeCardModal} from './ChangeCardModal/ChangeCardModal';
+import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
+
 
 export const Cards = function () {
     const headers = ['Question', 'Answer', 'Grade', 'Add Pack'];
@@ -53,14 +55,14 @@ export const Cards = function () {
     }, [dispatch, token, currentCardId]);
 
     const onAddCard = useCallback((question: string, answer: string) => {
-        token && dispatch(addCard(token, packId, question, answer ))
+        token && dispatch(addCard(token, packId, question, answer))
     }, [dispatch, token, packId]);
 
-    const onDeletePack = useCallback((cardId: string) => {
-        token && dispatch(deleteCard(cardId, token))
-    }, [dispatch, token]);
+    const onDeleteCard = useCallback(() => {
+        token && dispatch(deleteCard(currentCardId, token))
+    }, [dispatch, token, currentCardId]);
 
-    const hideModal = useCallback( () => {
+    const hideModal = useCallback(() => {
         setModalType('');
     }, []);
 
@@ -72,10 +74,10 @@ export const Cards = function () {
                tableModel={'cards'} showModal={showModal}/>
         <MessageModal messageText={messageText} isResponseError={true}
                       actionCreator={setMessageText('')}/>
-        <AddCardModal modalType={modalType} addCard={onAddCard} hideModal={hideModal} />
+        <AddCardModal modalType={modalType} addCard={onAddCard} hideModal={hideModal}/>
         <ChangeCardModal modalType={modalType} hideModal={hideModal} changeCard={onChangeCard}
-                         currentQuestion={currentQuestion} currentAnswer={currentAnswer} />
-
+                         currentQuestion={currentQuestion} currentAnswer={currentAnswer}/>
+        <DeleteItemModal modalType={modalType} deleteItem={onDeleteCard} hideModal={hideModal}/>
         {isLoading && <Loading/>}
     </>
 };

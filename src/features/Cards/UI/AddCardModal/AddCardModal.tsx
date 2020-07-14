@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
-import {Modal} from '../../../../main/UI/common/Modal/Modal';
+import {Modal} from '../../../../main/UI/common/Modal Windows/Modal/Modal';
 import {NewInput} from '../../../../main/UI/common/NewInput/NewInput';
 import {Button} from '../../../../main/UI/common/Button/Button';
 

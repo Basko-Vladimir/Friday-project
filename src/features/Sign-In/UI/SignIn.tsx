@@ -4,7 +4,7 @@ import {NewInput} from '../../../main/UI/common/NewInput/NewInput';
 import {NavLink} from 'react-router-dom';
 import {FORGOT_PATH, SIGN_UP_PATH} from '../../../main/UI/Routes/Routes';
 import {Button} from '../../../main/UI/common/Button/Button';
-import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
+import {MessageModal} from '../../../main/UI/common/Modal Windows/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 
 type SignInPropsType = {
