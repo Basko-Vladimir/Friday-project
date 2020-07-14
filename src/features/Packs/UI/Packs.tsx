@@ -8,14 +8,21 @@ import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import {Redirect} from 'react-router-dom';
 import {PackItemType} from '../types';
 import {SearchContainer} from "../../../main/UI/common/Search/Search";
-import {Message} from '../../../main/UI/common/Message/Message';
+import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 import {PaginatorContainer} from "../../../main/UI/common/Paginator/Paginator";
+import {AddPackModal} from './AddPackModal/AddPackModal';
+import {ChangePackModal} from './ChangePackModal/ChangePackModal';
+import {DeletePackModal} from './DeletePackModal/DeletePackModal';
 
 export const Packs = function () {
     const headers = ['Name', 'Grade', 'Add Pack'];
+
     const [firstRendering, setFirstRendering] = useState<boolean>(true);
+    const [currentPackId, setCurrentPackId] = useState<string>('');
+    const [currentPackName, setCurrentPackName] = useState<string>('');
+    const [modalType, setModalType] = useState<string>('');
     const token = getItemFromLS('token');
 
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
@@ -26,43 +33,64 @@ export const Packs = function () {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (firstRendering && token && isAuth) {
-            setFirstRendering(false);
+        if (firstRendering && token) {
             dispatch(getPacks(token));
+            setFirstRendering(false);
         }
-    }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
+        // if (firstRendering && token && isAuth) {
+        //     debugger
+        //     dispatch(getPacks(token));
+        //     setFirstRendering(false);
+        // } else if (token && !isAuth){
+        //     debugger
+        //     dispatch(setAuthMe(token));
+        // }
+    }, [dispatch, token, setFirstRendering, firstRendering]);
 
+    const showModal = useCallback((modalType: string, packId?: string, packName?: string) => {
+        packId && setCurrentPackId(packId);
+        packName && setCurrentPackName(packName);
+        setModalType(modalType);
+    }, [setCurrentPackId, setCurrentPackName, setModalType]);
+
+    const hideModal = useCallback(() => {
+        setModalType('');
+    }, [setModalType]);
 
     const onGetPacks = useCallback((sortParams: string) => {
-        token && dispatch(getPacks(token, `sortPacks=${sortParams}`))
+        token && dispatch(getPacks(token, `sortPacks=${sortParams}`));
     }, [dispatch, token]);
 
-    const onUpdatePack = useCallback((idPack: string) => {
-        dispatch(changePack(idPack, token));
+    const onChangePack = useCallback((newName: string) => {
+        token && dispatch(changePack(currentPackId, token, newName));
+    }, [dispatch, token, currentPackId]);
+
+    const onAddPack = useCallback((title: string) => {
+        token && dispatch(addPack(token, title));
     }, [dispatch, token]);
 
-    const onAddPack = useCallback(() => {
-        dispatch(addPack(token))
-    }, [dispatch, token]);
-
-    const onDeletePack = useCallback((idPack: string) => {
-        dispatch(deletePack(idPack, token))
-    }, [dispatch, token]);
-
-    if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
+    const onDeletePack = useCallback(() => {
+        token && dispatch(deletePack(currentPackId, token));
+    }, [dispatch, token, currentPackId]);
 
 
-    return <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        <SearchContainer/>
-        <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
-               deleteItem={onDeletePack} addItem={onAddPack}
-               updateItem={onUpdatePack} tableModel={'packs'}/>
-        {isLoading && <Loading/>}
-        {
-            messageText && <Message messageText={messageText} isResponseError={true}
-                                    actionCreator={setMessageText('')}/>
-        }
-        <PaginatorContainer/>
-    </div>
+    if (!isAuth && !firstRendering) return <Redirect to={SIGN_IN_PATH}/>;
+    // if (isLoading) return <Loading/>;
 
+    return (
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <SearchContainer/>
+            <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
+                   tableModel={'packs'} showModal={showModal}/>
+            <PaginatorContainer/>
+            <MessageModal messageText={messageText} isResponseError={true}
+                          actionCreator={setMessageText('')}/>
+            <AddPackModal modalType={modalType} addPack={onAddPack}
+                          hideModal={hideModal}/>
+            <ChangePackModal modalType={modalType} onChangePack={onChangePack}
+                             hideModal={hideModal} currentPackName={currentPackName}/>
+            <DeletePackModal modalType={modalType} deletePack={onDeletePack} hideModal={hideModal}/>
+            {isLoading && <Loading/>}
+        </div>
+    )
 };

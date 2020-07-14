@@ -1,32 +1,21 @@
-import React, {ChangeEvent, FormEvent, useCallback, useEffect, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useCallback, useState} from 'react';
 import {PROFILE_PATH} from '../../../main/UI/Routes/Routes';
 import {Redirect} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {login, setAuthMe} from '../BLL/signInReducer';
+import {login,} from '../BLL/signInReducer';
 import {AppStateType} from '../../../main/BLL/store';
 import {SignIn} from './SignIn';
-import {getItemFromLS} from '../LS-service/localStorage';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 
 export const SignInContainer = React.memo(() => {
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
-    const token = getItemFromLS('token');
 
-    const [firstRendering, setFirstRendering] = useState<boolean>(true);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isRemember, setIsRemember] = useState<boolean>(false);
-
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (token && firstRendering && !isAuth) {
-            dispatch(setAuthMe(token));
-            setFirstRendering(false)
-        }
-    }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
 
     const changeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.currentTarget.value)

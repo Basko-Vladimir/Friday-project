@@ -4,8 +4,8 @@ import {Button} from '../../Button/Button';
 
 type HeadersPropsType = {
     columnsHeaders: Array<string>
-    addItem: () => void
     getItems: (sortParams: string) => void
+    showModal: (modalType: string) => void
 };
 
 
@@ -13,7 +13,7 @@ export const ColumnsHeaders: React.FC<HeadersPropsType> = React.memo((props) => 
     const [sortInc, setSort] = useState<boolean>(false);
     let sortDirection = '';
 
-    const {columnsHeaders, addItem, getItems} = props;
+    const {columnsHeaders, getItems, showModal} = props;
 
     const onSetSort = (e: React.MouseEvent) => {
         let property = e.currentTarget.textContent;
@@ -31,7 +31,7 @@ export const ColumnsHeaders: React.FC<HeadersPropsType> = React.memo((props) => 
         <div className={styles.headers}>
             {columnsHeaders.map((header, i) => {
                     return i === columnsHeaders.length - 1
-                        ? <Button key={header} title={header} onClick={addItem}/>
+                        ? <Button key={header} title={header} name={'add'} onClick={(e) => showModal(e.currentTarget.name)}/>
                         : <span key={header}>
                             <b onClick={onSetSort}>{header}</b>
                     </span>

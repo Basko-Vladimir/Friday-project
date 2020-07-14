@@ -4,7 +4,7 @@ import {Button} from '../../../main/UI/common/Button/Button';
 import {NewInput} from '../../../main/UI/common/NewInput/NewInput';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import { NavLink } from 'react-router-dom';
-import {Message} from '../../../main/UI/common/Message/Message';
+import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
 import { setMessageText } from '../../../main/BLL/appReducer';
 
 type ForgotPropsType = {
@@ -27,7 +27,7 @@ export const Forgot:React.FC<ForgotPropsType> = React.memo((props) => {
                 <Button title={'Send email'}/>
             </form>
             {
-                messageText && <Message messageText={messageText} isResponseError={isResponseError}
+                messageText && <MessageModal messageText={messageText} isResponseError={isResponseError}
                                         actionCreator={setMessageText('')}/>
             }
         </div>

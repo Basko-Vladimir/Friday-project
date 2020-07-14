@@ -1,29 +1,29 @@
-import React from 'react';
-import styles from './Message.module.scss';
+import React, {useCallback} from 'react';
 import {Button} from '../Button/Button';
 import {useDispatch} from 'react-redux';
 import {SetMessageTextType} from '../../../BLL/appReducer';
+import {Modal} from '../Modal/Modal';
 
-type MessagePropsType = {
+type MessageModalPropsType = {
     messageText: string
     isResponseError: boolean
     actionCreator: SetMessageTextType
 }
 
-export const Message: React.FC<MessagePropsType> = React.memo((props) => {
+export const MessageModal: React.FC<MessageModalPropsType> = React.memo((props) => {
     const {messageText, isResponseError, actionCreator} = props;
-    const messageClass = isResponseError ? `${styles.message} ${styles.error} ` : styles.message;
     const dispatch = useDispatch();
 
-    const closeMessage = () => {
+    const closeMessage = useCallback(() => {
         dispatch(actionCreator)
-    };
+    }, [dispatch, actionCreator]);
 
     return <>
-        <div className={styles.background}> </div>
-        <div className={messageClass}>
+        <Modal isResponseError={isResponseError} isShow={Boolean(messageText)}>
             <h3>{messageText}</h3>
             <Button title={'Close'} onClick={closeMessage}/>
-        </div>
+        </Modal>
     </>
 });
+
+

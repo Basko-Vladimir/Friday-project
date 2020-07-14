@@ -11,10 +11,10 @@ export const packsAPI = {
             .then(res => res.data)
     },
 
-    addPack (token: string | undefined) {
+    addPack (token: string, packName: string) {
         return instance.post('/cards/pack', {
             cardsPack: {
-                name: 'BaskoPack',
+                name: packName,
                 grade: 0
             },
             token
@@ -22,11 +22,11 @@ export const packsAPI = {
             .then(res => res.data)
     },
 
-    updatePack (idPack: string, token: string | undefined) {
+    updatePack (packId: string, token: string, newName: string) {
         return instance.put('/cards/pack', {
             cardsPack: {
-                _id: idPack,
-                name: 'changedBaskoPack'
+                _id: packId,
+                name: newName
             },
             token
         })

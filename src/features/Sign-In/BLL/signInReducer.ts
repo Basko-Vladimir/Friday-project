@@ -63,12 +63,16 @@ export const login = (email: string, password: string, isRemember: boolean): Thu
 
 export const setAuthMe = (token: string) => async (dispatch: Dispatch<ActionsTypes>) => {
     try {
+        dispatch(isLoading(true));
         dispatch(loginSuccess(true));
         const data = await authAPI.authMe(token);
         setItemToLS('token', data.token);
         dispatch(setUserData({...data}));
+        return data
     } catch (err) {
         dispatch(loginSuccess(false));
+    } finally {
+        dispatch(isLoading(false));
     }
 };
 

@@ -4,7 +4,7 @@ import {NewInput} from '../../../main/UI/common/NewInput/NewInput';
 import {NavLink} from 'react-router-dom';
 import {FORGOT_PATH, SIGN_UP_PATH} from '../../../main/UI/Routes/Routes';
 import {Button} from '../../../main/UI/common/Button/Button';
-import {Message} from '../../../main/UI/common/Message/Message';
+import {MessageModal} from '../../../main/UI/common/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 
 type SignInPropsType = {
@@ -39,7 +39,7 @@ export const SignIn: React.FC<SignInPropsType> = React.memo((props) => {
                 <Button title={'Sign in'}/>
                 <NavLink to={SIGN_UP_PATH}>Registration</NavLink>
                 {
-                    messageText && <Message messageText={messageText} isResponseError={true}
+                    messageText && <MessageModal messageText={messageText} isResponseError={true}
                                             actionCreator={setMessageText('')}/>
                 }
             </form>

@@ -7,38 +7,28 @@ const instance = axios.create({
 });
 
 export const cardsAPI = {
-    getCards (token: string, packId :string, sortParams: string = '') {
+    getCards(token: string, packId: string, sortParams: string = '') {
         return instance.get<CardsType>(`/cards/card?token=${token}&cardsPack_id=${packId}&${sortParams}`)
             .then(res => res.data)
     },
 
-    addCard(token: string, packId:string) {
+    addCard(token: string, packId: string, question: string, answer: string) {
         return instance.post<NewCardType>('/cards/card', {
-            card: {
-                cardsPack_id: packId,
-                question: 'No question Basko',
-                answer: 'No answer Basko',
-                grade: 0
-            },
+            card: {cardsPack_id: packId, question, answer, grade: 0},
             token
         })
             .then(res => res.data)
     },
 
-    updateCard (cardId: string, token: string) {
+    updateCard(cardId: string, token: string, question: string, answer: string) {
         return instance.put<UpdatedCardType>('/cards/card', {
-            card: {
-                _id: cardId,
-                question: 'Changed question Basko',
-                answer: 'Changed answer Basko',
-                grade: 0
-            },
+            card: {_id: cardId, question, answer, grade: 0},
             token
         })
             .then(res => res.data)
     },
 
-    deleteCard (cardId: string, token: string) {
+    deleteCard(cardId: string, token: string) {
         return instance.delete<DeletedCardType>(`/cards/card?token=${token}&id=${cardId}`)
             .then(res => res.data)
     }

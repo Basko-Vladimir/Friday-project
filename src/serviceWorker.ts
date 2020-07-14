@@ -102,7 +102,7 @@ function registerValidSW(swUrl: string, config?: Config) {
       };
     })
     .catch(error => {
-      console.error('Message during service worker registration:', error);
+      console.error('MessageModal during service worker registration:', error);
     });
 }
 
