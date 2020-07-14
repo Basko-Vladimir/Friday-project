@@ -1,4 +1,4 @@
-import React, {DetailedHTMLProps, InputHTMLAttributes, useEffect, useState} from 'react';
+import React, {DetailedHTMLProps, InputHTMLAttributes, useCallback, useEffect, useState} from 'react';
 import s from './Learn.module.scss'
 import {Button} from "../../main/UI/common/Button/Button";
 import {useParams} from "react-router-dom";
@@ -11,9 +11,12 @@ import {getItemFromLS} from "../Sign-In/LS-service/localStorage";
 
 type LearnType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
         HTMLInputElement> &
-    { show: boolean, setShow: (show: boolean) => void, cards: Array<CardItemType>, currentCard: number }
+    {
+        show: boolean, setShow: (show: boolean) => void, cards: Array<CardItemType>, currentCard: number,
+        doAnswer: () => void
+    }
 
-const Learn: React.FC<LearnType> =  ({show, setShow, cards, currentCard}) => {
+const Learn: React.FC<LearnType> =  ({show, setShow, cards, currentCard, doAnswer}) => {
 
 
     return <div className={s.container}>
@@ -27,11 +30,11 @@ const Learn: React.FC<LearnType> =  ({show, setShow, cards, currentCard}) => {
             <p>{cards[currentCard].answer}</p>
             <div className={s.body}>
                 <div className={s.answers}>
-                    <span>Не знал.</span>
-                    <span>Что-то слышал про это...</span>
-                    <span>Угадал</span>
-                    <span>Почти знал</span>
-                    <span>Знал на 100%</span>
+                    <span onClick={doAnswer}>Не знал.</span>
+                    <span onClick={doAnswer}>Что-то слышал про это...</span>
+                    <span onClick={doAnswer}>Угадал</span>
+                    <span onClick={doAnswer}>Почти знал</span>
+                    <span onClick={doAnswer}>Знал на 100%</span>
                 </div>
                 <div className={s.nextBtnContainer}>
                     <Button title='Next >>>'/>
@@ -64,7 +67,10 @@ export const LearnContainer = () => {
     // Текущий индекс массива(какая карточка отображается)
     const currentCard = 0 as number;
 
+    // Коллбэк на оценку карточки
+    const doAnswer = useCallback(() => {}, []);
 
-
-    return cards.length && <Learn show={show} setShow={setShow}  cards={cards} currentCard={currentCard}/>
+    return cards.length  ? <Learn show={show} setShow={setShow} cards={cards} currentCard={currentCard}
+                                  doAnswer={doAnswer}
+    /> : <></>
 };
