@@ -18,19 +18,16 @@ import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemM
 
 export const Packs = function () {
     const headers = ['Name', 'Grade', 'Add Pack'];
-
     const [firstRendering, setFirstRendering] = useState<boolean>(true);
     const [currentPackId, setCurrentPackId] = useState<string>('');
     const [currentPackName, setCurrentPackName] = useState<string>('');
     const [modalType, setModalType] = useState<string>('');
-    const token = getItemFromLS('token');
+    let token = getItemFromLS('token');
 
-    const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
     const packs = useSelector<AppStateType, Array<PackItemType>>(state => state.packs.packs);
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const ownerId = useSelector<AppStateType, string | undefined>(state => state.signIn.userData?._id);
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -38,14 +35,7 @@ export const Packs = function () {
             dispatch(getPacks(token));
             setFirstRendering(false);
         }
-        // if (firstRendering && token && isAuth) {
-        //     debugger
-        //     dispatch(getPacks(token));
-        //     setFirstRendering(false);
-        // } else if (token && !isAuth){
-        //     debugger
-        //     dispatch(setAuthMe(token));
-        // }
+
     }, [dispatch, token, setFirstRendering, firstRendering]);
 
     const showModal = useCallback((modalType: string, packId?: string, creatorId?: string, packName?: string) => {
@@ -79,8 +69,8 @@ export const Packs = function () {
     }, [dispatch, token, currentPackId]);
 
 
-    if (!isAuth && !firstRendering) return <Redirect to={SIGN_IN_PATH}/>;
-    // if (isLoading) return <Loading/>;
+    if (isLoading) return <Loading/>;
+    if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>

@@ -26,23 +26,22 @@ export const Cards = function (props: CardsPropsType) {
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [currentAnswer, setCurrentAnswer] = useState<string>('');
     const token = getItemFromLS('token');
-    const packCreatorId = props.state.data;
+    const packCreatorId = props.state?.data;
 
-    const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
     const cards = useSelector<AppStateType, Array<CardItemType>>(state => state.cards.cards);
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const ownerId = useSelector<AppStateType, string | undefined>(state => state.signIn.userData?._id);
-
+    console.log(ownerId);
     const {packId} = useParams();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (firstRendering && token && isAuth) {
-            setFirstRendering(false);
+        if (firstRendering && token) {
             dispatch(getCards(token, packId));
+            setFirstRendering(false);
         }
-    }, [dispatch, token, setFirstRendering, firstRendering, isAuth, packId]);
+    }, [dispatch, token, setFirstRendering, firstRendering, packId]);
 
     const showModal = useCallback((modalType: string, cardId?: string, creatorId?: string, question?: string, answer?: string) => {
         if (packCreatorId !== ownerId) {
@@ -76,7 +75,8 @@ export const Cards = function (props: CardsPropsType) {
     }, []);
 
 
-    if (!isAuth) return <Redirect to={SIGN_IN_PATH}/>;
+    if (isLoading) return <Loading/>;
+    if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
     return <>
         <Table columnsHeaders={headers} rows={cards} getItems={onGetCards}

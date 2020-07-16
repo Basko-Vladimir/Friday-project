@@ -7,6 +7,7 @@ import {isLoading} from '../../Sign-Up/BLL/SignUpReducer';
 import {IsLoadingACType} from '../../Sign-Up/BLL/SignUpTypes';
 import {ThunkAction} from 'redux-thunk';
 import {AppStateType} from '../../../main/BLL/store';
+import {setAuthMe} from '../../Sign-In/BLL/signInReducer';
 
 const SET_PACKS = 'cards/packsReducer/SET_PACKS';
 const UPDATE_PACK = 'cards/packsReducer/UPDATE_PACK';
@@ -55,12 +56,15 @@ export const SetNewPageAC = (newPage: number) => ({type: SET_NEW_PAGE, newPage} 
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getPacks = (token: string, sortParams?: string) => async (dispatch: Dispatch<ActionsType>) => {
+export const getPacks = (token: string, sortParams?: string): ThunkType => async (dispatch) => {
     try {
         dispatch(isLoading(true));
-        const data = await packsAPI.getPacks(token, sortParams);
-        setItemToLS('token', data.token);
-        dispatch(setPacks(data.cardPacks));
+        const userData = await dispatch(setAuthMe(token));
+        if (userData) {
+            const packsData = await packsAPI.getPacks(userData.token, sortParams);
+            setItemToLS('token', packsData.token);
+            dispatch(setPacks(packsData.cardPacks));
+        }
     } catch (e) {
         dispatch(setMessageText(e.response.data.error))
     } finally {
@@ -69,7 +73,6 @@ export const getPacks = (token: string, sortParams?: string) => async (dispatch:
 };
 
 export const getPacksNew = (token: string, page: number) => async (dispatch: Dispatch<ActionsType>) => {
-
     try {
         dispatch(isLoading(true));
         const data = await packsAPI.getPacks(token, '', 4, page);

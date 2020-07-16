@@ -10,7 +10,6 @@ import Loading from '../../main/UI/common/LoadingToggle/Loading';
 
 export const Profile = () => {
     const userData = useSelector<AppStateType, UserDataType | null>(state => state.signIn.userData);
-    const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
 
     const token = getItemFromLS('token');
@@ -18,16 +17,15 @@ export const Profile = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (firstRendering && token && !isAuth) {
+        if (firstRendering && token) {
             dispatch(setAuthMe(token));
             setFirstRendering(false);
         }
-    }, [dispatch, token, setFirstRendering, firstRendering, isAuth]);
+    }, [dispatch, token, setFirstRendering, firstRendering]);
 
-    if (!isAuth) {
-        return <Redirect to={SIGN_IN_PATH}/>;
-    }
-    if (isLoading) return <Loading/>;
+
+    if (isLoading) return <Loading />;
+    if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
     return (
         <div>

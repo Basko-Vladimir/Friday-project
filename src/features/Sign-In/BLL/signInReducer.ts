@@ -37,7 +37,7 @@ export const signInReducer = (state: StateType = initialState, action: ActionsTy
 
 type ActionsTypes = SetUserDataType | LoginSuccessType | SetMessageTextType | IsLoadingACType;
 
-type SetUserDataType = ReturnType<typeof setUserData>
+export type SetUserDataType = ReturnType<typeof setUserData>
 export const setUserData = (userData: UserDataType | null) => ({type: SET_USER_DATA, userData} as const);
 
 type LoginSuccessType = ReturnType<typeof loginSuccess>;
@@ -62,7 +62,7 @@ export const login = (email: string, password: string, isRemember: boolean): Thu
 };
 
 export const setAuthMe = (token: string) => async (dispatch: Dispatch<ActionsTypes>) => {
-    try {
+     try {
         dispatch(isLoading(true));
         dispatch(loginSuccess(true));
         const data = await authAPI.authMe(token);
