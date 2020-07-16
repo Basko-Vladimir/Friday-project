@@ -6,11 +6,13 @@ import {login,} from '../BLL/signInReducer';
 import {AppStateType} from '../../../main/BLL/store';
 import {SignIn} from './SignIn';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
+import {getItemFromLS} from '../LS-service/localStorage';
 
 export const SignInContainer = React.memo(() => {
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
-    const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
+    // const isAuth = useSelector<AppStateType, boolean>(state => state.signIn.isAuth);
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
+    const token = getItemFromLS('token');
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -37,7 +39,7 @@ export const SignInContainer = React.memo(() => {
         setIsRemember(false);
     }, [dispatch, email, password, isRemember]);
 
-    if (isAuth) return <Redirect to={PROFILE_PATH}/>;
+    if (token) return <Redirect to={PROFILE_PATH}/>;
 
     return <>
         <SignIn email={email} password={password} isRemember={isRemember}
