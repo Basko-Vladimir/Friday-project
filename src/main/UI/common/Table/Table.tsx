@@ -31,7 +31,7 @@ export const Table = React.memo(function (props: TablePropsType) {
                                         <span>
                                             <NavLink to={{
                                                 pathname: `${CARDS_PATH}/${row._id}`,
-                                                state: {data: row.user_id}
+                                                // state: {data: row.user_id}
                                             }}>{row.name}</NavLink>
                                         </span>
                                     <span>{row.grade}</span>
