@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/Friday-project/static/css/main.fea44909.chunk.css",
-    "main.js": "/Friday-project/static/js/main.5d80fec5.chunk.js",
-    "main.js.map": "/Friday-project/static/js/main.5d80fec5.chunk.js.map",
+    "main.js": "/Friday-project/static/js/main.1b8eb448.chunk.js",
+    "main.js.map": "/Friday-project/static/js/main.1b8eb448.chunk.js.map",
     "runtime-main.js": "/Friday-project/static/js/runtime-main.f5ca4bc0.js",
     "runtime-main.js.map": "/Friday-project/static/js/runtime-main.f5ca4bc0.js.map",
     "static/js/2.1e7f031f.chunk.js": "/Friday-project/static/js/2.1e7f031f.chunk.js",
     "static/js/2.1e7f031f.chunk.js.map": "/Friday-project/static/js/2.1e7f031f.chunk.js.map",
     "index.html": "/Friday-project/index.html",
-    "precache-manifest.dacd836d11fce42edd54bc840ac1d896.js": "/Friday-project/precache-manifest.dacd836d11fce42edd54bc840ac1d896.js",
+    "precache-manifest.5c1e91be10f55b8546818d498b74d6a3.js": "/Friday-project/precache-manifest.5c1e91be10f55b8546818d498b74d6a3.js",
     "service-worker.js": "/Friday-project/service-worker.js",
     "static/css/main.fea44909.chunk.css.map": "/Friday-project/static/css/main.fea44909.chunk.css.map",
     "static/js/2.1e7f031f.chunk.js.LICENSE.txt": "/Friday-project/static/js/2.1e7f031f.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.f5ca4bc0.js",
     "static/js/2.1e7f031f.chunk.js",
     "static/css/main.fea44909.chunk.css",
-    "static/js/main.5d80fec5.chunk.js"
+    "static/js/main.1b8eb448.chunk.js"
   ]
 }
