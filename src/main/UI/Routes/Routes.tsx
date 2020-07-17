@@ -7,9 +7,9 @@ import {Profile} from '../../../features/Profile/Profile';
 import {ForgotContainer} from '../../../features/Forgot/UI/ForgotContainer';
 import {Packs} from '../../../features/Packs/UI/Packs';
 import {Cards} from '../../../features/Cards/UI/Cards';
-import {LearnContainer} from "../../../features/Learn/Learn";
 import {AppStateType} from '../../BLL/store';
 import {useSelector} from 'react-redux';
+import {LearnContainer} from "../../../features/Learn/UI/Learn";
 
 export const SIGN_IN_PATH = '/sign-in';
 export const SIGN_UP_PATH = '/sign-up';
