@@ -21,7 +21,7 @@ export const CARDS_PATH = '/cards';
 export const LEARN = '/learn';
 
 export const Routes = () => {
-    const packCreatorId = useSelector<AppStateType, string | undefined>(state => state.cards.cards[0]?.user_id);
+    const cardCreatorId = useSelector<AppStateType, string | undefined>(state => state.cards.cards[0]?.user_id);
     return (
         <Switch>
             <Route path={SIGN_IN_PATH} render={() => <SignInContainer/>}/>
@@ -31,7 +31,7 @@ export const Routes = () => {
             <Route path={PROFILE_PATH} render={() => <Profile/>}/>
             <Route path={PACKS_PATH} render={() => <Packs/>}/>
             <Route path={`${LEARN}/:id?`} render={() => <LearnContainer/>}/>
-            <Route path={`${CARDS_PATH}/:packId?`} render={() => <Cards state={{packCreatorId: packCreatorId}}/>}/>
+            <Route path={`${CARDS_PATH}/:packId?`} render={() => <Cards state={{cardCreatorId:cardCreatorId}}/>}/>
             <Redirect exact path={'/'} to={SIGN_IN_PATH}/>
             <Route path={'*'} render={() => <h2> 404 ERROR PAGE NOT FOUND</h2>}/>
         </Switch>

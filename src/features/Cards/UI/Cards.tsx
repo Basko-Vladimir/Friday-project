@@ -15,7 +15,7 @@ import {ChangeCardModal} from './ChangeCardModal/ChangeCardModal';
 import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
 
 type CardsPropsType = {
-    state: { packCreatorId: string | undefined }
+    state: { cardCreatorId: string | undefined }
 }
 
 export const Cards = function (props: CardsPropsType) {
@@ -26,7 +26,7 @@ export const Cards = function (props: CardsPropsType) {
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [currentAnswer, setCurrentAnswer] = useState<string>('');
     const token = getItemFromLS('token');
-    const packCreatorId = props.state.packCreatorId;
+    const cardCreatorId = props.state.cardCreatorId;
 
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
     const cards = useSelector<AppStateType, Array<CardItemType>>(state => state.cards.cards);
@@ -45,7 +45,8 @@ export const Cards = function (props: CardsPropsType) {
     }, [dispatch, token, setFirstRendering, firstRendering, packId]);
 
     const showModal = useCallback((modalType: string, cardId?: string, creatorId?: string, question?: string, answer?: string) => {
-        if (packCreatorId !== ownerId) {
+        console.log(cardCreatorId, ownerId);
+        if (cardCreatorId !== ownerId) {
             dispatch(setMessageText('This not your Card'))
         } else {
             setModalType(modalType);
@@ -53,7 +54,7 @@ export const Cards = function (props: CardsPropsType) {
             question && setCurrentQuestion(question);
             answer && setCurrentAnswer(answer);
         }
-    }, [setModalType, setCurrentCardId, setCurrentAnswer, setCurrentQuestion, ownerId, dispatch, packCreatorId]);
+    }, [setModalType, setCurrentCardId, setCurrentAnswer, setCurrentQuestion, ownerId, dispatch, cardCreatorId]);
 
     const onGetCards = useCallback((sortParams: string) => {
         token && dispatch(getCards(token, packId, `sortCards=${sortParams}`))
