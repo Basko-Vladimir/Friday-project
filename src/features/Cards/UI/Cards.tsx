@@ -45,8 +45,7 @@ export const Cards = function (props: CardsPropsType) {
     }, [dispatch, token, setFirstRendering, firstRendering, packId]);
 
     const showModal = useCallback((modalType: string, cardId?: string, creatorId?: string, question?: string, answer?: string) => {
-        console.log(cardCreatorId, ownerId);
-        if (cardCreatorId !== ownerId) {
+        if (cardCreatorId && cardCreatorId !== ownerId) {
             dispatch(setMessageText('This not your Card'))
         } else {
             setModalType(modalType);
