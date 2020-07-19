@@ -37,7 +37,7 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
 };
 
 type SetPacksType = ReturnType<typeof setCards>
-const setCards = (cards: Array<CardItemType>) => ({type: SET_CARDS, cards} as const);
+export const setCards = (cards: Array<CardItemType>) => ({type: SET_CARDS, cards} as const);
 
 type UpdateCardType = ReturnType<typeof updateCardAC>;
 const updateCardAC = (cardId: string, newCard: CardItemType) => ({type: UPDATE_CARD, cardId, newCard} as const);

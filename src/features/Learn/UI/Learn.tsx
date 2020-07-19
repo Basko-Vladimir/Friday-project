@@ -22,7 +22,7 @@ const Learn: React.FC<LearnType> =  ({
                                          isClicked, clickedStyle, onNext
 }) => {
 
-debugger
+
     return <div className={s.container}>
         <div className={s.visible}>
             <h2>Learning Page</h2>
@@ -93,17 +93,17 @@ export const LearnContainer = () => {
         return res.id + 1;
     };
 
+    // Текущий индекс массива(какая карточка отображается)
+    // let currentCard = firstRender ? 0 as number : getCard(cards);
+    // let [currentCard, setCurrentCard] = useState<number>(0);
+    let [currentCard, setCurrentCard] = useState<number>(firstRender ? 0 : getCard(cards));
+
     // CallBack на кнопку NEXT
     const onNext = useCallback( () => {
         if (cards.length > 0) {
-            // getCard(cards);
-            currentCard++;
+            setCurrentCard(getCard(cards));
         }
-    }, [cards] );
-
-    // Текущий индекс массива(какая карточка отображается)
-    // const currentCard = 0 as number;
-    let currentCard = firstRender ? 0 as number : getCard(cards);
+    }, [cards, currentCard] );
 
     // Достаём id карточки. Делаем проверку, чтобы длинна массива не была равна нулю, чтобы он успел прийти в редакс.
     const cardId = cards.length !== 0 ? cards[currentCard]._id : '';
