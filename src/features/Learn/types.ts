@@ -1,4 +1,6 @@
-export type CardItemType = {
+import {CardItemType} from "../Cards/types";
+
+export type CardsType = {
     answer: string
     cardsPack_id: string
     created: string

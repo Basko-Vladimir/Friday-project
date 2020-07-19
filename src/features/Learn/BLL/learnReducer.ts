@@ -5,10 +5,13 @@ import { isLoading } from '../../Sign-Up/BLL/SignUpReducer';
 import { setItemToLS } from '../../Sign-In/LS-service/localStorage';
 import {setMessageText, SetMessageTextType} from '../../../main/BLL/appReducer';
 import {IsLoadingACType} from '../../Sign-Up/BLL/SignUpTypes';
-import { CardItemType } from '../types';
 import {learnAPI} from "../DAL/learnAPI";
+import {setAuthMe} from "../../Sign-In/BLL/signInReducer";
+import {cardsAPI} from "../../Cards/DAL/cardsAPI";
+import {CardItemType} from "../../Cards/types";
 
 const UPDATE_GRADE = 'learn/learnReducer/UPDATE_GRADE';
+const SET_CARDS = 'learn/learnReducer/SET_CARDS';
 
 const initialState = {
     cards: [] as Array<CardItemType>
@@ -28,24 +31,45 @@ export const learnReducer = (state: StateType = initialState, action: UpdateGrad
     }
 };
 
+// Action Creators
 type UpdateGradeType = ReturnType<typeof updateGrade>
 const updateGrade = (grade: number) => ({type:UPDATE_GRADE, grade} as const);
 
+type SetPacksType = ReturnType<typeof setCards>
+export const setCards = (cards: Array<CardItemType>) => ({type: SET_CARDS, cards} as const);
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, UpdateGradeType>;
+// Типы, которые может диспатчить санка
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, UpdateGradeType | SetPacksType | IsLoadingACType | SetMessageTextType>;
 
-export const setNewGrade = (token: string, grade: number, cardId: string) =>  async (dispatch: Dispatch<UpdateGradeType>) => {
+
+export const getCards = (token: string, packId: string, sortParams?: string): ThunkType => async (dispatch) => {
+    try {
+        dispatch(isLoading(true));
+        const userData = await dispatch(setAuthMe(token));
+        if (userData) {
+            const cardsData = await learnAPI.getCards(userData.token, packId, sortParams);
+            setItemToLS('token', cardsData.token);
+            dispatch(setCards(cardsData.cards));
+        }
+    } catch (e) {
+        dispatch(setMessageText(e.response.data.error))
+    } finally {
+        dispatch(isLoading(false));
+    }
+};
+
+
+export const setNewGrade = (token: string, grade: number, cardId: string): ThunkType =>  async (dispatch) => {
     try {
 
-        // dispatch(isLoading(true));
+        dispatch(isLoading(true));
         const data = await learnAPI.putGrade(token, grade, cardId);
         setItemToLS('token', data.token);
         dispatch(updateGrade(data.grade));
-        // dispatch(updateGrade(data.card.grade));
     } catch (e) {
-        // dispatch(setMessageText(e.response.data.error))
+        dispatch(setMessageText(e.response.data.error))
     } finally {
-        // dispatch(isLoading(false));
+        dispatch(isLoading(false));
     }
 };
 

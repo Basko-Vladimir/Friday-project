@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {CardItemType} from '../types';
+import {CardsType} from "../types";
 
 
 const instance = axios.create({
@@ -7,8 +7,12 @@ const instance = axios.create({
 });
 
 export const learnAPI = {
+    getCards(token: string, packId: string, sortParams: string = '') {
+        return instance.get<CardsType>(`/cards/card?token=${token}&cardsPack_id=${packId}&${sortParams}`)
+            .then(res => res.data)
+    },
     putGrade(token: string, grade: number, cardId: string) {
-        return instance.put<CardItemType>(`/cards/grade`, {token: token, grade: grade, card_id: cardId})
+        return instance.put<CardsType>(`/cards/grade`, {token: token, grade: grade, card_id: cardId})
             .then(res => res.data)
     }
 };
