@@ -14,15 +14,15 @@ type LearnType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
         HTMLInputElement> &
     {
         show: boolean, setShow: (show: boolean) => void, cards: Array<CardItemType>, currentCard: number,
-        doAnswer: (grade: number) => void, isClicked: boolean, clickedStyle: any
+        doAnswer: (grade: number) => void, isClicked: boolean, clickedStyle: any, onNext: () => void
     }
 
 const Learn: React.FC<LearnType> =  ({
                                          show, setShow, cards, currentCard, doAnswer,
-                                         isClicked, clickedStyle
+                                         isClicked, clickedStyle, onNext
 }) => {
 
-
+debugger
     return <div className={s.container}>
         <div className={s.visible}>
             <h2>Learning Page</h2>
@@ -41,7 +41,7 @@ const Learn: React.FC<LearnType> =  ({
                     <span onClick={() => {doAnswer(5)}}>Знал на 100%</span>
                 </div>
                 <div className={s.nextBtnContainer}>
-                    <Button title='Next >>>'/>
+                    <Button title='Next >>>' onClick={onNext}/>
                 </div>
 
             </div>
@@ -72,26 +72,50 @@ export const LearnContainer = () => {
         }, [dispatch, token, params.id, firstRender, setFirstRender]
     );
 
-    // Текущий индекс массива(какая карточка отображается)
-    const currentCard = 0 as number;
-
     // Достаём запрошенные карточки из редюсера
     const cards = useSelector<AppStateType, Array<CardItemType>>(s => s.cards.cards);
 
+    // Изменение стиля кнопки после клика(пока не работает)
+    const [isClicked, setIsClicked] = useState(false);
+    const clickedStyle = {backgroundColor: 'darksalmon'};
+
+    const getCard = (cards: Array<CardItemType>) => {
+        const sum = cards.reduce((acc, card) => acc + (6 - card.grade) * (6 - card.grade), 0);
+        const rand = Math.random() * sum;
+        const res = cards.reduce((acc: { sum: number, id: number}, card, i) => {
+                const newSum = acc.sum + (6 - card.grade) * (6 - card.grade);
+                return {sum: newSum, id: newSum < rand ? i : acc.id}
+            }
+            , {sum: 0, id: -1});
+        console.log('test: ', sum, rand, res);
+
+        // return cards[res.id + 1];
+        return res.id + 1;
+    };
+
+    // CallBack на кнопку NEXT
+    const onNext = useCallback( () => {
+        if (cards.length > 0) {
+            // getCard(cards);
+            currentCard++;
+        }
+    }, [cards] );
+
+    // Текущий индекс массива(какая карточка отображается)
+    // const currentCard = 0 as number;
+    let currentCard = firstRender ? 0 as number : getCard(cards);
+
     // Достаём id карточки. Делаем проверку, чтобы длинна массива не была равна нулю, чтобы он успел прийти в редакс.
-    const cardId = cards.length !== 0 ? cards[currentCard]._id: '';
+    const cardId = cards.length !== 0 ? cards[currentCard]._id : '';
 
     // Коллбэк на оценку карточки
     const doAnswer = useCallback((grade: number) => {
-        // const token = getItemFromLS('token') as string;
         dispatch(setNewGrade(token, grade, cardId));
         setIsClicked(true)
     }, [token, dispatch, cardId]);
 
-    const [isClicked, setIsClicked] = useState(false);
-    const clickedStyle = {backgroundColor: 'darksalmon'};
-
     return cards.length  ? <Learn show={show} setShow={setShow} cards={cards} currentCard={currentCard}
                                   doAnswer={doAnswer} isClicked={isClicked} clickedStyle={clickedStyle}
+                                  onNext={onNext}
     /> : <></>
 };
