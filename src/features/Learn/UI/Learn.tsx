@@ -22,7 +22,6 @@ const Learn: React.FC<LearnType> =  ({
                                          isClicked, clickedStyle, onNext
 }) => {
 
-
     return <div className={s.container}>
         <div className={s.visible}>
             <h2>Learning Page</h2>
@@ -94,8 +93,6 @@ export const LearnContainer = () => {
     };
 
     // Текущий индекс массива(какая карточка отображается)
-    // let currentCard = firstRender ? 0 as number : getCard(cards);
-    // let [currentCard, setCurrentCard] = useState<number>(0);
     let [currentCard, setCurrentCard] = useState<number>(firstRender ? 0 : getCard(cards));
 
     // CallBack на кнопку NEXT
