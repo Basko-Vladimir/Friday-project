@@ -7,8 +7,8 @@ const instance = axios.create({
 });
 
 export const learnAPI = {
-    getCards(token: string, packId: string, sortParams: string = '') {
-        return instance.get<CardsType>(`/cards/card?token=${token}&cardsPack_id=${packId}&${sortParams}`)
+    getCards(token: string, packId: string, pageCount: number = 20) {
+        return instance.get<CardsType>(`/cards/card?token=${token}&cardsPack_id=${packId}&pageCount=${pageCount}`)
             .then(res => res.data)
     },
     putGrade(token: string, grade: number, cardId: string) {

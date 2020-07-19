@@ -7,19 +7,20 @@ import {AppStateType} from "../../../main/BLL/store";
 import {CardItemType} from "../../Cards/types";
 
 import {getItemFromLS} from "../../Sign-In/LS-service/localStorage";
-import {getCards, setNewGrade} from "../BLL/learnReducer";
+import {getCards, setGradeMessage, setNewGrade} from "../BLL/learnReducer";
 
 
 type LearnType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
         HTMLInputElement> &
     {
         show: boolean, setShow: (show: boolean) => void, cards: Array<CardItemType>, currentCard: number,
-        doAnswer: (grade: number) => void, isClicked: boolean, clickedStyle: any, onNext: () => void
+        doAnswer: (grade: number) => void, isClicked: boolean, clickedStyle: any, onNext: () => void,
+        gradeMessage: string
     }
 
 const Learn: React.FC<LearnType> =  ({
                                          show, setShow, cards, currentCard, doAnswer,
-                                         isClicked, clickedStyle, onNext
+                                         isClicked, clickedStyle, onNext, gradeMessage
 }) => {
 debugger
     return <div className={s.container}>
@@ -39,6 +40,7 @@ debugger
                     <span onClick={() => {doAnswer(4)}}>Почти знал</span>
                     <span onClick={() => {doAnswer(5)}}>Знал на 100%</span>
                 </div>
+                <strong><div style={{color: 'limegreen'}}>{gradeMessage}</div></strong>
                 <div className={s.nextBtnContainer}>
                     <Button title='Next >>>' onClick={onNext}/>
                 </div>
@@ -57,6 +59,8 @@ export const LearnContainer = () => {
 
     // Показать/спрятать ответ
     const [show, setShow] = useState<boolean>(false);
+    // const [showMessage, setShowMessage] = useState<boolean>(false);
+    const gradeMessage = useSelector<AppStateType, string>(s => s.learn.gradeMessage);
 
     // Достали токен
     const token = getItemFromLS('token') as string;
@@ -89,6 +93,7 @@ export const LearnContainer = () => {
         console.log('test: ', sum, rand, res);
 
         // return cards[res.id + 1];
+
         return res.id + 1;
     };
 
@@ -98,7 +103,10 @@ export const LearnContainer = () => {
     // CallBack на кнопку NEXT
     const onNext = useCallback( () => {
         if (cards.length > 0) {
+            setShow(false);
             setCurrentCard(getCard(cards));
+            dispatch(setGradeMessage(''))
+            // setShow(false);
         }
     }, [cards, currentCard] );
 
@@ -113,6 +121,6 @@ export const LearnContainer = () => {
 debugger
     return cards.length  ? <Learn show={show} setShow={setShow} cards={cards} currentCard={currentCard}
                                   doAnswer={doAnswer} isClicked={isClicked} clickedStyle={clickedStyle}
-                                  onNext={onNext}
+                                  onNext={onNext} gradeMessage={gradeMessage}
     /> : <></>
 };
