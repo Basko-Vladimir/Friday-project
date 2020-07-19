@@ -5,9 +5,9 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../main/BLL/store";
 import {CardItemType} from "../../Cards/types";
-import {getCards} from "../../Cards/BLL/cardsReducer";
+
 import {getItemFromLS} from "../../Sign-In/LS-service/localStorage";
-import {setNewGrade} from "../BLL/learnReducer";
+import {getCards, setNewGrade} from "../BLL/learnReducer";
 
 
 type LearnType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>,
@@ -21,7 +21,7 @@ const Learn: React.FC<LearnType> =  ({
                                          show, setShow, cards, currentCard, doAnswer,
                                          isClicked, clickedStyle, onNext
 }) => {
-
+debugger
     return <div className={s.container}>
         <div className={s.visible}>
             <h2>Learning Page</h2>
@@ -72,7 +72,7 @@ export const LearnContainer = () => {
     );
 
     // Достаём запрошенные карточки из редюсера
-    const cards = useSelector<AppStateType, Array<CardItemType>>(s => s.cards.cards);
+    const cards = useSelector<AppStateType, Array<CardItemType>>(s => s.learn.cards);
 
     // Изменение стиля кнопки после клика(пока не работает)
     const [isClicked, setIsClicked] = useState(false);
@@ -110,7 +110,7 @@ export const LearnContainer = () => {
         dispatch(setNewGrade(token, grade, cardId));
         setIsClicked(true)
     }, [token, dispatch, cardId]);
-
+debugger
     return cards.length  ? <Learn show={show} setShow={setShow} cards={cards} currentCard={currentCard}
                                   doAnswer={doAnswer} isClicked={isClicked} clickedStyle={clickedStyle}
                                   onNext={onNext}

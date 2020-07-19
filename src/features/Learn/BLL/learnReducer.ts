@@ -18,10 +18,16 @@ const initialState = {
 };
 
 type StateType = typeof initialState;
-// type ActionsType =| SetMessageTextType | IsLoadingACType;
+type ActionsType = UpdateGradeType | SetPacksType;
 
-export const learnReducer = (state: StateType = initialState, action: UpdateGradeType): StateType => {
+export const learnReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
+        case SET_CARDS:
+            debugger
+            return {
+                ...state,
+                cards: action.cards
+            };
         case UPDATE_GRADE:
             return {
                 ...state
@@ -43,11 +49,13 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, UpdateGradeTy
 
 
 export const getCards = (token: string, packId: string, sortParams?: string): ThunkType => async (dispatch) => {
+    debugger
     try {
         dispatch(isLoading(true));
         const userData = await dispatch(setAuthMe(token));
         if (userData) {
             const cardsData = await learnAPI.getCards(userData.token, packId, sortParams);
+            debugger
             setItemToLS('token', cardsData.token);
             dispatch(setCards(cardsData.cards));
         }
