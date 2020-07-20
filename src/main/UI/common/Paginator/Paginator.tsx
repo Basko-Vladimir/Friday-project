@@ -5,19 +5,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../BLL/store";
 import {getPacksNew, SetNewPageAC} from "../../../../features/Packs/BLL/packsReducer";
 import {getItemFromLS} from "../../../../features/Sign-In/LS-service/localStorage";
+import {getTotalCount, setToken} from "./BLL/paginatorReducer";
 
 export type ButtonPropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement> &
     {
         title: string, currentPage: number, setPage: any,
-        disableLeftBtn: boolean, disableRightBtn: boolean, lastPage: any,
+        disableLeftBtn: boolean, disableRightBtn: boolean,
         b4Call: () => void, b1Call: () => void, b1: string | number, b2: string | number,
-        b3: string | number, b4: string | number, showSpan: boolean, arrowsCall: any
+        b3: string | number, b4: string | number, showSpan: boolean, arrowsCall: any,
+        pagesCount: number
     };
 
 const Paginator: React.FC<ButtonPropsType> =
-    React.memo(({ title, currentPage, setPage, disableLeftBtn, disableRightBtn, lastPage,
-                    b4Call, b1Call, b1, b2, b3, b4, showSpan, arrowsCall,
+    React.memo(({ title, currentPage, setPage, disableLeftBtn, disableRightBtn,
+                    b4Call, b1Call, b1, b2, b3, b4, showSpan, arrowsCall, pagesCount,
                                                              ...props
                                                          }) => {
     return (
@@ -33,13 +35,14 @@ const Paginator: React.FC<ButtonPropsType> =
             }}/>
             <Button title={b4.toString()} className={s.button} onClick={b4Call}/>
             {showSpan &&  <span>...</span>}
-            <Button title={lastPage || '...'} className={s.button} onClick={() => {setPage(lastPage)}}/>
+            <Button title={pagesCount.toString() || '...'} className={s.button} onClick={() => {setPage(pagesCount)}}/>
             <Button title={'>'} className={s.arrow} disabled={disableRightBtn} onClick={() => {arrowsCall('right')}}/>
         </div>
     )
 });
 export const PaginatorContainer = () => {
 
+    const dispatch = useDispatch();
     // Нужно починить:
     // 1. Дизейблы.
     // 2. Переключение страниц стрелками
@@ -49,13 +52,25 @@ export const PaginatorContainer = () => {
     const [btns2, setBtns2] = useState([btns[0] + 1, btns[0] + 2]);
 
     // Данные
-    // const itemsCount = useSelector<any, number>(s => s.packs.packs.length);  //Кол-во колод
-    // const pagesCount = Math.ceil(itemsCount / pageSize); // Кол-во страниц
-    // let lastPage = currentPage * pageSize;
-    // const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
+    const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
+    debugger
+    const cardPacksTotalCount = useSelector<any, number>(s => s.paginator.cardPacksTotalCount);  //Кол-во колод
+    const pagesCount = Math.ceil(cardPacksTotalCount / pageSize); // Кол-во страниц
+    // let pagesCount = currentPage * pageSize;
 
+debugger
     let currentPage = useSelector<AppStateType, number>(s => s.packs.page); // Текущая страница
-    let lastPage = 25;
+
+    const isToken = useSelector<AppStateType, boolean>(s => s.paginator.isToken);
+    debugger
+    useEffect(() => {
+        // КОЛИЧЕСТВО СТРАНИЦ ПРИХОДИТ, НО ОШИБКА ТОКЕНА!!!!
+        if(isToken) {
+            debugger
+            const token = getItemFromLS('token') as string;
+            dispatch(getTotalCount(token));
+        }
+    }, []);
 
     // span show
     const [showSpan, setShowSpan] = useState<boolean>(true);
@@ -71,11 +86,12 @@ export const PaginatorContainer = () => {
     useEffect(() => {
         if (currentPage === 1) {
             setDisableLeftBtn(true);
-        } else if (lastPage === currentPage) {
+        } else if (pagesCount === currentPage) {
+            debugger
             setDisableRightBtn(true);
             setShowSpan(false);
             setDisableLeftBtn(false);
-        } else if (currentPage < lastPage - 4 ) {
+        } else if (currentPage < pagesCount - 4 ) {
             setShowSpan(true);
         }
         else {
@@ -83,10 +99,10 @@ export const PaginatorContainer = () => {
             setDisableLeftBtn(false);
         }
     }, [currentPage]);
-    useEffect(() => {btns[0] < 1 && setBtns([1, 4])});
+    useEffect(() => {btns[0] < 1 && setBtns([1, 4])},[currentPage]);
+
 
     // Callbacks
-    const dispatch = useDispatch();
 
     // переключение страниц <>
     const arrowsCall = (dir: string) => {
@@ -99,7 +115,7 @@ export const PaginatorContainer = () => {
     };
     //Кнопка 4
     const b4Call = () => {
-        if(btns[1] === lastPage - 1) {
+        if(btns[1] === pagesCount - 1) {
             currentPage = btns[1];
         } else {
             currentPage = btns[1];
@@ -130,9 +146,9 @@ export const PaginatorContainer = () => {
             currentPage = btns2[0];
         } else if (btn === 1) {
             currentPage = btns2[1];
-        } else if (btn === lastPage) {
-            currentPage = lastPage;
-            setBtns([lastPage - 4, lastPage - 1]);
+        } else if (btn === pagesCount) {
+            currentPage = pagesCount;
+            setBtns([pagesCount - 4, pagesCount - 1]);
         }
         setBtns2([btns[0] + 1, btns[0] + 2]);
         dispatch(SetNewPageAC(currentPage));
@@ -145,12 +161,13 @@ export const PaginatorContainer = () => {
                       setPage={setPage}
                       disableLeftBtn={disableLeftBtn}
                       disableRightBtn={disableRightBtn}
-                      lastPage={lastPage}
+                      pagesCount={pagesCount}
                       b4Call={b4Call}
                       b1Call={b1Call}
                       b1={btns[0]} b2={btns2[0]} b3={btns2[1]} b4={btns[1]}
                       showSpan={showSpan}
                       arrowsCall={arrowsCall}
+
     />
 };
 

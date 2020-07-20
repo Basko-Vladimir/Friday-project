@@ -7,25 +7,36 @@ import {setAuthMe} from "../../../../../features/Sign-In/BLL/signInReducer";
 import {setItemToLS} from "../../../../../features/Sign-In/LS-service/localStorage";
 import { ThunkAction } from 'redux-thunk';
 import {paginatorAPI} from "../DAL/paginatorAPI";
+import {packsAPI} from "../../../../../features/Packs/DAL/packsAPI";
+import {setPacks} from "../../../../../features/Packs/BLL/packsReducer";
 
 
-const SET_CARDS = 'learn/learnReducer/SET_CARDS';
+const SET_TOTAL_COUNT = 'paginator/paginatorReducer/SET_TOTAL_COUNT';
+const SET_TOKEN = 'paginator/paginatorReducer/SET_TOKEN';
+
 
 const initialState = {
     cards: [] as Array<CardItemType>,
-    page: 1,
-    pageCount: 5,
+    page: 1 as number,
+    pageCount: 5 as number,
+    cardPacksTotalCount: 0 as number,
+    isToken: true
 };
 
 type StateType = typeof initialState;
-type ActionsType = SetPacksType ;
+type ActionsType = SetTotalCountType | SetTokenType;
 
 export const paginatorReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
-        case SET_CARDS:
+        case SET_TOTAL_COUNT:
             debugger
             return {
-                ...state,
+                ...state, cardPacksTotalCount: action.cardPacksTotalCount
+            };
+        case SET_TOKEN:
+            debugger
+            return {
+                ...state, isToken: !state.isToken
             };
         default:
             return state;
@@ -34,24 +45,31 @@ export const paginatorReducer = (state: StateType = initialState, action: Action
 
 // Action Creators
 
-type SetPacksType = ReturnType<typeof setCards>
-export const setCards = (cards: Array<CardItemType>) => ({type: SET_CARDS, cards} as const);
+
+type SetTotalCountType = ReturnType<typeof setTotalCount>
+export const setTotalCount = (cardPacksTotalCount: number) => ({type: SET_TOTAL_COUNT, cardPacksTotalCount} as const);
+
+type SetTokenType = ReturnType<typeof setToken>
+export const setToken = () => ({type: SET_TOKEN}as const)
 
 
 // Типы, которые может диспатчить санка
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown,
-     SetPacksType | IsLoadingACType | SetMessageTextType >;
+    SetTotalCountType | IsLoadingACType | SetMessageTextType | SetTokenType >;
 
 
-export const getCards = (token: string, packId: string): ThunkType => async (dispatch) => {
-
+export const getTotalCount = (token: string): ThunkType => async (dispatch) => {
+      debugger
     try {
         dispatch(isLoading(true));
+        dispatch(setToken());
         const userData = await dispatch(setAuthMe(token));
         if (userData) {
-            const cardsData = await paginatorAPI.getCards(userData.token, packId, 20);
-            setItemToLS('token', cardsData.token);
-            dispatch(setCards(cardsData.cards));
+            const packsData = await packsAPI.getPacks(userData.token);
+            setItemToLS('token', packsData.token);
+            debugger
+            dispatch(setTotalCount(packsData.cardPacksTotalCount));
+            dispatch(setToken())
         }
     } catch (e) {
         dispatch(setMessageText(e.response.data.error))
