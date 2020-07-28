@@ -11,13 +11,15 @@ import {setAuthMe} from '../../Sign-In/BLL/signInReducer';
 
 const SET_CARDS = 'cards/packsReducer/SET_CARDS';
 const UPDATE_CARD = 'cards/packsReducer/UPDATE_CARD';
+const GET_TOTAL_COUNT = 'cards/packsReducer/GET_TOTAL_COUNT';
 
 const initialState = {
-    cards: [] as Array<CardItemType>
+    cards: [] as Array<CardItemType>,
+    cardsTotalCount: 0 as number
 };
 
 type StateType = typeof initialState;
-type ActionsType = SetPacksType | UpdateCardType | SetMessageTextType | IsLoadingACType;
+type ActionsType = SetPacksType | UpdateCardType | SetMessageTextType | IsLoadingACType | GetTotalCountType;
 
 export const cardsReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
@@ -31,10 +33,17 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
                 ...state,
                 cards: state.cards.map(c => c._id === action.cardId ? {...c, ...action.newCard} : c)
             };
+        case GET_TOTAL_COUNT: 
+            return {
+              ...state, cardsTotalCount: action.cardsTotalCount
+            };
         default:
             return state;
     }
 };
+
+type GetTotalCountType = ReturnType<typeof getTotalCount>
+export const getTotalCount = (cardsTotalCount: number) => ({type: GET_TOTAL_COUNT, cardsTotalCount} as const);
 
 type SetPacksType = ReturnType<typeof setCards>
 export const setCards = (cards: Array<CardItemType>) => ({type: SET_CARDS, cards} as const);
@@ -50,6 +59,8 @@ export const getCards = (token: string, packId: string, sortParams?: string): Th
         const userData = await dispatch(setAuthMe(token));
         if (userData) {
             const cardsData = await cardsAPI.getCards(userData.token, packId, sortParams);
+            const totalCount = cardsData.cardsTotalCount;
+            dispatch(getTotalCount(totalCount));
             setItemToLS('token', cardsData.token);
             dispatch(setCards(cardsData.cards));
         }

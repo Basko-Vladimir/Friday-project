@@ -79,7 +79,7 @@ export const getPacks = (token: string, sortParams?: string): ThunkType => async
     try {
         dispatch(isLoading(true));
         const userData = await dispatch(setAuthMe(token));
-        const {page, pageCount} = getState().packs
+        const {page, pageCount} = getState().packs;
         if (userData) {
             const packsData = await packsAPI.getPacks(userData.token, sortParams, pageCount, page);
             dispatch(setTotalCount(packsData.cardPacksTotalCount));
