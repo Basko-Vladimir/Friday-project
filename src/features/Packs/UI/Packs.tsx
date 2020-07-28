@@ -57,7 +57,6 @@ export const Packs = function () {
        token && dispatch(getPacks(token));
     }, [currentPage]);
 
-    // const [page, setPage] = React.useState(1);
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         debugger
         dispatch(SetPage(value))
