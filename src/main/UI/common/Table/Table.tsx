@@ -29,10 +29,7 @@ export const Table = React.memo(function (props: TablePropsType) {
                             rows.map((row: PackItemType) => {
                                 return <div key={row._id} className={styles.row}>
                                         <span>
-                                            <NavLink to={{
-                                                pathname: `${CARDS_PATH}/${row._id}`,
-                                                state: {data: row.user_id}
-                                            }}>{row.name}</NavLink>
+                                            <NavLink to={`${CARDS_PATH}/${row._id}`}>{row.name}</NavLink>
                                         </span>
                                     <span>{row.grade}</span>
                                     <span className={styles.buttonColumn}>
