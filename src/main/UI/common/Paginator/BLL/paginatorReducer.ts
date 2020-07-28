@@ -29,12 +29,10 @@ type ActionsType = SetTotalCountType | SetTokenType;
 export const paginatorReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
         case SET_TOTAL_COUNT:
-            debugger
             return {
                 ...state, cardPacksTotalCount: action.cardPacksTotalCount
             };
         case SET_TOKEN:
-            debugger
             return {
                 ...state, isToken: !state.isToken
             };
@@ -50,7 +48,7 @@ type SetTotalCountType = ReturnType<typeof setTotalCount>
 export const setTotalCount = (cardPacksTotalCount: number) => ({type: SET_TOTAL_COUNT, cardPacksTotalCount} as const);
 
 type SetTokenType = ReturnType<typeof setToken>
-export const setToken = () => ({type: SET_TOKEN}as const)
+export const setToken = () => ({type: SET_TOKEN}as const);
 
 
 // Типы, которые может диспатчить санка
@@ -59,17 +57,15 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown,
 
 
 export const getTotalCount = (token: string): ThunkType => async (dispatch) => {
-      debugger
     try {
         dispatch(isLoading(true));
         dispatch(setToken());
         const userData = await dispatch(setAuthMe(token));
         if (userData) {
-            const packsData = await packsAPI.getPacks(userData.token);
-            setItemToLS('token', packsData.token);
-            debugger
-            dispatch(setTotalCount(packsData.cardPacksTotalCount));
-            dispatch(setToken())
+            // // const packsData = await packsAPI.getPacks(userData.token);
+            // setItemToLS('token', packsData.token);
+            // dispatch(setTotalCount(packsData.cardPacksTotalCount));
+            // dispatch(setToken())
         }
     } catch (e) {
         dispatch(setMessageText(e.response.data.error))

@@ -2,11 +2,12 @@ import axios from 'axios';
 import {PacksType} from '../types';
 
 const instance = axios.create({
-    baseURL: 'https://cards-nya-back.herokuapp.com/1.0'
+    // baseURL: 'https://cards-nya-back.herokuapp.com/1.0'
+    baseURL: 'http://localhost:7542/1.0/'
 });
 
 export const packsAPI = {
-    getPacks (token: string, sortParams: string = '', pageCount: number = 5, page: number = 1 ) {
+    getPacks (token: string, sortParams: string = '', pageCount: number, page: number ) {
         return instance.get<PacksType>(`/cards/pack?token=${token}&pageCount=${pageCount}&page=${page}&${sortParams}`)
             .then(res => res.data)
     },

@@ -24,7 +24,6 @@ type ActionsType = UpdateGradeType | SetPacksType | SetGradeMessageType;
 export const learnReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
         case SET_CARDS:
-            debugger
             return {
                 ...state,
                 cards: action.cards

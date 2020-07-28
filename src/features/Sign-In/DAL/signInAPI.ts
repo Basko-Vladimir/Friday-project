@@ -2,7 +2,8 @@ import axios from 'axios';
 import {UserDataType} from '../types/ResponseSuccessTypes';
 
 const instance = axios.create({
-    baseURL: 'https://cards-nya-back.herokuapp.com/1.0'
+    // baseURL: 'https://cards-nya-back.herokuapp.com/1.0'
+    baseURL: 'http://localhost:7542/1.0/'
 });
 
 

@@ -1,9 +1,10 @@
 import axios from "axios";
 
-export const baseURL = 'https://cards-nya-back.herokuapp.com/1.0/';
+// export const baseURL = 'https://cards-nya-back.herokuapp.com/1.0/';
 
 export const instance = axios.create({
-    baseURL
+    // baseURL: 'https://cards-nya-back.herokuapp.com/1.0'
+    baseURL: 'http://localhost:7542/1.0/'
 });
 
 export type SignUpType =  {

@@ -22,7 +22,6 @@ const Learn: React.FC<LearnType> =  ({
                                          show, setShow, cards, currentCard, doAnswer,
                                          isClicked, clickedStyle, onNext, gradeMessage
 }) => {
-debugger
     return <div className={s.container}>
         <div className={s.visible}>
             <h2>Learning Page</h2>
@@ -118,7 +117,6 @@ export const LearnContainer = () => {
         dispatch(setNewGrade(token, grade, cardId));
         setIsClicked(true)
     }, [token, dispatch, cardId]);
-debugger
     return cards.length  ? <Learn show={show} setShow={setShow} cards={cards} currentCard={currentCard}
                                   doAnswer={doAnswer} isClicked={isClicked} clickedStyle={clickedStyle}
                                   onNext={onNext} gradeMessage={gradeMessage}

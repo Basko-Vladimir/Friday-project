@@ -46,7 +46,6 @@ export const SignUpError = (errorMessage: string)
 
 export const signUpTC = (email:string, password:string) =>
     async(dispatch: Dispatch<ChatActionTypes>)  => {
-    debugger
         try {
             dispatch(isLoading(true));
             const data = await SignUpAPI.SignUpAPI(email, password);

@@ -53,20 +53,19 @@ export const PaginatorContainer = () => {
 
     // Данные
     const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
-    debugger
     const cardPacksTotalCount = useSelector<any, number>(s => s.paginator.cardPacksTotalCount);  //Кол-во колод
     const pagesCount = Math.ceil(cardPacksTotalCount / pageSize); // Кол-во страниц
     // let pagesCount = currentPage * pageSize;
 
-debugger
+
     let currentPage = useSelector<AppStateType, number>(s => s.packs.page); // Текущая страница
 
     const isToken = useSelector<AppStateType, boolean>(s => s.paginator.isToken);
-    debugger
+
     useEffect(() => {
-        // КОЛИЧЕСТВО СТРАНИЦ ПРИХОДИТ, НО ОШИБКА ТОКЕНА!!!!
+
         if(isToken) {
-            debugger
+
             const token = getItemFromLS('token') as string;
             dispatch(getTotalCount(token));
         }
@@ -87,7 +86,6 @@ debugger
         if (currentPage === 1) {
             setDisableLeftBtn(true);
         } else if (pagesCount === currentPage) {
-            debugger
             setDisableRightBtn(true);
             setShowSpan(false);
             setDisableLeftBtn(false);
@@ -142,11 +140,12 @@ debugger
 
     // Вызов санки, экшена
     const setPage = (btn: number | null) => {
-        if (btn === 0) {
+
+        if (btn == 0) {
             currentPage = btns2[0];
-        } else if (btn === 1) {
+        } else if (btn == 1) {
             currentPage = btns2[1];
-        } else if (btn === pagesCount) {
+        } else if (btn == pagesCount) {
             currentPage = pagesCount;
             setBtns([pagesCount - 4, pagesCount - 1]);
         }

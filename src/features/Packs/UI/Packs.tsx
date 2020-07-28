@@ -3,7 +3,7 @@ import {Table} from '../../../main/UI/common/Table/Table';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../../main/BLL/store';
 import {getItemFromLS} from '../../Sign-In/LS-service/localStorage';
-import {addPack, changePack, deletePack, getPacks} from '../BLL/packsReducer';
+import {addPack, changePack, deletePack, getPacks, SetPage} from '../BLL/packsReducer';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import {Redirect} from 'react-router-dom';
 import {PackItemType} from '../types';
@@ -15,6 +15,9 @@ import {PaginatorContainer} from "../../../main/UI/common/Paginator/Paginator";
 import {AddPackModal} from './AddPackModal/AddPackModal';
 import {ChangePackModal} from './ChangePackModal/ChangePackModal';
 import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
+import PaginationRounded from "../../../main/UI/common/Paginator/Pagination";
+import {getTotalCount} from "../../../main/UI/common/Paginator/BLL/paginatorReducer";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
 
 export const Packs = function () {
     const headers = ['Name', 'Grade', 'Add Pack'];
@@ -33,10 +36,33 @@ export const Packs = function () {
     useEffect(() => {
         if (firstRendering && token) {
             dispatch(getPacks(token));
+
+            //new
+            // dispatch(getTotalCount(token));
+
             setFirstRendering(false);
         }
 
     }, [dispatch, token, setFirstRendering, firstRendering]);
+
+
+
+    // Данные
+    const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
+    const cardPacksTotalCount = useSelector<any, number>(s => s.packs.cardPacksTotalCount);  //Кол-во колод
+    const pagesCount = Math.ceil(cardPacksTotalCount / pageSize); // Кол-во страниц
+    let currentPage = useSelector<AppStateType, number>(s => s.packs.page); // Текущая страница
+
+    useEffect( () => {
+       token && dispatch(getPacks(token));
+    }, [currentPage]);
+
+    // const [page, setPage] = React.useState(1);
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        debugger
+        dispatch(SetPage(value))
+    };
+    //end
 
     const showModal = useCallback((modalType: string, packId?: string, creatorId?: string, packName?: string) => {
         if ((modalType === 'delete' || modalType === 'change') && creatorId !== ownerId) {
@@ -77,7 +103,11 @@ export const Packs = function () {
             <SearchContainer/>
             <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
                    tableModel={'packs'} showModal={showModal}/>
-            <PaginatorContainer/>
+            {/*<PaginatorContainer/>*/}
+            <PaginationRounded pageSize={pageSize} cardPacksTotalCount={cardPacksTotalCount}
+                               pagesCount={pagesCount} currentPage={currentPage}
+                               page={currentPage} handleChange={handleChange}
+            />
             <MessageModal messageText={messageText} isResponseError={true}
                           actionCreator={setMessageText('')}/>
             <AddPackModal modalType={modalType} addPack={onAddPack}

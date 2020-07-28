@@ -9,20 +9,25 @@ import {ThunkAction} from 'redux-thunk';
 import {AppStateType} from '../../../main/BLL/store';
 import {setAuthMe} from '../../Sign-In/BLL/signInReducer';
 
+
 const SET_PACKS = 'cards/packsReducer/SET_PACKS';
 const UPDATE_PACK = 'cards/packsReducer/UPDATE_PACK';
 const SET_NEW_PAGE = 'cards/packsReducer/SET_NEW_PAGE';
+const SET_TOTAL_COUNT = 'paginator/paginatorReducer/SET_TOTAL_COUNT';
+const SET_PAGE = 'paginator/paginatorReducer/SET_PAGE';
 
 const initialState = {
     packs: [] as Array<PackItemType>,
     pageCount: 5 as number,
-    page: 1 as number
+    page: 1 as number,
+    cardPacksTotalCount: 0 as number,
 };
 
 type StateType = typeof initialState;
-type ActionsType = SetPacksType | UpdatePackType | SetMessageTextType | IsLoadingACType | SetNewPageType;
+type ActionsType = SetPacksType | UpdatePackType | SetMessageTextType
+    | IsLoadingACType | SetNewPageType | SetTotalCountType | SetPageType;
 
-export const packsReducer = (state: StateType = initialState, action: ActionsType): StateType => {
+export const packsReducer = (state: StateType = initialState, action: ActionsType ): StateType => {
     switch (action.type) {
         case SET_PACKS:
             return {
@@ -39,10 +44,24 @@ export const packsReducer = (state: StateType = initialState, action: ActionsTyp
                 ...state,
                 page: action.newPage
             };
+        case SET_TOTAL_COUNT:
+            return {
+                ...state, cardPacksTotalCount: action.cardPacksTotalCount
+            };
+            case SET_PAGE:
+            return {
+                ...state, page: action.page
+            };
         default:
             return state;
     }
 };
+
+type SetPageType = ReturnType<typeof SetPage>
+export const SetPage = (page: number) => ({type: SET_PAGE, page} as const);
+
+type SetTotalCountType = ReturnType<typeof setTotalCount>
+export const setTotalCount = (cardPacksTotalCount: number) => ({type: SET_TOTAL_COUNT, cardPacksTotalCount} as const);
 
 type SetPacksType = ReturnType<typeof setPacks>
 export const setPacks = (packs: Array<PackItemType>) => ({type: SET_PACKS, packs} as const);
@@ -56,12 +75,14 @@ export const SetNewPageAC = (newPage: number) => ({type: SET_NEW_PAGE, newPage} 
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getPacks = (token: string, sortParams?: string): ThunkType => async (dispatch) => {
+export const getPacks = (token: string, sortParams?: string): ThunkType => async (dispatch, getState) => {
     try {
         dispatch(isLoading(true));
         const userData = await dispatch(setAuthMe(token));
+        const {page, pageCount} = getState().packs
         if (userData) {
-            const packsData = await packsAPI.getPacks(userData.token, sortParams);
+            const packsData = await packsAPI.getPacks(userData.token, sortParams, pageCount, page);
+            dispatch(setTotalCount(packsData.cardPacksTotalCount));
             setItemToLS('token', packsData.token);
             dispatch(setPacks(packsData.cardPacks));
         }
