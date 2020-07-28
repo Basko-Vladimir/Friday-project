@@ -8,7 +8,6 @@ import { appReducer } from './appReducer';
 import {packsReducer} from '../../features/Packs/BLL/packsReducer';
 import {cardsReducer} from '../../features/Cards/BLL/cardsReducer';
 import {learnReducer} from "../../features/Learn/BLL/learnReducer";
-import {paginatorReducer} from "../UI/common/Paginator/BLL/paginatorReducer";
 
 const rootReducer = combineReducers({
     app: appReducer,
@@ -18,7 +17,6 @@ const rootReducer = combineReducers({
     setNewPass: setNewPassReducer,
     packs: packsReducer,
     cards: cardsReducer,
-    paginator: paginatorReducer,
     learn: learnReducer
 });
 

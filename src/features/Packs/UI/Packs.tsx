@@ -11,13 +11,10 @@ import {SearchContainer} from "../../../main/UI/common/Search/Search";
 import {MessageModal} from '../../../main/UI/common/Modal Windows/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
-import {PaginatorContainer} from "../../../main/UI/common/Paginator/Paginator";
 import {AddPackModal} from './AddPackModal/AddPackModal';
 import {ChangePackModal} from './ChangePackModal/ChangePackModal';
 import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
 import PaginationRounded from "../../../main/UI/common/Paginator/Pagination";
-import {getTotalCount} from "../../../main/UI/common/Paginator/BLL/paginatorReducer";
-import {createStyles, makeStyles} from "@material-ui/core/styles";
 
 export const Packs = function () {
     const headers = ['Name', 'Grade', 'Add Pack'];
