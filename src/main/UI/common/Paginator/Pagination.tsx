@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 export type PaginationPropsType = {
-        currentPage: number, pagesCount: number, cardPacksTotalCount: number, pageSize: number, page: number,
+        pagesCount: number, page: number,
         handleChange: ((event: ChangeEvent<unknown>, page: number) => void) | undefined
     };
 
@@ -23,7 +23,7 @@ export default function PaginationRounded(props:PaginationPropsType) {
 
     return (
         <div className={classes.root}>
-            <Pagination variant="outlined" shape="rounded"
+            <Pagination variant="outlined" shape="rounded" style={{display: 'flex', justifyContent: 'center'}}
                         count={props.pagesCount} page={props.page} onChange={props.handleChange}
             />
         </div>

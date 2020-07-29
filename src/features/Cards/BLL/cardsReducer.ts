@@ -12,14 +12,18 @@ import {setAuthMe} from '../../Sign-In/BLL/signInReducer';
 const SET_CARDS = 'cards/packsReducer/SET_CARDS';
 const UPDATE_CARD = 'cards/packsReducer/UPDATE_CARD';
 const GET_TOTAL_COUNT = 'cards/packsReducer/GET_TOTAL_COUNT';
+const SET_PAGE = 'cards/packsReducer/SET_PAGE';
 
 const initialState = {
     cards: [] as Array<CardItemType>,
+    pageCount: 5 as number,
+    page: 1 as number,
     cardsTotalCount: 0 as number
 };
 
 type StateType = typeof initialState;
-type ActionsType = SetPacksType | UpdateCardType | SetMessageTextType | IsLoadingACType | GetTotalCountType;
+type ActionsType = SetPacksType | UpdateCardType | SetMessageTextType
+    | IsLoadingACType | GetTotalCountType | SetPageType;
 
 export const cardsReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
@@ -37,10 +41,17 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
             return {
               ...state, cardsTotalCount: action.cardsTotalCount
             };
+        case SET_PAGE:
+            return {
+                ...state, page: action.value
+            };
         default:
             return state;
     }
 };
+
+type SetPageType = ReturnType<typeof setPage>
+export const setPage = (value: number) => ({type: SET_PAGE, value} as const);
 
 type GetTotalCountType = ReturnType<typeof getTotalCount>
 export const getTotalCount = (cardsTotalCount: number) => ({type: GET_TOTAL_COUNT, cardsTotalCount} as const);
@@ -53,12 +64,13 @@ const updateCardAC = (cardId: string, newCard: CardItemType) => ({type: UPDATE_C
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getCards = (token: string, packId: string, sortParams?: string): ThunkType => async (dispatch) => {
+export const getCards = (token: string, packId: string, sortParams?: string): ThunkType => async (dispatch, getState) => {
     try {
         dispatch(isLoading(true));
         const userData = await dispatch(setAuthMe(token));
+        const {page, pageCount} = getState().cards;
         if (userData) {
-            const cardsData = await cardsAPI.getCards(userData.token, packId, sortParams);
+            const cardsData = await cardsAPI.getCards(userData.token, packId, sortParams, page, pageCount);
             const totalCount = cardsData.cardsTotalCount;
             dispatch(getTotalCount(totalCount));
             setItemToLS('token', cardsData.token);

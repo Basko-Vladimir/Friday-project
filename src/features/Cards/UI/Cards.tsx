@@ -8,11 +8,13 @@ import {MessageModal} from '../../../main/UI/common/Modal Windows/MessageModal/M
 import {setMessageText} from '../../../main/BLL/appReducer';
 import {Redirect, useParams} from 'react-router-dom';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
-import {addCard, getCards, changeCard, deleteCard} from '../BLL/cardsReducer';
+import {addCard, getCards, changeCard, deleteCard, setCards, setPage} from '../BLL/cardsReducer';
 import {CardItemType} from '../types';
 import {AddCardModal} from './AddCardModal/AddCardModal';
 import {ChangeCardModal} from './ChangeCardModal/ChangeCardModal';
 import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
+import PaginationRounded from "../../../main/UI/common/Paginator/Pagination";
+import {getPacks, SetPage} from "../../Packs/BLL/packsReducer";
 
 type CardsPropsType = {
     state: { cardCreatorId: string | undefined }
@@ -33,8 +35,17 @@ export const Cards = function (props: CardsPropsType) {
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const ownerId = useSelector<AppStateType, string | undefined>(state => state.signIn.userData?._id);
 
+    const cardsTotalCount = useSelector<AppStateType, number>(s => s.cards.cardsTotalCount);
+    const pageSize = useSelector<AppStateType, number>(s => s.cards.pageCount); // Кол-во элементов на странице(РАЗМЕР)
+    const pagesCount = Math.ceil(cardsTotalCount / pageSize); // Кол-во страниц
+    let currentPage = useSelector<AppStateType, number>(s => s.cards.page); // Текущая страница
+    useEffect( () => {
+        token && dispatch(getCards(token, packId));
+    }, [currentPage]);
+
     const {packId} = useParams();
     const dispatch = useDispatch();
+
 
 
     useEffect(() => {
@@ -79,15 +90,32 @@ export const Cards = function (props: CardsPropsType) {
     if (isLoading) return <Loading/>;
     if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
+    //Pagination
+    // Количество карточек
+
+
+
+
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        debugger
+        dispatch(setPage(value))
+    };
+
+    //End pagination
+
     return <>
         <Table columnsHeaders={headers} rows={cards} getItems={onGetCards}
                tableModel={'cards'} showModal={showModal}/>
+
         <MessageModal messageText={messageText} isResponseError={true}
                       actionCreator={setMessageText('')}/>
         <AddCardModal modalType={modalType} addCard={onAddCard} hideModal={hideModal}/>
         <ChangeCardModal modalType={modalType} hideModal={hideModal} changeCard={onChangeCard}
                          currentQuestion={currentQuestion} currentAnswer={currentAnswer}/>
         <DeleteItemModal modalType={modalType} deleteItem={onDeleteCard} hideModal={hideModal}/>
+        <PaginationRounded pagesCount={pagesCount} page={currentPage} handleChange={handleChange}
+
+        />
         {isLoading && <Loading/>}
     </>
 };

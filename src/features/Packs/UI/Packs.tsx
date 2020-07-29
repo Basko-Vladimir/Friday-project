@@ -100,10 +100,7 @@ export const Packs = function () {
             <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
                    tableModel={'packs'} showModal={showModal}/>
             {/*<PaginatorContainer/>*/}
-            <PaginationRounded pageSize={pageSize} cardPacksTotalCount={cardPacksTotalCount}
-                               pagesCount={pagesCount} currentPage={currentPage}
-                               page={currentPage} handleChange={handleChange}
-            />
+            <PaginationRounded pagesCount={pagesCount} page={currentPage} handleChange={handleChange} />
             <MessageModal messageText={messageText} isResponseError={true}
                           actionCreator={setMessageText('')}/>
             <AddPackModal modalType={modalType} addPack={onAddPack}
