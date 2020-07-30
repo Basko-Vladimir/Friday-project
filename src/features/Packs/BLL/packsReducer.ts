@@ -1,7 +1,7 @@
 import {Dispatch} from 'redux';
 import {packsAPI} from '../DAL/packsAPI';
 import {PackItemType} from '../types';
-import {setItemToLS} from '../../Sign-In/LS-service/localStorage';
+import {getItemFromLS, setItemToLS} from '../../Sign-In/LS-service/localStorage';
 import {setMessageText, SetMessageTextType} from '../../../main/BLL/appReducer';
 import {isLoading} from '../../Sign-Up/BLL/SignUpReducer';
 import {IsLoadingACType} from '../../Sign-Up/BLL/SignUpTypes';
@@ -93,12 +93,19 @@ export const getPacks = (token: string, sortParams?: string): ThunkType => async
     }
 };
 
-export const getPacksNew = (token: string, page: number) => async (dispatch: Dispatch<ActionsType>) => {
+export const getPacksForSearch = (searchQuery: string): ThunkType => async (dispatch: Dispatch<ActionsType>, getState) => {
     try {
         dispatch(isLoading(true));
-        const data = await packsAPI.getPacks(token, '', 4, page);
+        const {cardPacksTotalCount, page} = getState().packs;
+        const token = getItemFromLS('token') as string;
+        const data = await packsAPI.getPacks(token, '', cardPacksTotalCount, page);
         setItemToLS('token', data.token);
-        dispatch(setPacks(data.cardPacks));
+
+        let result = data.cardPacks.filter((i: PackItemType) => {
+            return i.name.match(new RegExp(searchQuery, 'g'));
+        });  // Поиск совпадений запроса в массиве колод
+
+        dispatch(setPacks(result));
     } catch (e) {
         dispatch(setMessageText(e.response.data.error))
     } finally {
