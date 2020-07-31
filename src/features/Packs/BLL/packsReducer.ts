@@ -15,17 +15,19 @@ const UPDATE_PACK = 'cards/packsReducer/UPDATE_PACK';
 const SET_NEW_PAGE = 'cards/packsReducer/SET_NEW_PAGE';
 const SET_TOTAL_COUNT = 'paginator/paginatorReducer/SET_TOTAL_COUNT';
 const SET_PAGE = 'paginator/paginatorReducer/SET_PAGE';
+const SET_PACK_NAME = 'paginator/paginatorReducer/SET_PACK_NAME';
 
 const initialState = {
     packs: [] as Array<PackItemType>,
     pageCount: 5 as number,
     page: 1 as number,
     cardPacksTotalCount: 0 as number,
+    packName: '' as string
 };
 
 type StateType = typeof initialState;
 type ActionsType = SetPacksType | UpdatePackType | SetMessageTextType
-    | IsLoadingACType | SetNewPageType | SetTotalCountType | SetPageType;
+    | IsLoadingACType | SetNewPageType | SetTotalCountType | SetPageType | SetPackNameType;
 
 export const packsReducer = (state: StateType = initialState, action: ActionsType ): StateType => {
     switch (action.type) {
@@ -52,10 +54,17 @@ export const packsReducer = (state: StateType = initialState, action: ActionsTyp
             return {
                 ...state, page: action.page
             };
+        case SET_PACK_NAME:
+            return {
+                ...state, packName: action.searchQuery
+            };
         default:
             return state;
     }
 };
+
+type SetPackNameType = ReturnType<typeof setPackName>
+export const setPackName = (searchQuery: string) => ({type: SET_PACK_NAME, searchQuery} as const);
 
 type SetPageType = ReturnType<typeof SetPage>
 export const SetPage = (page: number) => ({type: SET_PAGE, page} as const);
@@ -79,9 +88,9 @@ export const getPacks = (token: string, sortParams?: string): ThunkType => async
     try {
         dispatch(isLoading(true));
         const userData = await dispatch(setAuthMe(token));
-        const {page, pageCount} = getState().packs;
+        const {page, pageCount, packName} = getState().packs;
         if (userData) {
-            const packsData = await packsAPI.getPacks(userData.token, sortParams, pageCount, page);
+            const packsData = await packsAPI.getPacks(userData.token, sortParams, pageCount, page, packName);
             dispatch(setTotalCount(packsData.cardPacksTotalCount));
             setItemToLS('token', packsData.token);
             dispatch(setPacks(packsData.cardPacks));
@@ -95,17 +104,20 @@ export const getPacks = (token: string, sortParams?: string): ThunkType => async
 
 export const getPacksForSearch = (searchQuery: string): ThunkType => async (dispatch: Dispatch<ActionsType>, getState) => {
     try {
+        debugger
         dispatch(isLoading(true));
-        const {cardPacksTotalCount, page} = getState().packs;
+        dispatch(setPackName(searchQuery));
+        const {page, pageCount, packName} = getState().packs;
         const token = getItemFromLS('token') as string;
-        const data = await packsAPI.getPacks(token, '', cardPacksTotalCount, page);
+        debugger
+        const data = await packsAPI.getPacks(token, '', pageCount, page, packName);
         setItemToLS('token', data.token);
 
-        let result = data.cardPacks.filter((i: PackItemType) => {
-            return i.name.match(new RegExp(searchQuery, 'g'));
-        });  // Поиск совпадений запроса в массиве колод
-
-        dispatch(setPacks(result));
+        // let result = data.cardPacks.filter((i: PackItemType) => {
+        //     return i.name.match(new RegExp(searchQuery, 'g'));
+        // });  // Поиск совпадений запроса в массиве колод
+        debugger
+        dispatch(setPacks(data.cardPacks));
     } catch (e) {
         dispatch(setMessageText(e.response.data.error))
     } finally {
