@@ -1,13 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Table} from '../../../main/UI/common/Table/Table';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../../main/BLL/store';
 import {getItemFromLS} from '../../Sign-In/LS-service/localStorage';
-import {addPack, changePack, deletePack, getPacks, SetPage} from '../BLL/packsReducer';
+import {addPack, changePack, deletePack, getPacks, getPacksForSearch, setPackName, SetPage} from '../BLL/packsReducer';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
 import {Redirect} from 'react-router-dom';
 import {PackItemType} from '../types';
-import {SearchContainer} from "../../../main/UI/common/Search/Search";
+import {Search} from "../../../main/UI/common/Search/Search";
 import {MessageModal} from '../../../main/UI/common/Modal Windows/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
@@ -33,16 +33,9 @@ export const Packs = function () {
     useEffect(() => {
         if (firstRendering && token) {
             dispatch(getPacks(token));
-
-            //new
-            // dispatch(getTotalCount(token));
-
             setFirstRendering(false);
         }
-
     }, [dispatch, token, setFirstRendering, firstRendering]);
-
-
 
     // Данные
     const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
@@ -59,6 +52,29 @@ export const Packs = function () {
         dispatch(SetPage(value))
     };
     //end
+
+    // Search features ---------------------------------------
+    // Поисковый запрос / снятие значения с инпута
+    const [searchQuery, setSearchQuery] = useState('');
+    const setQuery = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.currentTarget.value)
+    };
+
+    // Сброс результатов поиска
+    const toReset = () => {
+        dispatch(setPackName(''))
+    };
+
+    const toSearch = () => {
+        dispatch(getPacksForSearch(searchQuery)); // Сетаем новый массив
+    };
+
+    const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            toSearch();
+        }
+    };
+    // End search --------------------------------------------
 
     const showModal = useCallback((modalType: string, packId?: string, creatorId?: string, packName?: string) => {
         if ((modalType === 'delete' || modalType === 'change') && creatorId !== ownerId) {
@@ -94,12 +110,14 @@ export const Packs = function () {
     if (isLoading) return <Loading/>;
     if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
+
+
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <SearchContainer/>
+            <Search setQuery={setQuery} searchQuery={searchQuery} toSearch={toSearch}
+                    toReset={toReset} onKeyPress={onKeyPress}/>
             <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
                    tableModel={'packs'} showModal={showModal}/>
-            {/*<PaginatorContainer/>*/}
             <PaginationRounded pagesCount={pagesCount} page={currentPage} handleChange={handleChange} />
             <MessageModal messageText={messageText} isResponseError={true}
                           actionCreator={setMessageText('')}/>

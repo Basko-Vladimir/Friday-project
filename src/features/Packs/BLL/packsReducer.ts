@@ -84,10 +84,10 @@ export const SetNewPageAC = (newPage: number) => ({type: SET_NEW_PAGE, newPage} 
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getPacks = (token: string, sortParams?: string): ThunkType => async (dispatch, getState) => {
+export const getPacks = (token?: string, sortParams?: string): ThunkType => async (dispatch, getState) => {
     try {
         dispatch(isLoading(true));
-        dispatch(setPackName(''));
+        const token = getItemFromLS('token') as string;
         const userData = await dispatch(setAuthMe(token));
         const {page, pageCount, packName} = getState().packs;
         if (userData) {
