@@ -87,6 +87,7 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 export const getPacks = (token: string, sortParams?: string): ThunkType => async (dispatch, getState) => {
     try {
         dispatch(isLoading(true));
+        dispatch(setPackName(''));
         const userData = await dispatch(setAuthMe(token));
         const {page, pageCount, packName} = getState().packs;
         if (userData) {

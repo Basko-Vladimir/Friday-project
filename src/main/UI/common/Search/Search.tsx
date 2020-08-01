@@ -31,12 +31,8 @@ export const Search: React.FC<InputPropsType> =
 });
 
 export const SearchContainer = () => {
-
-    //Всё что надо, передаём через пропсы и компонента становится универсальной!
-
     // Достаём массив колод из state
     const dispatch = useDispatch();
-    const cardsPack = useSelector<AppStateType, Array<PackItemType>>(state => state.packs.packs);
 
     const [searchQuery, setSearchQuery] = useState('');
     const setQuery = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,14 +43,10 @@ export const SearchContainer = () => {
 
     // Сброс результатов поиска
     const toReset = () => {
-
         dispatch(getPacks(token))
     };
 
     const toSearch = () => {
-        // let result = cardsPack.filter((i: PackItemType) => {
-        //     return i.name.match(new RegExp(searchQuery, 'g'));
-        // });  // Поиск совпадений запроса в массиве колод
         dispatch(getPacksForSearch(searchQuery)); // Сетаем новый массив
     };
 
