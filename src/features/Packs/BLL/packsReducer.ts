@@ -105,19 +105,15 @@ export const getPacks = (token?: string, sortParams?: string): ThunkType => asyn
 
 export const getPacksForSearch = (searchQuery: string): ThunkType => async (dispatch: Dispatch<ActionsType>, getState) => {
     try {
-        debugger
+
         dispatch(isLoading(true));
+        dispatch(SetPage(1));
         dispatch(setPackName(searchQuery));
         const {page, pageCount, packName} = getState().packs;
         const token = getItemFromLS('token') as string;
-        debugger
+
         const data = await packsAPI.getPacks(token, '', pageCount, page, packName);
         setItemToLS('token', data.token);
-
-        // let result = data.cardPacks.filter((i: PackItemType) => {
-        //     return i.name.match(new RegExp(searchQuery, 'g'));
-        // });  // Поиск совпадений запроса в массиве колод
-        debugger
         dispatch(setPacks(data.cardPacks));
     } catch (e) {
         dispatch(setMessageText(e.response.data.error))
