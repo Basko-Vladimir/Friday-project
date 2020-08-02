@@ -135,10 +135,10 @@ export const Cards = function (props: CardsPropsType) {
     //End pagination ============================================
 
     return <>
+        <Search setQuery={setQuery} searchQuery={searchQuery} toSearch={toSearch}
+                toReset={toReset} onKeyPress={onKeyPress} style={{margin: 'auto'}}/>
         <Table columnsHeaders={headers} rows={cards} getItems={onGetCards}
                tableModel={'cards'} showModal={showModal}/>
-        <Search setQuery={setQuery} searchQuery={searchQuery} toSearch={toSearch}
-                toReset={toReset} onKeyPress={onKeyPress}/>
         <MessageModal messageText={messageText} isResponseError={true}
                       actionCreator={setMessageText('')}/>
         <AddCardModal modalType={modalType} addCard={onAddCard} hideModal={hideModal}/>
