@@ -38,7 +38,7 @@ export const Packs = function () {
             // setFirstRendering(false);
         }
 
-    }, [ currentPage]);
+    }, [currentPage]);
 
     // Данные
     const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
@@ -95,7 +95,7 @@ export const Packs = function () {
     }, [setModalType]);
 
     const onGetPacks = useCallback((sortParams: string) => {
-        dispatch(getPacks('',`sortPacks=${sortParams}`));
+        dispatch(getPacks('', `sortPacks=${sortParams}`));
     }, []);
 
     const onChangePack = useCallback((newName: string) => {
@@ -107,13 +107,12 @@ export const Packs = function () {
     }, [dispatch]);
 
     const onDeletePack = useCallback(() => {
-      dispatch(deletePack(currentPackId, ''));
+        dispatch(deletePack(currentPackId, ''));
     }, [currentPackId]);
 
 
     if (isLoading) return <Loading/>;
     // if (!token) return <Redirect to={SIGN_IN_PATH}/>;
-
 
 
     return (
@@ -122,7 +121,7 @@ export const Packs = function () {
                     toReset={toReset} onKeyPress={onKeyPress}/>
             <Table columnsHeaders={headers} rows={packs} getItems={onGetPacks}
                    tableModel={'packs'} showModal={showModal}/>
-            <PaginationRounded pagesCount={pagesCount} page={currentPage} handleChange={handleChange} />
+            <PaginationRounded pagesCount={pagesCount} page={currentPage} handleChange={handleChange}/>
             <MessageModal messageText={messageText} isResponseError={true}
                           actionCreator={setMessageText('')}/>
             <AddPackModal modalType={modalType} addPack={onAddPack}

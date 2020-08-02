@@ -6,14 +6,12 @@ import {AppStateType} from '../../../main/BLL/store';
 import {getItemFromLS} from '../../Sign-In/LS-service/localStorage';
 import {MessageModal} from '../../../main/UI/common/Modal Windows/MessageModal/MessageModal';
 import {setMessageText} from '../../../main/BLL/appReducer';
-import {Redirect, useParams} from 'react-router-dom';
-import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
+import {useParams} from 'react-router-dom';
 import {
     addCard,
     getCards,
     changeCard,
     deleteCard,
-    setCards,
     setPage,
     setCardQuestion,
     setCardAnswer
@@ -23,7 +21,6 @@ import {AddCardModal} from './AddCardModal/AddCardModal';
 import {ChangeCardModal} from './ChangeCardModal/ChangeCardModal';
 import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
 import PaginationRounded from "../../../main/UI/common/Paginator/Pagination";
-import {getPacks, getPacksForSearch, setPackName, SetPage} from "../../Packs/BLL/packsReducer";
 import {Search} from "../../../main/UI/common/Search/Search";
 
 type CardsPropsType = {
@@ -37,7 +34,6 @@ export const Cards = function (props: CardsPropsType) {
     const [currentCardId, setCurrentCardId] = useState<string>('');
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [currentAnswer, setCurrentAnswer] = useState<string>('');
-    // const token = getItemFromLS('token');
     const cardCreatorId = props.state.cardCreatorId;
 
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
@@ -65,7 +61,7 @@ export const Cards = function (props: CardsPropsType) {
 
     const toSearch = () => {
         const token = getItemFromLS('token');
-        if(token){
+        if (token) {
             dispatch(getCards(token, packId, '', searchQuery)); // Сетаем новый массив
         }
     };
@@ -83,7 +79,6 @@ export const Cards = function (props: CardsPropsType) {
 
     const {packId} = useParams();
     const dispatch = useDispatch();
-
 
 
     useEffect(() => {
@@ -105,20 +100,20 @@ export const Cards = function (props: CardsPropsType) {
     }, [setModalType, setCurrentCardId, setCurrentAnswer, setCurrentQuestion, ownerId, dispatch, cardCreatorId]);
 
     const onGetCards = useCallback((sortParams: string) => {
-       dispatch(getCards('', packId, `sortCards=${sortParams}`))
+        dispatch(getCards('', packId, `sortCards=${sortParams}`))
     }, [dispatch, packId]);
 
     const onChangeCard = useCallback((question: string, answer: string) => {
-      dispatch(changeCard(currentCardId, '', question, answer));
-    }, [ currentCardId]);
+        dispatch(changeCard(currentCardId, '', question, answer));
+    }, [currentCardId]);
 
     const onAddCard = useCallback((question: string, answer: string) => {
-         dispatch(addCard('', packId, question, answer))
+        dispatch(addCard('', packId, question, answer))
     }, [packId]);
 
     const onDeleteCard = useCallback(() => {
         dispatch(deleteCard(currentCardId, ''))
-    }, [ currentCardId]);
+    }, [currentCardId]);
 
     const hideModal = useCallback(() => {
         setModalType('');

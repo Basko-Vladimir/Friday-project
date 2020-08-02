@@ -29,7 +29,7 @@ type StateType = typeof initialState;
 type ActionsType = SetPacksType | UpdatePackType | SetMessageTextType
     | IsLoadingACType | SetNewPageType | SetTotalCountType | SetPageType | SetPackNameType;
 
-export const packsReducer = (state: StateType = initialState, action: ActionsType ): StateType => {
+export const packsReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
         case SET_PACKS:
             return {
@@ -50,7 +50,7 @@ export const packsReducer = (state: StateType = initialState, action: ActionsTyp
             return {
                 ...state, cardPacksTotalCount: action.cardPacksTotalCount
             };
-            case SET_PAGE:
+        case SET_PAGE:
             return {
                 ...state, page: action.page
             };

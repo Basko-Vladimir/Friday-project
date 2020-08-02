@@ -42,9 +42,9 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
                 ...state,
                 cards: state.cards.map(c => c._id === action.cardId ? {...c, ...action.newCard} : c)
             };
-        case GET_TOTAL_COUNT: 
+        case GET_TOTAL_COUNT:
             return {
-              ...state, cardsTotalCount: action.cardsTotalCount
+                ...state, cardsTotalCount: action.cardsTotalCount
             };
         case SET_PAGE:
             return {
@@ -86,10 +86,9 @@ export const getCards = (token: string, packId: string, sortParams?: string, sea
     try {
         debugger
         dispatch(isLoading(true));
-        // const token = getItemFromLS('token') as string;
         // Диспатчить из коллбэка зануление Вопроса/Ответа, if !length
         // const userData = await dispatch(setAuthMe(token));
-        const token  = getItemFromLS('token')
+        const token = getItemFromLS('token') as string;
         const {page, pageCount, cardQuestion, cardAnswer} = getState().cards;
         dispatch(setCardQuestion(searchQuery));
         dispatch(setCardAnswer(searchQuery));
