@@ -22,33 +22,37 @@ export const Packs = function () {
     const [currentPackId, setCurrentPackId] = useState<string>('');
     const [currentPackName, setCurrentPackName] = useState<string>('');
     const [modalType, setModalType] = useState<string>('');
-    let token = getItemFromLS('token');
+
 
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
     const packs = useSelector<AppStateType, Array<PackItemType>>(state => state.packs.packs);
     const messageText = useSelector<AppStateType, string>(state => state.app.message);
     const ownerId = useSelector<AppStateType, string | undefined>(state => state.signIn.userData?._id);
+    let currentPage = useSelector<AppStateType, number>(s => s.packs.page); // Текущая страница
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (firstRendering && token) {
+        let token = getItemFromLS('token');
+        if (currentPage) {
             dispatch(getPacks(token));
-            setFirstRendering(false);
+            // setFirstRendering(false);
         }
-    }, [dispatch, token, setFirstRendering, firstRendering]);
+
+    }, [ currentPage]);
 
     // Данные
     const pageSize = useSelector<AppStateType, number>(s => s.packs.pageCount); // Кол-во элементов на странице(РАЗМЕР)
     const cardPacksTotalCount = useSelector<any, number>(s => s.packs.cardPacksTotalCount);  //Кол-во колод
     const pagesCount = Math.ceil(cardPacksTotalCount / pageSize); // Кол-во страниц
-    let currentPage = useSelector<AppStateType, number>(s => s.packs.page); // Текущая страница
 
-    useEffect( () => {
-       token && dispatch(getPacks(token));
-    }, [currentPage]);
+    //
+    // useEffect( () => {
+    //     let token = getItemFromLS('token');
+    //    token && dispatch(getPacks(token));
+    // }, [currentPage]);
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        debugger
+
         dispatch(SetPage(value))
     };
     //end
@@ -91,24 +95,24 @@ export const Packs = function () {
     }, [setModalType]);
 
     const onGetPacks = useCallback((sortParams: string) => {
-        token && dispatch(getPacks(token, `sortPacks=${sortParams}`));
-    }, [dispatch, token]);
+        dispatch(getPacks('',`sortPacks=${sortParams}`));
+    }, []);
 
     const onChangePack = useCallback((newName: string) => {
-        token && dispatch(changePack(currentPackId, token, newName));
-    }, [dispatch, token, currentPackId]);
+        dispatch(changePack(currentPackId, '', newName));
+    }, [currentPackId]);
 
     const onAddPack = useCallback((title: string) => {
-        token && dispatch(addPack(token, title));
-    }, [dispatch, token]);
+        dispatch(addPack('', title));
+    }, [dispatch]);
 
     const onDeletePack = useCallback(() => {
-        token && dispatch(deletePack(currentPackId, token));
-    }, [dispatch, token, currentPackId]);
+      dispatch(deletePack(currentPackId, ''));
+    }, [currentPackId]);
 
 
     if (isLoading) return <Loading/>;
-    if (!token) return <Redirect to={SIGN_IN_PATH}/>;
+    // if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
 
 

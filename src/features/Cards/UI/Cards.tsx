@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Table} from '../../../main/UI/common/Table/Table';
 import Loading from '../../../main/UI/common/LoadingToggle/Loading';
 import {useDispatch, useSelector} from 'react-redux';
@@ -8,13 +8,23 @@ import {MessageModal} from '../../../main/UI/common/Modal Windows/MessageModal/M
 import {setMessageText} from '../../../main/BLL/appReducer';
 import {Redirect, useParams} from 'react-router-dom';
 import {SIGN_IN_PATH} from '../../../main/UI/Routes/Routes';
-import {addCard, getCards, changeCard, deleteCard, setCards, setPage} from '../BLL/cardsReducer';
+import {
+    addCard,
+    getCards,
+    changeCard,
+    deleteCard,
+    setCards,
+    setPage,
+    setCardQuestion,
+    setCardAnswer
+} from '../BLL/cardsReducer';
 import {CardItemType} from '../types';
 import {AddCardModal} from './AddCardModal/AddCardModal';
 import {ChangeCardModal} from './ChangeCardModal/ChangeCardModal';
 import {DeleteItemModal} from '../../../main/UI/common/Modal Windows/DeleteItemModal/DeleteCardModal';
 import PaginationRounded from "../../../main/UI/common/Paginator/Pagination";
-import {getPacks, SetPage} from "../../Packs/BLL/packsReducer";
+import {getPacks, getPacksForSearch, setPackName, SetPage} from "../../Packs/BLL/packsReducer";
+import {Search} from "../../../main/UI/common/Search/Search";
 
 type CardsPropsType = {
     state: { cardCreatorId: string | undefined }
@@ -27,7 +37,7 @@ export const Cards = function (props: CardsPropsType) {
     const [currentCardId, setCurrentCardId] = useState<string>('');
     const [currentQuestion, setCurrentQuestion] = useState<string>('');
     const [currentAnswer, setCurrentAnswer] = useState<string>('');
-    const token = getItemFromLS('token');
+    // const token = getItemFromLS('token');
     const cardCreatorId = props.state.cardCreatorId;
 
     const isLoading = useSelector<AppStateType, boolean>(state => state.signUp.isLoading);
@@ -39,9 +49,37 @@ export const Cards = function (props: CardsPropsType) {
     const pageSize = useSelector<AppStateType, number>(s => s.cards.pageCount); // Кол-во элементов на странице(РАЗМЕР)
     const pagesCount = Math.ceil(cardsTotalCount / pageSize); // Кол-во страниц
     let currentPage = useSelector<AppStateType, number>(s => s.cards.page); // Текущая страница
-    useEffect( () => {
-        token && dispatch(getCards(token, packId));
-    }, [currentPage]);
+
+    // Search ---------------------------------------------
+    // Поисковый запрос / снятие значения с инпута
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const setQuery = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.currentTarget.value)
+    };
+
+    // Сброс результатов поиска
+    const toReset = () => {
+        dispatch(setCardQuestion(''));
+        dispatch(setCardAnswer(''));
+    };
+
+    const toSearch = () => {
+        const token = getItemFromLS('token');
+        if(token){
+            dispatch(getCards(token, packId, '', searchQuery)); // Сетаем новый массив
+        }
+    };
+
+    const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            toSearch();
+        }
+    };
+    // End search =========================================
+    //
+    // useEffect( () => {
+    //    dispatch(getCards('', packId));
+    // }, [currentPage]);
 
     const {packId} = useParams();
     const dispatch = useDispatch();
@@ -49,11 +87,11 @@ export const Cards = function (props: CardsPropsType) {
 
 
     useEffect(() => {
-        if (firstRendering && token) {
-            dispatch(getCards(token, packId));
-            setFirstRendering(false);
+        if (packId && currentPage) {
+            dispatch(getCards('', packId));
+            // setFirstRendering(false);
         }
-    }, [dispatch, token, setFirstRendering, firstRendering, packId]);
+    }, [packId, currentPage]);
 
     const showModal = useCallback((modalType: string, cardId?: string, creatorId?: string, question?: string, answer?: string) => {
         if (cardCreatorId && cardCreatorId !== ownerId) {
@@ -67,20 +105,20 @@ export const Cards = function (props: CardsPropsType) {
     }, [setModalType, setCurrentCardId, setCurrentAnswer, setCurrentQuestion, ownerId, dispatch, cardCreatorId]);
 
     const onGetCards = useCallback((sortParams: string) => {
-        token && dispatch(getCards(token, packId, `sortCards=${sortParams}`))
-    }, [dispatch, token, packId]);
+       dispatch(getCards('', packId, `sortCards=${sortParams}`))
+    }, [dispatch, packId]);
 
     const onChangeCard = useCallback((question: string, answer: string) => {
-        token && dispatch(changeCard(currentCardId, token, question, answer));
-    }, [dispatch, token, currentCardId]);
+      dispatch(changeCard(currentCardId, '', question, answer));
+    }, [ currentCardId]);
 
     const onAddCard = useCallback((question: string, answer: string) => {
-        token && dispatch(addCard(token, packId, question, answer))
-    }, [dispatch, token, packId]);
+         dispatch(addCard('', packId, question, answer))
+    }, [packId]);
 
     const onDeleteCard = useCallback(() => {
-        token && dispatch(deleteCard(currentCardId, token))
-    }, [dispatch, token, currentCardId]);
+        dispatch(deleteCard(currentCardId, ''))
+    }, [ currentCardId]);
 
     const hideModal = useCallback(() => {
         setModalType('');
@@ -88,25 +126,19 @@ export const Cards = function (props: CardsPropsType) {
 
 
     if (isLoading) return <Loading/>;
-    if (!token) return <Redirect to={SIGN_IN_PATH}/>;
+    // if (!token) return <Redirect to={SIGN_IN_PATH}/>;
 
-    //Pagination
-    // Количество карточек
-
-
-
-
+    //Pagination -------------------------------------------
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        debugger
         dispatch(setPage(value))
     };
-
-    //End pagination
+    //End pagination ============================================
 
     return <>
         <Table columnsHeaders={headers} rows={cards} getItems={onGetCards}
                tableModel={'cards'} showModal={showModal}/>
-
+        <Search setQuery={setQuery} searchQuery={searchQuery} toSearch={toSearch}
+                toReset={toReset} onKeyPress={onKeyPress}/>
         <MessageModal messageText={messageText} isResponseError={true}
                       actionCreator={setMessageText('')}/>
         <AddCardModal modalType={modalType} addCard={onAddCard} hideModal={hideModal}/>

@@ -2,7 +2,7 @@ import {AppStateType} from '../../../main/BLL/store';
 import {ThunkAction} from 'redux-thunk';
 import {Dispatch} from 'redux';
 import {isLoading} from '../../Sign-Up/BLL/SignUpReducer';
-import {setItemToLS} from '../../Sign-In/LS-service/localStorage';
+import {getItemFromLS, setItemToLS} from '../../Sign-In/LS-service/localStorage';
 import {setMessageText, SetMessageTextType} from '../../../main/BLL/appReducer';
 import {IsLoadingACType} from '../../Sign-Up/BLL/SignUpTypes';
 import {cardsAPI} from '../DAL/cardsAPI';
@@ -13,17 +13,22 @@ const SET_CARDS = 'cards/packsReducer/SET_CARDS';
 const UPDATE_CARD = 'cards/packsReducer/UPDATE_CARD';
 const GET_TOTAL_COUNT = 'cards/packsReducer/GET_TOTAL_COUNT';
 const SET_PAGE = 'cards/packsReducer/SET_PAGE';
+const SET_CARD_QUESTION = 'cards/packsReducer/SET_CARD_QUESTION';
+const SET_CARD_ANSWER = 'cards/packsReducer/SET_CARD_ANSWER';
 
 const initialState = {
     cards: [] as Array<CardItemType>,
     pageCount: 5 as number,
     page: 1 as number,
-    cardsTotalCount: 0 as number
+    cardsTotalCount: 0 as number,
+    cardQuestion: '' as string,
+    cardAnswer: '' as string
 };
 
 type StateType = typeof initialState;
 type ActionsType = SetPacksType | UpdateCardType | SetMessageTextType
-    | IsLoadingACType | GetTotalCountType | SetPageType;
+    | IsLoadingACType | GetTotalCountType | SetPageType | SetCardQuestionType
+    | SetCardAnswerType;
 
 export const cardsReducer = (state: StateType = initialState, action: ActionsType): StateType => {
     switch (action.type) {
@@ -45,10 +50,23 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
             return {
                 ...state, page: action.value
             };
+        case SET_CARD_QUESTION:
+            return {
+                ...state, cardQuestion: action.value
+            };
+        case SET_CARD_ANSWER:
+            return {
+                ...state, cardAnswer: action.value
+            };
         default:
             return state;
     }
 };
+type SetCardQuestionType = ReturnType<typeof setCardQuestion>
+export const setCardQuestion = (value: string) => ({type: SET_CARD_QUESTION, value} as const);
+
+type SetCardAnswerType = ReturnType<typeof setCardAnswer>
+export const setCardAnswer = (value: string) => ({type: SET_CARD_ANSWER, value} as const);
 
 type SetPageType = ReturnType<typeof setPage>
 export const setPage = (value: number) => ({type: SET_PAGE, value} as const);
@@ -64,19 +82,29 @@ const updateCardAC = (cardId: string, newCard: CardItemType) => ({type: UPDATE_C
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
 
-export const getCards = (token: string, packId: string, sortParams?: string): ThunkType => async (dispatch, getState) => {
+export const getCards = (token: string, packId: string, sortParams?: string, searchQuery?: any): ThunkType => async (dispatch, getState) => {
     try {
+        debugger
         dispatch(isLoading(true));
-        const userData = await dispatch(setAuthMe(token));
-        const {page, pageCount} = getState().cards;
-        if (userData) {
-            const cardsData = await cardsAPI.getCards(userData.token, packId, sortParams, page, pageCount);
+        // const token = getItemFromLS('token') as string;
+        // Диспатчить из коллбэка зануление Вопроса/Ответа, if !length
+        // const userData = await dispatch(setAuthMe(token));
+        const token  = getItemFromLS('token')
+        const {page, pageCount, cardQuestion, cardAnswer} = getState().cards;
+        dispatch(setCardQuestion(searchQuery));
+        dispatch(setCardAnswer(searchQuery));
+        if (token) {
+            debugger
+            const cardsData = await
+                cardsAPI.getCards(token, packId, sortParams, page, pageCount, cardQuestion, cardAnswer);
             const totalCount = cardsData.cardsTotalCount;
             dispatch(getTotalCount(totalCount));
             setItemToLS('token', cardsData.token);
+            debugger
             dispatch(setCards(cardsData.cards));
         }
     } catch (e) {
+        debugger
         dispatch(setMessageText(e.response.data.error))
     } finally {
         dispatch(isLoading(false));

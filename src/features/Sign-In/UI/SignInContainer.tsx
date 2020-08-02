@@ -39,7 +39,7 @@ export const SignInContainer = React.memo(() => {
         setIsRemember(false);
     }, [dispatch, email, password, isRemember]);
 
-    if (token) return <Redirect to={PROFILE_PATH}/>;
+    // if (token) return <Redirect to={PROFILE_PATH}/>;
 
     return <>
         <SignIn email={email} password={password} isRemember={isRemember}

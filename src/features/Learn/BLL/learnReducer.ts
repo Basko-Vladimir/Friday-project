@@ -1,7 +1,7 @@
 import {AppStateType} from '../../../main/BLL/store';
 import { ThunkAction } from 'redux-thunk';
 import { isLoading } from '../../Sign-Up/BLL/SignUpReducer';
-import { setItemToLS } from '../../Sign-In/LS-service/localStorage';
+import {getItemFromLS, setItemToLS} from '../../Sign-In/LS-service/localStorage';
 import {setMessageText, SetMessageTextType} from '../../../main/BLL/appReducer';
 import {IsLoadingACType} from '../../Sign-Up/BLL/SignUpTypes';
 import {learnAPI} from "../DAL/learnAPI";
@@ -60,9 +60,10 @@ export const getCards = (token: string, packId: string): ThunkType => async (dis
 
     try {
         dispatch(isLoading(true));
-        const userData = await dispatch(setAuthMe(token));
-        if (userData) {
-            const cardsData = await learnAPI.getCards(userData.token, packId, 20);
+        // const userData = await dispatch(setAuthMe(token));
+        const token  = getItemFromLS('token')
+        if (token) {
+            const cardsData = await learnAPI.getCards(token, packId, 20);
             setItemToLS('token', cardsData.token);
             dispatch(setCards(cardsData.cards));
         }

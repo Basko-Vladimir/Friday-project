@@ -34,7 +34,8 @@ export const Header = () => {
                 <NavLink to={LEARN} activeClassName={styles.active}>Learn</NavLink>
             </nav>
             {
-                isAuth && <div className={styles.signOut}>
+                isAuth &&
+                <div className={styles.signOut}>
                     <Button title={'Sign Out'} onClick={signOut}/>
                 </div>
             }
